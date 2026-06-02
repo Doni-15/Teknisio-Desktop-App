@@ -1,0 +1,15 @@
+services:
+  postgres:
+    image: postgres:16
+    container_name: teknisio-postgres
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-teknisio_db}
+      POSTGRES_USER: ${POSTGRES_USER:-teknisio_user}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-teknisio_password}
+    ports:
+      - "${POSTGRES_PORT:-5433}:5432"
+    volumes:
+      - teknisio_postgres_data:/var/lib/postgresql/data
+
+volumes:
+  teknisio_postgres_data:
