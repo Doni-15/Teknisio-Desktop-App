@@ -1,7 +1,0 @@
-
-# Local backend database and machine files
-teknisio_backend/data/
-teknisio_backend/*.db
-teknisio_backend/*.mv.db
-teknisio_backend/*.lock.db
-teknisio_backend/local.properties
