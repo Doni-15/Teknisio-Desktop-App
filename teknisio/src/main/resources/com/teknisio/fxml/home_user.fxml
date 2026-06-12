@@ -1,0 +1,272 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.SVGPath?>
+
+<BorderPane prefHeight="740.0" prefWidth="360.0" style="-fx-background-color: #EBF1F6;" stylesheets="@../css/style.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.teknisio.controller.HomeUserController">
+   
+   <!-- Center Scrollable Content -->
+   <center>
+      <ScrollPane fitToHeight="false" fitToWidth="true" hbarPolicy="NEVER" styleClass="hide-scrollbars"  vbarPolicy="NEVER" BorderPane.alignment="CENTER">
+         <content>
+            <VBox spacing="18.0" style="-fx-background-color: transparent;">
+               <padding>
+                  <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+               </padding>
+               <children>
+                  
+                  <!-- Header: Profile & Location -->
+                  <HBox alignment="CENTER_LEFT" spacing="12.0">
+                     <children>
+                        <!-- Profile Image Wrapper -->
+                        <StackPane fx:id="profileImageWrapper" styleClass="header-profile-img">
+                           <children>
+                              <ImageView fx:id="profileImageView" fitHeight="42.0" fitWidth="42.0" pickOnBounds="true" preserveRatio="false">
+                                 <image>
+                                    <Image url="@../images/profile.png" />
+                                 </image>
+                              </ImageView>
+                           </children>
+                        </StackPane>
+                        
+                        <!-- Location Info -->
+                        <VBox alignment="CENTER_LEFT">
+                           <children>
+                              <Label styleClass="location-title" text="My Location" />
+                              <HBox alignment="CENTER_LEFT" spacing="3.0">
+                                 <children>
+                                    <SVGPath content="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" fill="#2D4B73" scaleX="0.6" scaleY="0.6" />
+                                    <Label styleClass="location-value" text="Intertip St., Medan" />
+                                 </children>
+                              </HBox>
+                           </children>
+                        </VBox>
+                        
+                        <Region HBox.hgrow="ALWAYS" />
+                        
+                        <!-- Bell Notification Button -->
+                        <Button mnemonicParsing="false" styleClass="circle-btn">
+                           <graphic>
+                              <SVGPath content="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.89 2 2 2zm6-6v-5c0-3.07-1.63-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.64 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2zm-2 1H8v-6c0-2.48 1.51-4.5 4-4.5s4 2.02 4 4.5v6z" fill="#2D4B73" scaleX="0.8" scaleY="0.8" />
+                           </graphic>
+                        </Button>
+                     </children>
+                  </HBox>
+                  
+                  <!-- Electronic Devices Grid -->
+                  <VBox spacing="10.0">
+                     <children>
+                        <Label styleClass="section-title" text="Electronic Devices" />
+                        
+                        <GridPane alignment="CENTER" hgap="12.0" vgap="25.0">
+                          <columnConstraints>
+                              <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                              <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                          </columnConstraints>
+                           <rowConstraints>
+                             <RowConstraints valignment="TOP" vgrow="SOMETIMES" />
+                             <RowConstraints valignment="TOP" vgrow="SOMETIMES" />
+                           </rowConstraints>
+                           <children>
+                              <!-- AC -->
+                              <VBox onMouseClicked="#handleCategoryClick" styleClass="category-tile" GridPane.columnIndex="0" GridPane.rowIndex="0">
+                                 <children>
+                                    <StackPane styleClass="category-icon-container">
+                                       <children>
+                                          <SVGPath content="M19 19H5V5h14v14M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2m-1 7h-2V8h2v2m-3 0h-2V8h2v2m-3 0H8V8h2v2m-2 2h8v-2H8v2z" fill="#2D4B73" />
+                                       </children>
+                                    </StackPane>
+                                    <Label alignment="CENTER" styleClass="category-name" text="AC" wrapText="true" />
+                                 </children>
+                              </VBox>
+                              
+                              <!-- Fridge -->
+                              <VBox onMouseClicked="#handleCategoryClick" styleClass="category-tile" GridPane.columnIndex="1" GridPane.rowIndex="0">
+                                 <children>
+                                    <StackPane styleClass="category-icon-container">
+                                       <children>
+                                          <SVGPath content="M19 2H5c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-2 8H7V5h10v5zm0 10H7v-8h10v8z" fill="#2D4B73" />
+                                       </children>
+                                    </StackPane>
+                                    <Label alignment="CENTER" styleClass="category-name" text="Fridge" wrapText="true" />
+                                 </children>
+                              </VBox>
+                              
+                              <!-- Washing Machine -->
+                              <VBox onMouseClicked="#handleCategoryClick" styleClass="category-tile" GridPane.columnIndex="2" GridPane.rowIndex="0" style="-fx-cursor: hand;">
+                                 <children>
+                                    <StackPane styleClass="category-icon-container">
+                                       <children>
+                                          <SVGPath content="M17 1H7c-1.1 0-2 .9-2 2v18c0 1.1.9 2 2 2h10c1.1 0 2-.9 2-2V3c0-1.1-.9-2-2-2zm-5 18c-2.21 0-4-1.79-4-4s1.79-4 4-4 4 1.79 4 4-1.79 4-4 4zm0-6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z" fill="#2D4B73" />
+                                       </children>
+                                    </StackPane>
+                                    <Label alignment="CENTER" styleClass="category-name" text="Washing Machine" wrapText="true" />
+                                 </children>
+                              </VBox>
+                              
+                              <!-- Filter Camera -->
+                              <VBox onMouseClicked="#handleCategoryClick" styleClass="category-tile" GridPane.columnIndex="3" GridPane.rowIndex="0" style="-fx-cursor: hand;">
+                                 <children>
+                                    <StackPane styleClass="category-icon-container">
+                                       <children>
+                                          <SVGPath content="M12 2L1 21h22L12 2zm0 4l7.5 13h-15L12 6zm-1 8h2v2h-2v-2zm0-4h2v2h-2v-2z" fill="#2D4B73" />
+                                       </children>
+                                    </StackPane>
+                                    <Label alignment="CENTER" styleClass="category-name" text="Filter Camera" wrapText="true" />
+                                 </children>
+                              </VBox>
+                              
+                              <!-- Oven -->
+                              <VBox onMouseClicked="#handleCategoryClick" styleClass="category-tile" GridPane.columnIndex="0" GridPane.rowIndex="1" style="-fx-cursor: hand;">
+                                 <children>
+                                    <StackPane styleClass="category-icon-container">
+                                       <children>
+                                          <SVGPath content="M21 4H3c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-1 12H4V8h16v8zm-2-6h-4v2h4v-2z" fill="#2D4B73" />
+                                       </children>
+                                    </StackPane>
+                                    <Label alignment="CENTER" styleClass="category-name" text="Oven" wrapText="true" />
+                                 </children>
+                              </VBox>
+                              
+                              <!-- Television -->
+                              <VBox onMouseClicked="#handleCategoryClick" styleClass="category-tile" GridPane.columnIndex="1" GridPane.rowIndex="1" style="-fx-cursor: hand;">
+                                 <children>
+                                    <StackPane styleClass="category-icon-container">
+                                       <children>
+                                          <SVGPath content="M21 3H3c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h5v2h8v-2h5c1.1 0 1.99-.9 1.99-2L23 5c0-1.1-.9-2-2-2zm0 14H3V5h18v12z" fill="#2D4B73" />
+                                       </children>
+                                    </StackPane>
+                                    <Label alignment="CENTER" styleClass="category-name" text="Television" wrapText="true" />
+                                 </children>
+                              </VBox>
+                              
+                              <!-- Fan -->
+                              <VBox onMouseClicked="#handleCategoryClick" styleClass="category-tile" GridPane.columnIndex="2" GridPane.rowIndex="1" style="-fx-cursor: hand;">
+                                 <children>
+                                    <StackPane styleClass="category-icon-container">
+                                       <children>
+                                          <SVGPath content="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm0-10c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z" fill="#2D4B73" />
+                                       </children>
+                                    </StackPane>
+                                    <Label alignment="CENTER" styleClass="category-name" text="Fan" wrapText="true" />
+                                 </children>
+                              </VBox>
+                              
+                              <!-- Mixer -->
+                              <VBox onMouseClicked="#handleCategoryClick" styleClass="category-tile" GridPane.columnIndex="3" GridPane.rowIndex="1" style="-fx-cursor: hand;">
+                                 <children>
+                                    <StackPane styleClass="category-icon-container">
+                                       <children>
+                                          <SVGPath content="M18 4H6v2h12V4zm-2 4H8v2h8V8zm-1 4H9v6c0 1.66 1.34 3 3 3s3-1.34 3-3v-6z" fill="#2D4B73" />
+                                       </children>
+                                    </StackPane>
+                                    <Label alignment="CENTER" styleClass="category-name" text="Mixer" wrapText="true" />
+                                 </children>
+                              </VBox>
+                           </children>
+                        </GridPane>
+                        
+                        <!-- Slider Dots capsule for categories grid -->
+                        <HBox alignment="CENTER" spacing="6.0">
+                           <children>
+                              <StackPane styleClass="slider-dot, slider-dot-active" />
+                              <StackPane styleClass="slider-dot, slider-dot-inactive" />
+                              <StackPane styleClass="slider-dot, slider-dot-inactive" />
+                              <StackPane styleClass="slider-dot, slider-dot-inactive" />
+                           </children>
+                           <padding>
+                              <Insets top="4.0" />
+                           </padding>
+                        </HBox>
+                     </children>
+                   </VBox>
+                   
+                   <!-- Technician Nearby -->
+                   <VBox spacing="10.0">
+                      <children>
+                         <HBox alignment="CENTER_LEFT">
+                            <children>
+                               <Label styleClass="section-title" text="Technician Nearby" />
+                               <Region HBox.hgrow="ALWAYS" />
+                               <Label styleClass="see-all-link" text="See all" />
+                            </children>
+                         </HBox>
+                         
+                         <StackPane fx:id="carouselContainer" prefHeight="230.0" style="-fx-background-color: transparent;" />
+                      </children>
+                   </VBox>
+                   
+                   <!-- News Section -->
+                   <VBox spacing="10.0">
+                     <children>
+                        <HBox alignment="CENTER_LEFT">
+                           <children>
+                              <Label styleClass="section-title" text="News" />
+                              <Region HBox.hgrow="ALWAYS" />
+                              <Label styleClass="see-all-link" text="See all" />
+                           </children>
+                        </HBox>
+                        
+                        <VBox fx:id="newsContainer" spacing="12.0" style="-fx-background-color: transparent;" />
+                     </children>
+                  </VBox>
+               </children>
+            </VBox>
+         </content>
+      </ScrollPane>
+   </center>
+   
+   <!-- Bottom Sticky Navigation Menu -->
+   <bottom>
+      <HBox alignment="CENTER" styleClass="bottom-nav-bar" BorderPane.alignment="CENTER">
+         <children>
+            <!-- Home -->
+            <HBox alignment="CENTER" spacing="6.0" styleClass="nav-item, nav-item-active" HBox.hgrow="ALWAYS">
+               <children>
+                  <SVGPath content="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z" styleClass="nav-icon" />
+                  <Label styleClass="nav-label" text="Home" />
+               </children>
+            </HBox>
+            
+            <!-- Chat -->
+            <HBox alignment="CENTER" onMouseClicked="#handleChatTab" spacing="6.0" styleClass="nav-item" HBox.hgrow="ALWAYS" style="-fx-cursor: hand;">
+               <children>
+                  <SVGPath content="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-2 12H6v-2h12v2zm0-3H6V9h12v2zm0-3H6V6h12v2z" styleClass="nav-icon" />
+                  <Label styleClass="nav-label" text="Chat" />
+               </children>
+            </HBox>
+            
+            <!-- History -->
+            <HBox alignment="CENTER" onMouseClicked="#handleHistoryTab" spacing="6.0" styleClass="nav-item" HBox.hgrow="ALWAYS" style="-fx-cursor: hand;">
+               <children>
+                  <SVGPath content="M13 3c-4.97 0-9 4.03-9 9H1l3.89 3.89.07.14L9 12H6c0-3.87 3.13-7 7-7s7 3.13 7 7-3.13 7-7 7c-1.93 0-3.68-.79-4.94-2.06l-1.42 1.42C8.27 19.99 10.51 21 13 21c4.97 0 9-4.03 9-9s-4.03-9-9-9zm-1 5v5l4.28 2.54.72-1.21-3.5-2.08V8H12z" styleClass="nav-icon" />
+                  <Label styleClass="nav-label" text="History" />
+               </children>
+            </HBox>
+            
+            <!-- Account -->
+            <HBox alignment="CENTER" onMouseClicked="#handleAccountTab" spacing="6.0" styleClass="nav-item" HBox.hgrow="ALWAYS" style="-fx-cursor: hand;">
+               <children>
+                  <SVGPath content="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z" styleClass="nav-icon" />
+                  <Label styleClass="nav-label" text="Account" />
+               </children>
+            </HBox>
+         </children>
+      </HBox>
+   </bottom>
+</BorderPane>

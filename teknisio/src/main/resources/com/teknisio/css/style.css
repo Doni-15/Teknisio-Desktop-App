@@ -1,0 +1,1092 @@
+/* style.css - Global Stylesheet for Teknisio */
+
+.root {
+    /* Color Variables */
+    -fx-primary-color-start: #2D4B73;
+    -fx-primary-color-end: #527EBF;
+    -fx-bg-color: #EBF1F6;
+    -fx-text-primary: #2D4B73;
+    -fx-text-secondary: #6F7E91;
+    -fx-text-dark: #1E2D4A;
+    -fx-input-border: #E0E6ED;
+    -fx-input-focus-border: #2D4B73;
+    -fx-white: #FFFFFF;
+    
+    /* Typography */
+    -fx-font-family: "Inter", "Segoe UI", "Helvetica Neue", sans-serif;
+}
+
+/* Background & Containers */
+.main-bg {
+    -fx-background-color: -fx-bg-color;
+    -fx-padding: 30px 24px;
+}
+
+.scroll-pane {
+    -fx-background: -fx-bg-color;
+    -fx-background-color: transparent;
+}
+
+.scroll-pane > .viewport {
+    -fx-background-color: transparent;
+}
+
+/* Typography Styles */
+.title-large {
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -fx-text-primary;
+    -fx-alignment: center;
+}
+
+.tagline {
+    -fx-font-size: 12px;
+    -fx-text-fill: -fx-text-secondary;
+    -fx-font-weight: bold;
+    -fx-alignment: center;
+}
+
+.input-label {
+    -fx-font-size: 11px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -fx-text-dark;
+    -fx-padding: 0 0 4px 0;
+}
+
+/* Form Inputs */
+.text-field, .password-field {
+    -fx-background-color: -fx-white;
+    -fx-background-radius: 8px;
+    -fx-border-color: -fx-input-border;
+    -fx-border-radius: 8px;
+    -fx-border-width: 1px;
+    -fx-padding: 10px 14px;
+    -fx-text-fill: -fx-text-dark;
+    -fx-prompt-text-fill: -fx-text-secondary;
+    -fx-font-size: 12px;
+}
+
+.text-field:focused, .password-field:focused {
+    -fx-border-color: -fx-input-focus-border;
+    -fx-effect: dropshadow(three-pass-box, rgba(45, 75, 115, 0.15), 6, 0, 0, 2);
+}
+
+/* Primary Button with Gradient */
+.primary-btn {
+    -fx-background-color: linear-gradient(to right, -fx-primary-color-start, -fx-primary-color-end);
+    -fx-background-radius: 12px;
+    -fx-text-fill: -fx-white;
+    -fx-font-weight: bold;
+    -fx-font-size: 14px;
+    -fx-padding: 12px 0px;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(three-pass-box, rgba(45, 75, 115, 0.35), 8, 0, 0, 4);
+    -fx-alignment: center;
+}
+
+.primary-btn:hover {
+    -fx-background-color: linear-gradient(to right, #3A5F90, #618CD0);
+    -fx-effect: dropshadow(three-pass-box, rgba(45, 75, 115, 0.45), 10, 0, 0, 5);
+}
+
+.primary-btn:pressed {
+    -fx-background-color: linear-gradient(to right, #243B5B, #416499);
+}
+
+/* Navigation Links */
+.nav-link {
+    -fx-text-fill: -fx-text-dark;
+    -fx-font-size: 11px;
+    -fx-cursor: hand;
+    -fx-underline: false;
+}
+
+.nav-link:hover {
+    -fx-underline: true;
+}
+
+.nav-link-bold {
+    -fx-font-weight: bold;
+    -fx-text-fill: -fx-text-primary;
+}
+
+/* Walkthrough Specific Styles */
+.walkthrough-image-container {
+    -fx-background-radius: 20px;
+    -fx-border-radius: 20px;
+    -fx-background-color: #D1DCE6;
+}
+
+.slider-indicator-capsule {
+    -fx-background-color: rgba(255, 255, 255, 0.7);
+    -fx-background-radius: 10px;
+    -fx-padding: 4px 10px;
+}
+
+.slider-dot {
+    -fx-shape: "M 0 5 a 5 5 0 1 1 10 0 a 5 5 0 1 1 -10 0";
+    -fx-min-width: 6px;
+    -fx-min-height: 6px;
+    -fx-max-width: 6px;
+    -fx-max-height: 6px;
+    -fx-background-radius: 50%;
+}
+
+.slider-dot-active {
+    -fx-background-color: -fx-primary-color-start;
+}
+
+.slider-dot-inactive {
+    -fx-background-color: rgba(45, 75, 115, 0.3);
+}
+
+/* ==========================================
+   Dashboard / User Home Screen Styles
+   ========================================== */
+
+/* Remove ScrollPane Scrollbars but keep scrolling enabled */
+.hide-scrollbars {
+    -fx-background-color: transparent;
+    -fx-hbar-policy: never;
+    -fx-vbar-policy: never;
+}
+
+.hide-scrollbars .scroll-bar {
+    -fx-opacity: 0;
+    -fx-padding: 0;
+    -fx-min-width: 0;
+    -fx-min-height: 0;
+    -fx-max-width: 0;
+    -fx-max-height: 0;
+}
+
+.hide-scrollbars > .viewport {
+    -fx-background-color: transparent;
+}
+
+/* Profile and Location Header */
+.header-profile-img {
+    -fx-cursor: hand;
+}
+
+.location-title {
+    -fx-font-size: 10px;
+    -fx-text-fill: -fx-text-secondary;
+    -fx-font-weight: bold;
+}
+
+.location-value {
+    -fx-font-size: 12px;
+    -fx-text-fill: -fx-text-primary;
+    -fx-font-weight: bold;
+}
+
+.circle-btn {
+    -fx-background-color: -fx-white;
+    -fx-background-radius: 50%;
+    -fx-border-color: #E2E8F0;
+    -fx-border-radius: 50%;
+    -fx-border-width: 1px;
+    -fx-min-width: 38px;
+    -fx-min-height: 38px;
+    -fx-max-width: 38px;
+    -fx-max-height: 38px;
+    -fx-alignment: center;
+    -fx-cursor: hand;
+}
+
+.circle-btn:hover {
+    -fx-background-color: #F8FAFC;
+    -fx-border-color: -fx-primary-color-start;
+}
+
+/* Sections */
+.section-title {
+    -fx-font-size: 15px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -fx-text-primary;
+}
+
+.see-all-link {
+    -fx-font-size: 11px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -fx-text-secondary;
+    -fx-cursor: hand;
+}
+
+.see-all-link:hover {
+    -fx-text-fill: -fx-primary-color-start;
+    -fx-underline: true;
+}
+
+/* Electronic Devices Grid Tiles */
+.category-tile {
+    -fx-alignment: top-center;
+    -fx-spacing: 6px;
+    -fx-cursor: hand;
+}
+
+.category-icon-container {
+    -fx-background-color: #E2ECF7;
+    -fx-background-radius: 50%;
+    -fx-min-width: 42px;
+    -fx-min-height: 42px;
+    -fx-max-width: 42px;
+    -fx-max-height: 42px;
+    -fx-alignment: center;
+    -fx-transition: 0.2s;
+}
+
+.category-tile:hover .category-icon-container {
+    -fx-background-color: -fx-primary-color-start;
+}
+
+.category-tile:hover .category-icon-container SVGPath {
+    -fx-fill: -fx-white;
+}
+
+.category-name {
+    -fx-font-size: 9.5px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -fx-text-secondary;
+    -fx-alignment: center;
+    -fx-text-alignment: center;
+}
+
+.category-tile:hover .category-name {
+    -fx-text-fill: -fx-primary-color-start;
+}
+
+/* Technician Nearby Cards (StackPane Overlays) */
+.tech-card {
+    -fx-background-color: transparent;
+    -fx-background-radius: 18px;
+    -fx-min-width: 160px;
+    -fx-max-width: 160px;
+    -fx-min-height: 194px;
+    -fx-max-height: 194px;
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.08), 12, 0, 0, 4);
+    -fx-cursor: hand;
+}
+
+.tech-card-active {
+    -fx-background-color: transparent;
+    -fx-border-color: #2D4B73;
+    -fx-border-width: 3px;
+    -fx-border-radius: 18px;
+    -fx-background-radius: 18px;
+    -fx-min-width: 160px;
+    -fx-max-width: 160px;
+    -fx-min-height: 194px;
+    -fx-max-height: 194px;
+    -fx-effect: dropshadow(three-pass-box, rgba(45, 75, 115, 0.3), 16, 0, 0, 8);
+    -fx-cursor: hand;
+}
+
+.tech-gradient-overlay {
+    -fx-background-color: linear-gradient(to bottom, transparent 40%, rgba(0, 0, 0, 0.8) 100%);
+    -fx-background-radius: 16px;
+}
+
+.tech-name {
+    -fx-font-size: 11px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -fx-white;
+}
+
+.tech-price {
+    -fx-font-size: 8px;
+    -fx-text-fill: #E2ECF7;
+    -fx-font-weight: bold;
+}
+
+.tech-distance {
+    -fx-font-size: 8px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #E2ECF7;
+    -fx-background-color: rgba(45, 75, 115, 0.7);
+    -fx-background-radius: 6px;
+    -fx-padding: 2px 4px;
+}
+
+.tech-badge {
+    -fx-background-color: rgba(255, 255, 255, 0.9);
+    -fx-background-radius: 50%;
+    -fx-min-width: 18px;
+    -fx-min-height: 18px;
+    -fx-max-width: 18px;
+    -fx-max-height: 18px;
+    -fx-alignment: center;
+}
+
+.tech-badge SVGPath {
+    -fx-fill: -fx-primary-color-start;
+}
+
+.tech-more-info-btn {
+    -fx-background-color: #2D4B73;
+    -fx-background-radius: 8px;
+    -fx-padding: 3px 6px;
+    -fx-text-fill: -fx-white;
+    -fx-font-size: 8px;
+    -fx-font-weight: bold;
+    -fx-cursor: hand;
+}
+
+.tech-more-info-btn:hover {
+    -fx-background-color: #3A5F90;
+}
+
+.tech-specialization {
+    -fx-font-size: 10px;
+    -fx-text-fill: -fx-text-secondary;
+}
+
+.tech-price {
+    -fx-font-size: 10px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -fx-primary-color-start;
+}
+
+/* News List */
+.news-card {
+    -fx-background-color: -fx-white;
+    -fx-background-radius: 14px;
+    -fx-padding: 10px;
+    -fx-alignment: center-left;
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.02), 6, 0, 0, 2);
+    -fx-cursor: hand;
+}
+
+.news-card:hover {
+    -fx-effect: dropshadow(three-pass-box, rgba(45, 75, 115, 0.08), 8, 0, 0, 3);
+}
+
+.news-title {
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -fx-text-dark;
+    -fx-wrap-text: true;
+}
+
+.news-meta {
+    -fx-font-size: 9px;
+    -fx-text-fill: -fx-text-secondary;
+}
+
+/* Bottom Navigation Bar */
+.bottom-nav-bar {
+    -fx-background-color: -fx-white;
+    -fx-padding: 10px 16px;
+    -fx-alignment: center;
+    -fx-spacing: 12px;
+    -fx-border-color: #E2E7EC transparent transparent transparent;
+    -fx-border-width: 1px 0 0 0;
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.03), 8, 0, 0, -4);
+}
+
+.nav-item {
+    -fx-alignment: center;
+    -fx-spacing: 4px;
+    -fx-padding: 8px 12px;
+    -fx-cursor: hand;
+    -fx-background-color: transparent;
+    -fx-background-radius: 18px;
+}
+
+.nav-item:hover {
+    -fx-background-color: #F1F5F9;
+}
+
+.nav-item-active {
+    -fx-background-color: #E2ECF7;
+    -fx-background-radius: 18px;
+    -fx-padding: 8px 16px;
+}
+
+.nav-item-active .nav-icon {
+    -fx-fill: -fx-primary-color-start;
+}
+
+.nav-item-active .nav-label {
+    -fx-text-fill: -fx-primary-color-start;
+    -fx-font-weight: bold;
+}
+
+.nav-label {
+    -fx-font-size: 10px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -fx-text-secondary;
+}
+
+.nav-icon {
+    -fx-fill: -fx-text-secondary;
+}
+
+/* ==========================================
+   Order Technician Screen Styles
+   ========================================== */
+
+/* Form Card Container */
+.form-card {
+    -fx-background-color: -fx-white;
+    -fx-background-radius: 16px;
+    -fx-padding: 18px;
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.04), 10, 0, 0, 4);
+}
+
+/* Circular Header Back Button */
+.back-btn {
+    -fx-background-color: -fx-white;
+    -fx-background-radius: 50%;
+    -fx-border-color: #E2E8F0;
+    -fx-border-radius: 50%;
+    -fx-border-width: 1px;
+    -fx-min-width: 38px;
+    -fx-min-height: 38px;
+    -fx-max-width: 38px;
+    -fx-max-height: 38px;
+    -fx-alignment: center;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.02), 6, 0, 0, 2);
+}
+
+.back-btn:hover {
+    -fx-background-color: #F8FAFC;
+    -fx-border-color: -fx-primary-color-start;
+}
+
+/* Customized Category Toggle Buttons */
+.category-toggle {
+    -fx-background-color: #E2ECF7;
+    -fx-background-radius: 50%;
+    -fx-min-width: 44px;
+    -fx-min-height: 44px;
+    -fx-max-width: 44px;
+    -fx-max-height: 44px;
+    -fx-alignment: center;
+    -fx-cursor: hand;
+    -fx-padding: 0px;
+}
+
+.category-toggle:selected {
+    -fx-background-color: -fx-primary-color-start;
+}
+
+.category-toggle SVGPath {
+    -fx-fill: -fx-primary-color-start;
+}
+
+.category-toggle:selected SVGPath {
+    -fx-fill: -fx-white;
+}
+
+.category-toggle-label {
+    -fx-font-size: 10px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -fx-text-secondary;
+}
+
+.category-toggle-tile {
+    -fx-alignment: center;
+    -fx-spacing: 6px;
+    -fx-cursor: hand;
+}
+
+/* Custom TextArea Style (Reset Defaults) */
+.form-text-area {
+    -fx-background-color: -fx-white;
+    -fx-background-radius: 12px;
+    -fx-border-color: #E2E8F0;
+    -fx-border-radius: 12px;
+    -fx-border-width: 1px;
+    -fx-text-fill: -fx-text-dark;
+    -fx-prompt-text-fill: -fx-text-secondary;
+    -fx-font-size: 12px;
+    /* Reset focus borders */
+    -fx-focus-color: transparent;
+    -fx-faint-focus-color: transparent;
+}
+
+.form-text-area:focused {
+    -fx-border-color: -fx-primary-color-start;
+}
+
+.form-text-area .content {
+    -fx-background-color: -fx-white;
+    -fx-background-radius: 12px;
+    -fx-padding: 8px 12px;
+}
+
+.form-text-area:focused .content {
+    -fx-background-color: -fx-white;
+}
+
+.attachment-btn {
+    -fx-background-color: transparent;
+    -fx-cursor: hand;
+    -fx-padding: 4px;
+}
+
+.attachment-btn SVGPath {
+    -fx-fill: -fx-text-secondary;
+}
+
+.attachment-btn:hover SVGPath {
+    -fx-fill: -fx-primary-color-start;
+}
+
+/* Custom DatePicker Style (Reset defaults to plain line) */
+.form-date-picker {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-padding: 0px;
+}
+
+.form-date-picker .text-field {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-padding: 0px;
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -fx-text-dark;
+}
+
+.form-date-picker .button {
+    -fx-background-color: transparent;
+    -fx-padding: 0px;
+    -fx-cursor: hand;
+}
+
+.form-date-picker .button:hover {
+    -fx-background-color: transparent;
+}
+
+.form-date-picker .button .arrow {
+    -fx-background-color: transparent;
+    -fx-shape: "";
+    -fx-padding: 0px;
+}
+
+/* Segmented Time Slot ToggleButtons */
+.time-toggle {
+    -fx-background-color: -fx-white;
+    -fx-background-radius: 0px;
+    -fx-border-color: #E2E8F0;
+    -fx-border-width: 1px 1px 1px 0px;
+    -fx-padding: 10px 4px;
+    -fx-cursor: hand;
+    -fx-alignment: center;
+    -fx-text-fill: -fx-text-secondary;
+}
+
+.time-toggle-first {
+    -fx-border-width: 1px 1px 1px 1px;
+    -fx-background-radius: 12px 0 0 12px;
+    -fx-border-radius: 12px 0 0 12px;
+}
+
+.time-toggle-last {
+    -fx-background-radius: 0 12px 12px 0;
+    -fx-border-radius: 0 12px 12px 0;
+}
+
+.time-toggle:selected {
+    -fx-background-color: -fx-primary-color-start;
+    -fx-text-fill: -fx-white;
+    -fx-border-color: -fx-primary-color-start;
+}
+
+.time-toggle:selected SVGPath {
+    -fx-fill: -fx-white;
+}
+
+.time-toggle-icon {
+    -fx-fill: -fx-text-secondary;
+}
+
+.time-toggle:selected .time-toggle-icon {
+    -fx-fill: -fx-white;
+}
+
+.time-toggle-title {
+    -fx-font-size: 11px;
+    -fx-font-weight: bold;
+    -fx-text-fill: inherit;
+}
+
+.time-toggle-subtitle {
+    -fx-font-size: 8px;
+    -fx-text-fill: inherit;
+    -fx-opacity: 0.85;
+}
+
+/* Summary Card Banner */
+.summary-card {
+    -fx-background-color: #E6F4F8;
+    -fx-background-radius: 16px;
+    -fx-padding: 12px 16px;
+    -fx-border-color: #CDE4EB;
+    -fx-border-radius: 16px;
+    -fx-border-width: 1px;
+}
+
+/* ==========================================
+   User Profile Screen Styles
+   ========================================== */
+
+.profile-avatar-wrapper {
+    -fx-border-color: #2D4B73;
+    -fx-border-width: 2.5px;
+    -fx-border-radius: 100px;
+    -fx-background-radius: 100px;
+    -fx-padding: 3px;
+    -fx-min-width: 102px;
+    -fx-min-height: 102px;
+    -fx-max-width: 102px;
+    -fx-max-height: 102px;
+    -fx-alignment: center;
+}
+
+.profile-name {
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #2D4B73;
+}
+
+.verified-badge {
+    -fx-background-color: #E8F8F0;
+    -fx-text-fill: #27AE60;
+    -fx-font-size: 10px;
+    -fx-font-weight: bold;
+    -fx-background-radius: 12px;
+    -fx-padding: 4px 12px;
+}
+
+.profile-section-title {
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #6F7E91;
+    -fx-padding: 10px 0 0 0;
+}
+
+.profile-card {
+    -fx-background-color: #FFFFFF;
+    -fx-background-radius: 16px;
+    -fx-padding: 0px;
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.03), 10, 0, 0, 4);
+}
+
+.profile-card-row {
+    -fx-alignment: center-left;
+    -fx-padding: 12px 18px;
+    -fx-border-color: transparent transparent #F1F5F9 transparent;
+    -fx-border-width: 0 0 1px 0;
+}
+
+.profile-card-row-last {
+    -fx-alignment: center-left;
+    -fx-padding: 12px 18px;
+    -fx-border-color: transparent;
+    -fx-border-width: 0;
+}
+
+.profile-row-label {
+    -fx-font-size: 10px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #94A3B8;
+}
+
+.profile-row-value {
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #2D4B73;
+}
+
+.profile-row-text {
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #2D4B73;
+}
+
+.profile-row-icon {
+    -fx-fill: #2D4B73;
+}
+
+.edit-btn {
+    -fx-background-color: transparent;
+    -fx-cursor: hand;
+    -fx-padding: 4px;
+}
+
+.edit-btn SVGPath {
+    -fx-fill: #2D4B73;
+}
+
+.edit-btn:hover SVGPath {
+    -fx-fill: #527EBF;
+}
+
+.logout-btn {
+    -fx-background-color: rgba(231, 76, 60, 0.04);
+    -fx-border-color: #E74C3C;
+    -fx-border-radius: 10px;
+    -fx-background-radius: 10px;
+    -fx-border-width: 1px;
+    -fx-text-fill: #E74C3C;
+    -fx-font-weight: bold;
+    -fx-font-size: 13px;
+    -fx-padding: 10px 24px;
+    -fx-cursor: hand;
+    -fx-alignment: center;
+}
+
+.logout-btn:hover {
+    -fx-background-color: rgba(231, 76, 60, 0.12);
+}
+
+.logout-icon {
+    -fx-fill: #E74C3C;
+}
+
+/* ==========================================
+   History Screen Styles
+   ========================================== */
+
+.history-card {
+    -fx-background-color: #FFFFFF;
+    -fx-background-radius: 14px;
+    -fx-padding: 0px;
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.04), 10, 0, 0, 4);
+}
+
+.history-card-header {
+    -fx-alignment: center-left;
+    -fx-padding: 14px 18px;
+    -fx-border-color: transparent transparent #F1F5F9 transparent;
+    -fx-border-width: 0 0 1px 0;
+}
+
+.history-card-title {
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #2D4B73;
+}
+
+.history-card-body {
+    -fx-padding: 14px 18px;
+    -fx-alignment: center-left;
+}
+
+.history-card-col {
+    -fx-alignment: center-left;
+    -fx-spacing: 2px;
+}
+
+.history-card-detail-label {
+    -fx-font-size: 10px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #94A3B8;
+}
+
+.history-card-detail-val {
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #2D4B73;
+}
+
+.repaired-badge {
+    -fx-background-color: #E8F8F0;
+    -fx-text-fill: #27AE60;
+    -fx-font-size: 10px;
+    -fx-font-weight: bold;
+    -fx-background-radius: 12px;
+    -fx-padding: 4px 12px;
+}
+
+/* ==========================================
+   Chat Screen Styles
+   ========================================== */
+
+.chat-card {
+    -fx-background-color: #FFFFFF;
+    -fx-background-radius: 16px;
+    -fx-padding: 6px 0px;
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.03), 10, 0, 0, 4);
+}
+
+.chat-row {
+    -fx-alignment: center-left;
+    -fx-padding: 14px 18px;
+    -fx-spacing: 12px;
+    -fx-border-color: transparent transparent #F1F5F9 transparent;
+    -fx-border-width: 0 0 1px 0;
+    -fx-cursor: hand;
+}
+
+.chat-row-last {
+    -fx-alignment: center-left;
+    -fx-padding: 14px 18px;
+    -fx-spacing: 12px;
+    -fx-border-color: transparent;
+    -fx-border-width: 0;
+    -fx-cursor: hand;
+}
+
+.chat-row:hover, .chat-row-last:hover {
+    -fx-background-color: #F8FAFC;
+}
+
+.chat-avatar-wrapper {
+    -fx-min-width: 48px;
+    -fx-min-height: 48px;
+    -fx-max-width: 48px;
+    -fx-max-height: 48px;
+    -fx-alignment: center;
+}
+
+.chat-name {
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #2D4B73;
+}
+
+.chat-message {
+    -fx-font-size: 11px;
+    -fx-text-fill: #6F7E91;
+}
+
+.chat-time {
+    -fx-font-size: 10px;
+    -fx-text-fill: #6F7E91;
+    -fx-font-weight: bold;
+}
+
+.chat-unread-badge {
+    -fx-background-color: #2D4B73;
+    -fx-background-radius: 50%;
+    -fx-min-width: 18px;
+    -fx-min-height: 18px;
+    -fx-max-width: 18px;
+    -fx-max-height: 18px;
+    -fx-alignment: center;
+}
+
+.chat-unread-text {
+    -fx-text-fill: #FFFFFF;
+    -fx-font-size: 9px;
+    -fx-font-weight: bold;
+}
+
+/* ==========================================
+   Specialized Technician List Screen Styles
+   ========================================== */
+
+.category-selector-card {
+    -fx-background-color: #FFFFFF;
+    -fx-background-radius: 16px;
+    -fx-padding: 10px 16px;
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.04), 10, 0, 0, 4);
+    -fx-alignment: center-left;
+    -fx-spacing: 14px;
+    -fx-cursor: hand;
+    -fx-border-color: transparent;
+    -fx-border-width: 1px;
+    -fx-border-radius: 16px;
+}
+
+.category-selector-card:hover {
+    -fx-background-color: #F8FAFC;
+    -fx-border-color: #E2E8F0;
+}
+
+.category-icon-circle-wrapper {
+    -fx-background-color: #E2ECF7;
+    -fx-background-radius: 50%;
+    -fx-min-width: 36px;
+    -fx-min-height: 36px;
+    -fx-max-width: 36px;
+    -fx-max-height: 36px;
+    -fx-alignment: center;
+}
+
+.category-icon-circle-wrapper SVGPath {
+    -fx-fill: #2D4B73;
+}
+
+.category-selector-text {
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #2D4B73;
+}
+
+.tech-list-card {
+    -fx-background-color: #FFFFFF;
+    -fx-background-radius: 16px;
+    -fx-padding: 12px 14px;
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.03), 10, 0, 0, 4);
+    -fx-cursor: hand;
+    -fx-border-width: 1px;
+    -fx-border-color: transparent;
+    -fx-border-radius: 16px;
+}
+
+.tech-list-card:hover {
+    -fx-background-color: #F8FAFC;
+}
+
+.tech-list-card-selected {
+    -fx-background-color: #E6F5F8;
+    -fx-background-radius: 16px;
+    -fx-padding: 12px 14px;
+    -fx-effect: dropshadow(three-pass-box, rgba(45, 75, 115, 0.1), 12, 0, 0, 5);
+    -fx-cursor: hand;
+    -fx-border-width: 1px;
+    -fx-border-color: #CDE4EB;
+    -fx-border-radius: 16px;
+}
+
+.tech-list-card-selected:hover {
+    -fx-background-color: #DDF1F5;
+}
+
+.tech-list-name {
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #2D4B73;
+}
+
+.tech-list-sublabel {
+    -fx-font-size: 9px;
+    -fx-text-fill: #6F7E91;
+    -fx-font-weight: bold;
+}
+
+.tech-list-subvalue {
+    -fx-font-size: 11px;
+    -fx-text-fill: #2D4B73;
+    -fx-font-weight: bold;
+}
+
+/* Custom Checkbox styles */
+.custom-checkbox {
+    -fx-cursor: hand;
+}
+
+.custom-checkbox > .box {
+    -fx-background-color: #FFFFFF;
+    -fx-border-color: #CBD5E1;
+    -fx-border-width: 1.5px;
+    -fx-border-radius: 6px;
+    -fx-background-radius: 6px;
+    -fx-min-width: 22px;
+    -fx-min-height: 22px;
+    -fx-max-width: 22px;
+    -fx-max-height: 22px;
+    -fx-alignment: center;
+}
+
+.custom-checkbox:selected > .box {
+    -fx-background-color: #2D4B73;
+    -fx-border-color: #2D4B73;
+}
+
+.custom-checkbox > .box > .mark {
+    -fx-background-color: transparent;
+    -fx-shape: "M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z";
+}
+
+.custom-checkbox:selected > .box > .mark {
+    -fx-background-color: #FFFFFF;
+}
+
+/* ==========================================
+   Category Floating Window Overlay Styles
+   ========================================== */
+
+.category-selector-btn {
+    -fx-background-color: transparent;
+    -fx-cursor: hand;
+    -fx-padding: 4px 12px;
+    -fx-background-radius: 8px;
+}
+
+.category-selector-btn:hover {
+    -fx-background-color: #F1F5F9;
+}
+
+.floating-overlay-card {
+    -fx-background-color: #FFFFFF;
+    -fx-background-radius: 18px;
+    -fx-padding: 20px;
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.15), 18, 0, 0, 8);
+}
+
+.floating-card-title {
+    -fx-font-size: 15px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #2D4B73;
+}
+
+.floating-close-btn {
+    -fx-background-color: #F1F5F9;
+    -fx-background-radius: 50%;
+    -fx-min-width: 28px;
+    -fx-min-height: 28px;
+    -fx-max-width: 28px;
+    -fx-max-height: 28px;
+    -fx-alignment: center;
+    -fx-cursor: hand;
+}
+
+.floating-close-btn:hover {
+    -fx-background-color: #E2E8F0;
+}
+
+.floating-close-btn SVGPath {
+    -fx-fill: #6F7E91;
+}
+
+.floating-category-item {
+    -fx-alignment: center;
+    -fx-spacing: 6px;
+    -fx-padding: 8px;
+    -fx-background-color: #F8FAFC;
+    -fx-background-radius: 12px;
+    -fx-border-color: #E2E8F0;
+    -fx-border-width: 1px;
+    -fx-border-radius: 12px;
+    -fx-cursor: hand;
+    -fx-min-width: 76px;
+    -fx-min-height: 76px;
+    -fx-max-width: 76px;
+    -fx-max-height: 76px;
+}
+
+.floating-category-item:hover {
+    -fx-background-color: #E2ECF7;
+    -fx-border-color: #2D4B73;
+}
+
+.floating-category-item SVGPath {
+    -fx-fill: #2D4B73;
+}
+
+.floating-category-item-selected {
+    -fx-background-color: #2D4B73;
+    -fx-border-color: #2D4B73;
+}
+
+.floating-category-item-selected .category-name {
+    -fx-text-fill: #FFFFFF;
+}
+
+.floating-category-item-selected SVGPath {
+    -fx-fill: #FFFFFF;
+}
+
+
+
+
+
+

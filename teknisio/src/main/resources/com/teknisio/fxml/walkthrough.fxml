@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Rectangle?>
+
+<VBox alignment="TOP_CENTER" prefHeight="740.0" prefWidth="360.0" spacing="0.0" styleClass="main-bg" stylesheets="@../css/style.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.teknisio.controller.WalkthroughController">
+    <children>
+        <!-- Rounded Image Container with Slider Dots Overlay -->
+        <StackPane prefHeight="420.0" prefWidth="312.0">
+            <children>
+                <ImageView fx:id="slideImageView" fitHeight="420.0" fitWidth="312.0" pickOnBounds="true" preserveRatio="false">
+                    <!-- Clipped in controller to get rounded corners -->
+                </ImageView>
+                
+                <!-- Dots Capsule Indicator at bottom-center of the image -->
+                <HBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" spacing="8.0" styleClass="slider-indicator-capsule" StackPane.alignment="BOTTOM_CENTER">
+                    <StackPane.margin>
+                        <Insets bottom="16.0" />
+                    </StackPane.margin>
+                    <children>
+                        <StackPane fx:id="dot1" styleClass="slider-dot, slider-dot-active" />
+                        <StackPane fx:id="dot2" styleClass="slider-dot, slider-dot-inactive" />
+                        <StackPane fx:id="dot3" styleClass="slider-dot, slider-dot-inactive" />
+                    </children>
+                </HBox>
+            </children>
+        </StackPane>
+        
+        <!-- Logo and App Info Section -->
+        <VBox alignment="CENTER" spacing="10.0" VBox.vgrow="ALWAYS">
+            <padding>
+                <Insets top="20.0" bottom="20.0" />
+            </padding>
+            <children>
+                <ImageView fitHeight="64.0" fitWidth="64.0" pickOnBounds="true" preserveRatio="true">
+                    <image>
+                        <Image url="@../images/logo.png" />
+                    </image>
+                </ImageView>
+                <VBox alignment="CENTER" spacing="2.0">
+                    <children>
+                        <Label styleClass="title-large" text="TEKNISIO" />
+                        <Label styleClass="tagline" text="Your Service Solution" />
+                    </children>
+                </VBox>
+            </children>
+        </VBox>
+        
+        <!-- Start Button -->
+        <Button fx:id="startButton" mnemonicParsing="false" onAction="#handleStart" prefHeight="48.0" prefWidth="312.0" styleClass="primary-btn" text="Start">
+            <VBox.margin>
+                <Insets bottom="10.0" />
+            </VBox.margin>
+        </Button>
+    </children>
+</VBox>

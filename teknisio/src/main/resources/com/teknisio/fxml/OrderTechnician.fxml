@@ -1,0 +1,258 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.ToggleButton?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.SVGPath?>
+
+<BorderPane prefHeight="740.0" prefWidth="360.0" style="-fx-background-color: #EBF1F6;" stylesheets="@../css/style.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.teknisio.controller.OrderTechnicianController">
+   
+   <!-- Top Header Navigation -->
+   <top>
+      <HBox alignment="CENTER_LEFT" prefHeight="60.0" style="-fx-background-color: transparent;" BorderPane.alignment="CENTER">
+         <padding>
+            <Insets left="20.0" right="20.0" top="10.0" />
+         </padding>
+         <children>
+            <!-- Back Button -->
+            <Button mnemonicParsing="false" onAction="#handleBack" styleClass="back-btn">
+               <graphic>
+                  <SVGPath content="M15.41 16.59L10.83 12l4.58-4.59L14 6l-6 6 6 6 1.41-1.41z" fill="#2D4B73" />
+               </graphic>
+            </Button>
+            
+            <Region HBox.hgrow="ALWAYS" />
+            
+            <!-- Title -->
+            <Label styleClass="section-title" text="Order Technician" />
+            
+            <Region HBox.hgrow="ALWAYS" />
+            
+            <!-- Dummy Node to balance layout centering -->
+            <Region prefWidth="38.0" />
+         </children>
+      </HBox>
+   </top>
+   
+   <!-- Scrollable Main Form -->
+   <center>
+      <ScrollPane fitToHeight="false" fitToWidth="true" hbarPolicy="NEVER" styleClass="hide-scrollbars" vbarPolicy="NEVER" BorderPane.alignment="CENTER">
+         <content>
+            <VBox spacing="20.0" style="-fx-background-color: transparent;">
+               <padding>
+                  <Insets bottom="20.0" left="20.0" right="20.0" top="10.0" />
+               </padding>
+               <children>
+                  
+                  <!-- Select Category Section -->
+                  <VBox spacing="8.0">
+                     <children>
+                        <Label styleClass="section-title" text="Select Category" />
+                        
+                        <HBox alignment="CENTER" spacing="40.0" styleClass="form-card">
+                           <children>
+                              <!-- AC Option -->
+                              <VBox styleClass="category-toggle-tile">
+                                 <children>
+                                    <ToggleButton fx:id="categoryAc" mnemonicParsing="false" styleClass="category-toggle">
+                                       <graphic>
+                                          <SVGPath content="M19 19H5V5h14v14M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2m-1 7h-2V8h2v2m-3 0h-2V8h2v2m-3 0H8V8h2v2m-2 2h8v-2H8v2z" />
+                                       </graphic>
+                                    </ToggleButton>
+                                    <Label styleClass="category-toggle-label" text="AC" />
+                                 </children>
+                              </VBox>
+                              
+                              <!-- Fridge Option -->
+                              <VBox styleClass="category-toggle-tile">
+                                 <children>
+                                    <ToggleButton fx:id="categoryFridge" mnemonicParsing="false" styleClass="category-toggle">
+                                       <graphic>
+                                          <SVGPath content="M19 2H5c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-2 8H7V5h10v5z" />
+                                       </graphic>
+                                    </ToggleButton>
+                                    <Label styleClass="category-toggle-label" text="Fridge" />
+                                 </children>
+                              </VBox>
+                           </children>
+                        </HBox>
+                     </children>
+                  </VBox>
+                  
+                  <!-- Describe Damages Section -->
+                  <VBox spacing="8.0">
+                     <children>
+                        <Label styleClass="section-title" text="Describe Damages" />
+                        
+                        <StackPane alignment="BOTTOM_RIGHT">
+                           <children>
+                              <!-- Text Area Input -->
+                              <TextArea fx:id="descriptionField" prefHeight="130.0" promptText="Describe your furniture damages" styleClass="form-text-area" wrapText="true" />
+                              
+                              <!-- Overlay Attachment Icons -->
+                              <HBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" spacing="2.0">
+                                 <StackPane.margin>
+                                    <Insets bottom="8.0" right="10.0" />
+                                 </StackPane.margin>
+                                 <children>
+                                    <!-- Photo Attachment -->
+                                    <Button mnemonicParsing="false" styleClass="attachment-btn" fx:id="photoBtn">
+                                       <graphic>
+                                          <SVGPath content="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z" />
+                                       </graphic>
+                                    </Button>
+                                    
+                                    <!-- Camera Attachment -->
+                                    <Button mnemonicParsing="false" styleClass="attachment-btn" fx:id="cameraBtn">
+                                       <graphic>
+                                          <SVGPath content="M9 2L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2h-3.17L15 2H9zm3 15c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z" />
+                                       </graphic>
+                                    </Button>
+                                 </children>
+                              </HBox>
+                           </children>
+                        </StackPane>
+                     </children>
+                  </VBox>
+                  
+                  <!-- Set Schedule Section -->
+                  <VBox spacing="8.0">
+                     <children>
+                        <Label styleClass="section-title" text="Set Schedule" />
+                        
+                        <VBox styleClass="form-card" spacing="16.0">
+                           <children>
+                              
+                              <!-- Date selector picker row -->
+                              <HBox alignment="CENTER_LEFT" spacing="10.0" style="-fx-border-color: transparent transparent #E2E8F0 transparent; -fx-border-width: 0 0 1px 0; -fx-padding: 0 0 12px 0;">
+                                 <children>
+                                    <!-- Calendar Icon -->
+                                    <SVGPath content="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V10h14v10zm0-12H5V6h14v2z" fill="#2D4B73" scaleX="0.9" scaleY="0.9" />
+                                    <!-- DatePicker -->
+                                    <DatePicker fx:id="datePicker" promptText="Set a date" styleClass="form-date-picker" HBox.hgrow="ALWAYS" />
+                                 </children>
+                              </HBox>
+                              
+                              <!-- Time segment segmented HBox -->
+                              <HBox alignment="CENTER">
+                                 <children>
+                                    <!-- Morning Segment -->
+                                    <ToggleButton fx:id="timeMorning" mnemonicParsing="false" prefWidth="102.0" styleClass="time-toggle, time-toggle-first" HBox.hgrow="ALWAYS">
+                                       <graphic>
+                                          <VBox alignment="CENTER" spacing="3.0">
+                                             <children>
+                                                <SVGPath content="M12.01 6.01c-.38 0-.74.15-1.01.42s-.42.63-.42 1.01c0 .38.15.74.42 1.01.27.27.63.42 1.01.42s.74-.15 1.01-.42.42-.63.42-1.01c0-.38-.15-.74-.42-1.01s-.63-.42-1.01-.42zm-5-3h10v2h-10zm-1 8h12v2h-12zm7.5-6h-3v1h3z" styleClass="time-toggle-icon" />
+                                                <Label styleClass="time-toggle-title" text="Morning" />
+                                                <Label styleClass="time-toggle-subtitle" text="8 AM - 11 AM" />
+                                             </children>
+                                          </VBox>
+                                       </graphic>
+                                    </ToggleButton>
+                                    
+                                    <!-- Afternoon Segment -->
+                                    <ToggleButton fx:id="timeAfternoon" mnemonicParsing="false" prefWidth="102.0" styleClass="time-toggle" HBox.hgrow="ALWAYS">
+                                       <graphic>
+                                          <VBox alignment="CENTER" spacing="3.0">
+                                             <children>
+                                                <SVGPath content="M12 7c-2.76 0-5 2.24-5 5s2.24 5 5 5 5-2.24 5-5-2.24-5-5-5zM2 13h2c.55 0 1-.45 1-1s-.45-1-1-1H2c-.55 0-1 .45-1 1s.45 1 1 1zm18 0h2c.55 0 1-.45 1-1s-.45-1-1-1h-2c-.55 0-1 .45-1 1s.45 1 1 1zM11 2v2c0 .55.45 1 1 1s1-.45 1-1V2c0-.55-.45-1-1-1s-1 .45-1 1zm0 18v2c0 .55.45 1 1 1s1-.45 1-1v-2c0-.55-.45-1-1-1s-1 .45-1 1z" styleClass="time-toggle-icon" />
+                                                <Label styleClass="time-toggle-title" text="Afternoon" />
+                                                <Label styleClass="time-toggle-subtitle" text="12 PM - 3 PM" />
+                                             </children>
+                                          </VBox>
+                                       </graphic>
+                                    </ToggleButton>
+                                    
+                                    <!-- Evening Segment -->
+                                    <ToggleButton fx:id="timeEvening" mnemonicParsing="false" prefWidth="102.0" styleClass="time-toggle, time-toggle-last" HBox.hgrow="ALWAYS">
+                                       <graphic>
+                                          <VBox alignment="CENTER" spacing="3.0">
+                                             <children>
+                                                <SVGPath content="M12 2c-5.52 0-10 4.48-10 10s4.48 10 10 10 10-4.48 10-10-4.48-10-10-10zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z" styleClass="time-toggle-icon" />
+                                                <Label styleClass="time-toggle-title" text="Evening" />
+                                                <Label styleClass="time-toggle-subtitle" text="4 PM - 6 PM" />
+                                             </children>
+                                          </VBox>
+                                       </graphic>
+                                    </ToggleButton>
+                                 </children>
+                              </HBox>
+                           </children>
+                        </VBox>
+                     </children>
+                  </VBox>
+               </children>
+            </VBox>
+         </content>
+      </ScrollPane>
+   </center>
+   
+   <!-- Bottom Sticky Summary Card and Action Button -->
+   <bottom>
+      <VBox alignment="CENTER" spacing="12.0" style="-fx-background-color: #EBF1F6;" BorderPane.alignment="CENTER">
+         <padding>
+            <Insets bottom="20.0" left="20.0" right="20.0" top="10.0" />
+         </padding>
+         <children>
+            <!-- Summary Card -->
+            <HBox alignment="CENTER_LEFT" spacing="12.0" styleClass="summary-card">
+               <children>
+                  <!-- Circular Profile Picture -->
+                  <StackPane fx:id="techImageWrapper">
+                     <children>
+                        <ImageView fx:id="techImageView" fitHeight="48.0" fitWidth="48.0" pickOnBounds="true" preserveRatio="false">
+                           <image>
+                              <Image url="@../images/tech_ahmed.png" />
+                           </image>
+                        </ImageView>
+                     </children>
+                  </StackPane>
+                  
+                  <!-- Info Details -->
+                  <VBox alignment="CENTER_LEFT" spacing="2.0">
+                     <children>
+                        <Label fx:id="techNameLabel" style="-fx-font-size: 13px; -fx-font-weight: bold; -fx-text-fill: #2D4B73;" text="Ahmed Rush" />
+                        
+                        <!-- Ratings -->
+                        <HBox fx:id="techRatingBox" alignment="CENTER_LEFT" spacing="1.0" />
+                        
+                        <!-- Location Distance -->
+                        <HBox alignment="CENTER_LEFT" spacing="4.0">
+                           <children>
+                              <SVGPath content="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" fill="#6F7E91" scaleX="0.5" scaleY="0.5" />
+                              <Label fx:id="techDistanceLabel" style="-fx-font-size: 8px; -fx-text-fill: #6F7E91; -fx-font-weight: bold;" text="Location: ±2 Km" />
+                           </children>
+                        </HBox>
+                        
+                        <!-- Price -->
+                        <HBox alignment="CENTER_LEFT" spacing="4.0">
+                           <children>
+                              <Label fx:id="techPriceLabel" style="-fx-font-size: 9px; -fx-text-fill: #2D4B73; -fx-font-weight: bold;" text="Price Range: Rp50.000 - Rp200.000" />
+                           </children>
+                        </HBox>
+                     </children>
+                  </VBox>
+                  
+                  <Region HBox.hgrow="ALWAYS" />
+                  
+                  <!-- Specialist Badges -->
+                  <HBox fx:id="techBadgesBox" alignment="CENTER_RIGHT" spacing="4.0" />
+               </children>
+            </HBox>
+            
+            <!-- Confirm Order Button -->
+            <Button mnemonicParsing="false" onAction="#handleConfirmOrder" prefHeight="48.0" prefWidth="320.0" styleClass="primary-btn" text="Confirm Order" />
+         </children>
+      </VBox>
+   </bottom>
+</BorderPane>

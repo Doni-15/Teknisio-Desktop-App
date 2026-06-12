@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.SVGPath?>
+
+<ScrollPane fitToHeight="false" fitToWidth="true" hbarPolicy="NEVER" styleClass="hide-scrollbars" style="-fx-background-color: #EBF1F6;" stylesheets="@../css/style.css" vbarPolicy="NEVER" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.teknisio.controller.HistoryController">
+   <content>
+      <VBox alignment="TOP_CENTER" spacing="20.0" style="-fx-background-color: transparent;">
+         <padding>
+            <Insets bottom="30.0" left="20.0" right="20.0" top="10.0" />
+         </padding>
+         <children>
+            
+            <!-- Header: Back Button & Title -->
+            <StackPane prefHeight="50.0">
+               <children>
+                  <!-- Back button left aligned -->
+                  <Button alignment="CENTER" mnemonicParsing="false" onAction="#handleBack" styleClass="back-btn" StackPane.alignment="CENTER_LEFT">
+                     <graphic>
+                        <SVGPath content="M15.41 16.59L10.83 12l4.58-4.59L14 6l-6 6 6 6 1.41-1.41z" fill="#2D4B73" />
+                     </graphic>
+                  </Button>
+                  
+                  <!-- Centered Title -->
+                  <Label styleClass="section-title" text="History" style="-fx-font-size: 16px;" StackPane.alignment="CENTER" />
+               </children>
+            </StackPane>
+            
+            <!-- Card Section: History List -->
+            <VBox spacing="14.0" style="-fx-background-color: transparent;">
+               <children>
+                  
+                  <!-- Dummy History Card 1: Matches Mockup Sisi Kiri -->
+                  <VBox styleClass="history-card">
+                     <children>
+                        <!-- Header of Card -->
+                        <HBox styleClass="history-card-header">
+                           <children>
+                              <Label styleClass="history-card-title" text="AC Repair" />
+                              <Region HBox.hgrow="ALWAYS" />
+                              <Label styleClass="repaired-badge" text="Repaired" />
+                           </children>
+                        </HBox>
+                        
+                        <!-- Details (Col 1: Technician, Col 2: Date) -->
+                        <HBox styleClass="history-card-body" spacing="0.0">
+                           <children>
+                              <!-- Col Left -->
+                              <VBox styleClass="history-card-col" HBox.hgrow="ALWAYS">
+                                 <children>
+                                    <Label styleClass="history-card-detail-label" text="Technician" />
+                                    <Label styleClass="history-card-detail-val" text="Ahmed Rush" />
+                                 </children>
+                              </VBox>
+                              
+                              <!-- Col Right -->
+                              <VBox styleClass="history-card-col" HBox.hgrow="ALWAYS">
+                                 <children>
+                                    <Label styleClass="history-card-detail-label" text="Date" />
+                                    <Label styleClass="history-card-detail-val" text="11 May 2026" />
+                                 </children>
+                              </VBox>
+                           </children>
+                        </HBox>
+                     </children>
+                  </VBox>
+                  
+               </children>
+            </VBox>
+            
+         </children>
+      </VBox>
+   </content>
+</ScrollPane>

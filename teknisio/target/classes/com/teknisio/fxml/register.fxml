@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox alignment="TOP_CENTER" prefHeight="740.0" prefWidth="360.0" spacing="0.0" styleClass="main-bg" stylesheets="@../css/style.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.teknisio.controller.RegisterController">
+    <children>
+        <!-- Top Logo and Tagline Area -->
+        <VBox alignment="CENTER" spacing="12.0">
+            <VBox.margin>
+                <Insets top="40.0" bottom="30.0" />
+            </VBox.margin>
+            <children>
+                <ImageView fitHeight="80.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true">
+                    <image>
+                        <Image url="@../images/logo.png" />
+                    </image>
+                </ImageView>
+                <VBox alignment="CENTER" spacing="2.0">
+                    <children>
+                        <Label styleClass="title-large" text="TEKNISIO" />
+                        <Label styleClass="tagline" text="Your Service Solution" />
+                    </children>
+                </VBox>
+            </children>
+        </VBox>
+        
+        <!-- Input Fields Form Container -->
+        <VBox maxWidth="312.0" spacing="18.0" VBox.vgrow="ALWAYS">
+            <children>
+                <!-- Email Field -->
+                <VBox spacing="4.0">
+                    <children>
+                        <Label styleClass="input-label" text="Email" />
+                        <TextField fx:id="emailField" prefHeight="44.0" promptText="Enter your Email" styleClass="text-field" />
+                    </children>
+                </VBox>
+                
+                <!-- Password Field -->
+                <VBox spacing="4.0">
+                    <children>
+                        <Label styleClass="input-label" text="Password" />
+                        <PasswordField fx:id="passwordField" prefHeight="44.0" promptText="Enter your Password" styleClass="password-field" />
+                    </children>
+                </VBox>
+                
+                <!-- Phone Number Field -->
+                <VBox spacing="4.0">
+                    <children>
+                        <Label styleClass="input-label" text="Phone Number" />
+                        <TextField fx:id="phoneField" prefHeight="44.0" promptText="Enter your phone number" styleClass="text-field" />
+                    </children>
+                </VBox>
+            </children>
+            <padding>
+                <Insets top="10.0" bottom="20.0" />
+            </padding>
+        </VBox>
+        
+        <!-- Bottom Actions (Confirm button & login link) -->
+        <VBox alignment="CENTER" spacing="20.0">
+            <VBox.margin>
+                <Insets bottom="30.0" />
+            </VBox.margin>
+            <children>
+                <!-- Confirm Button -->
+                <Button fx:id="confirmButton" mnemonicParsing="false" onAction="#handleRegister" prefHeight="48.0" prefWidth="312.0" styleClass="primary-btn" text="Confirm" />
+                
+                <!-- Navigation Link -->
+                <HBox alignment="CENTER" spacing="4.0">
+                    <children>
+                        <Label styleClass="nav-link" text="Already have account?" />
+                        <Label fx:id="loginLink" onMouseClicked="#goToLogin" styleClass="nav-link, nav-link-bold" text="Login now" />
+                    </children>
+                </HBox>
+            </children>
+        </VBox>
+    </children>
+</VBox>
