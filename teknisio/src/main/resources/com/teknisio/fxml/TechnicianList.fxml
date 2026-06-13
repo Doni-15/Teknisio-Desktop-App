@@ -409,7 +409,7 @@
                         <HBox alignment="CENTER" spacing="10.0">
                            <children>
                               <!-- AC Item -->
-                              <VBox fx:id="overlayAC" alignment="CENTER" onMouseClicked="#handleSelectCategory" spacing="6.0" styleClass="floating-category-item, floating-category-item-selected" userData="AC">
+                              <VBox fx:id="overlayAC" alignment="CENTER" onMouseClicked="#handleSelectCategory" spacing="6.0" styleClass="floating-category-item floating-category-item-selected" userData="AC">
                                  <children>
                                     <SVGPath content="M19 19H5V5h14v14M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2m-1 7h-2V8h2v2m-3 0h-2V8h2v2m-3 0H8V8h2v2m-2 2h8v-2H8v2z" scaleX="0.7" scaleY="0.7" />
                                     <Label styleClass="category-name" style="-fx-font-size: 9px; -fx-font-weight: bold; -fx-text-fill: inherit;" text="AC" />

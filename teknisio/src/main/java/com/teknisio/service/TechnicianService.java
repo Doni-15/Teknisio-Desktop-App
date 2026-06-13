@@ -2,6 +2,7 @@ package com.teknisio.service;
 
 import com.google.gson.reflect.TypeToken;
 import com.teknisio.dto.TechnicianDto;
+import com.teknisio.dto.DeviceCategoryDto;
 
 import java.io.IOException;
 import java.lang.reflect.Type;

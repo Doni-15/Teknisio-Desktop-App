@@ -25,9 +25,9 @@
                         <Insets bottom="16.0" />
                     </StackPane.margin>
                     <children>
-                        <StackPane fx:id="dot1" styleClass="slider-dot, slider-dot-active" />
-                        <StackPane fx:id="dot2" styleClass="slider-dot, slider-dot-inactive" />
-                        <StackPane fx:id="dot3" styleClass="slider-dot, slider-dot-inactive" />
+                        <StackPane fx:id="dot1" styleClass="slider-dot slider-dot-active" />
+                        <StackPane fx:id="dot2" styleClass="slider-dot slider-dot-inactive" />
+                        <StackPane fx:id="dot3" styleClass="slider-dot slider-dot-inactive" />
                     </children>
                 </HBox>
             </children>

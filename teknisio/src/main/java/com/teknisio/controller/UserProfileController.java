@@ -129,6 +129,17 @@ public class UserProfileController implements Initializable {
     }
 
     @FXML
+    private void handleSelectLocation(MouseEvent event) {
+        LocationController.setBackRoute("/com/teknisio/fxml/UserProfile.fxml");
+        try {
+            Main.setRoot("/com/teknisio/fxml/Location.fxml");
+        } catch (IOException e) {
+            System.err.println("Failed to navigate to Location: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
     private void handleLanguageClick(MouseEvent event) {
         showAlert(Alert.AlertType.INFORMATION, "Pengaturan", "Pengaturan bahasa akan segera tersedia.");
     }

@@ -17,10 +17,13 @@ public class TechnicianDto {
     private Integer totalJobs;
     private String description;
     private List<DeviceCategoryDto> supportedDeviceCategories;
+    private String phoneNumber;
 
     public TechnicianDto() {}
 
     public String getTechnicianProfileId() { return technicianProfileId; }
+    public String getPhoneNumber() { return phoneNumber; }
+    public void setPhoneNumber(String phoneNumber) { this.phoneNumber = phoneNumber; }
     public String getName() { return name; }
     public String getProfilePhoto() { return profilePhoto; }
     public String getAvailabilityStatus() { return availabilityStatus; }

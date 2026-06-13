@@ -36,7 +36,7 @@ public class ChatController implements Initializable {
     @FXML private TextField searchField;
 
     // Active conversations are stored per-session (not from backend)
-    private static final List<ChatContact> SESSION_ACTIVE_CONTACTS = new ArrayList<>();
+    public static final List<ChatContact> SESSION_ACTIVE_CONTACTS = new ArrayList<>();
 
     private List<ChatContact> technicianContacts = new ArrayList<>();
 

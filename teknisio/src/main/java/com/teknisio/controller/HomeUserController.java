@@ -67,9 +67,19 @@ public class HomeUserController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        // Restore location label
-        if (locationValueLabel != null && selectedLocationText != null) {
-            locationValueLabel.setText(selectedLocationText);
+        // Restore location label from session or selected text
+        if (locationValueLabel != null) {
+            String address = SessionManager.getAddress();
+            if (address != null && !address.isBlank()) {
+                String shortAddr = address;
+                if (address.contains(",")) {
+                    shortAddr = address.split(",")[0].trim();
+                }
+                locationValueLabel.setText(shortAddr);
+                selectedLocationText = shortAddr;
+            } else {
+                locationValueLabel.setText(selectedLocationText);
+            }
         }
 
         // Set greeting from session

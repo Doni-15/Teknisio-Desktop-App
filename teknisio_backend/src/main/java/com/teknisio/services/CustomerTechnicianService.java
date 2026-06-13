@@ -130,7 +130,8 @@ public class CustomerTechnicianService {
       technicianProfile.getRatingCount(),
       technicianProfile.getTotalPekerjaan(),
       technicianProfile.getDeskripsi(),
-      getSupportedDeviceCategories(technicianProfile)
+      getSupportedDeviceCategories(technicianProfile),
+      technicianProfile.getUser().getNoTelepon()
     );
   }
 

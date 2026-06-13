@@ -40,7 +40,13 @@ public class ServiceRequestDto {
     public String getCustomerPhoneNumber() { return customerPhoneNumber; }
     public String getCustomerProfilePhoto() { return customerProfilePhoto; }
     public String getTechnicianProfileId() { return technicianProfileId; }
-    public String getStatus() { return status; }
+    public String getStatus() {
+        if (status == null) return null;
+        String upper = status.toUpperCase();
+        if ("WAITING".equals(upper)) return "PENDING";
+        if ("ON_PROGRESS".equals(upper)) return "IN_PROGRESS";
+        return status;
+    }
     public String getIssueDescription() { return issueDescription; }
     public String getAddress() { return address; }
     public String getAddressDetail() { return addressDetail; }
@@ -85,9 +91,11 @@ public class ServiceRequestDto {
     public String getStatusLabel() {
         if (status == null) return "Unknown";
         switch (status.toUpperCase()) {
-            case "PENDING":    return "Menunggu";
+            case "PENDING":
+            case "WAITING":    return "Menunggu";
             case "ACCEPTED":   return "Diterima";
-            case "IN_PROGRESS":return "Sedang Dikerjakan";
+            case "IN_PROGRESS":
+            case "ON_PROGRESS":return "Sedang Dikerjakan";
             case "COMPLETED":  return "Selesai";
             case "CANCELLED":  return "Dibatalkan";
             case "REJECTED":   return "Ditolak";
@@ -99,9 +107,11 @@ public class ServiceRequestDto {
     public String getStatusColor() {
         if (status == null) return "#6B7680";
         switch (status.toUpperCase()) {
-            case "PENDING":    return "#F39C12";
+            case "PENDING":
+            case "WAITING":    return "#F39C12";
             case "ACCEPTED":   return "#2980B9";
-            case "IN_PROGRESS":return "#8E44AD";
+            case "IN_PROGRESS":
+            case "ON_PROGRESS":return "#8E44AD";
             case "COMPLETED":  return "#27AE60";
             case "CANCELLED":  return "#95A5A6";
             case "REJECTED":   return "#E74C3C";

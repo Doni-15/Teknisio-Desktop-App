@@ -467,6 +467,9 @@
     -fx-alignment: center;
     -fx-cursor: hand;
     -fx-padding: 0px;
+    -fx-content-display: graphic-only;
+    -fx-text-overrun: clip;
+    -fx-ellipsis-string: "";
 }
 
 .category-toggle:selected {

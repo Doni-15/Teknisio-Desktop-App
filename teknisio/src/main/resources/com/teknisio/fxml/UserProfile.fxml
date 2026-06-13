@@ -111,14 +111,15 @@
                         </HBox>
 
                         <!-- Row 4: Address -->
-                        <HBox alignment="CENTER_LEFT" styleClass="profile-card-row-last">
+                        <HBox alignment="CENTER_LEFT" onMouseClicked="#handleSelectLocation" styleClass="profile-card-row-last" style="-fx-cursor: hand;">
                            <children>
                               <VBox alignment="CENTER_LEFT" spacing="2.0" HBox.hgrow="ALWAYS">
                                  <children>
                                     <Label styleClass="profile-row-label" text="Address" />
                                     <Label fx:id="rowAddressVal" styleClass="profile-row-value" text="—" wrapText="true" />
                                  </children>
-                              </VBox>
+                              </VBox>
+                              <SVGPath content="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z" fill="#2D4B73" opacity="0.6" scaleX="0.8" scaleY="0.8" />
                            </children>
                         </HBox>
                      </children>
