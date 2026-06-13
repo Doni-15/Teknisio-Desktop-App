@@ -11,12 +11,12 @@ import javafx.animation.Timeline;
 import javafx.animation.TranslateTransition;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import java.io.IOException;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Alert;
-import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
@@ -50,6 +50,18 @@ public class HomeUserController implements Initializable {
     @FXML
     private VBox newsContainer;
 
+    @FXML
+    private Label locationValueLabel;
+
+    private static String selectedLocationText = "Intertip St., Medan";
+    
+    /**
+     * Called by LocationController when a new location is selected.
+     */
+    public static void setSelectedLocation(String location) {
+        selectedLocationText = location;
+    }
+
     private List<Technician> technicians = new ArrayList<>();
     private List<News> newsList = new ArrayList<>();
 
@@ -61,6 +73,11 @@ public class HomeUserController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        // Restore selected location text
+        if (locationValueLabel != null && selectedLocationText != null) {
+            locationValueLabel.setText(selectedLocationText);
+        }
+
         // 1. Circular Crop on Profile Image
         Circle profileClip = new Circle(21, 21, 21);
         profileImageView.setClip(profileClip);
@@ -86,7 +103,7 @@ public class HomeUserController implements Initializable {
             "Oven Specialist",
             4.8,
             "Rp 40.000 - Rp 150.000",
-            "/com/teknisio/images/tech_cedric.png",
+            "/com/teknisio/assets/technicians/tech_cedric.png",
             false
         ));
         
@@ -95,7 +112,7 @@ public class HomeUserController implements Initializable {
             "AC Specialist",
             5.0,
             "Rp 50.000 - Rp 200.000",
-            "/com/teknisio/images/tech_ahmed.png",
+            "/com/teknisio/assets/technicians/tech_ahmed.png",
             true // Featured center card
         ));
 
@@ -104,7 +121,7 @@ public class HomeUserController implements Initializable {
             "Fridge Specialist",
             4.7,
             "Rp 45.000 - Rp 180.000",
-            "/com/teknisio/images/tech_devon.png",
+            "/com/teknisio/assets/technicians/tech_devon.png",
             false
         ));
 
@@ -112,13 +129,13 @@ public class HomeUserController implements Initializable {
         newsList.add(new News(
             "Cara agar perabotan mu awet",
             "2 April 2026",
-            "/com/teknisio/images/news_prep.png",
+            "/com/teknisio/assets/news/news_prep.png",
             "5 min read"
         ));
         newsList.add(new News(
             "Waspada arus listrik dirumah mu",
             "2 April 2026",
-            "/com/teknisio/images/news_ac.png",
+            "/com/teknisio/assets/news/news_ac.png",
             "8 min read"
         ));
     }
@@ -550,6 +567,16 @@ public class HomeUserController implements Initializable {
             Main.setRoot("/com/teknisio/fxml/History.fxml");
         } catch (IOException e) {
             System.err.println("Failed to navigate to History page: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    private void handleLocationClick(MouseEvent event) {
+        try {
+            Main.setRoot("/com/teknisio/fxml/Location.fxml");
+        } catch (IOException e) {
+            System.err.println("Failed to navigate to Location page: " + e.getMessage());
             e.printStackTrace();
         }
     }

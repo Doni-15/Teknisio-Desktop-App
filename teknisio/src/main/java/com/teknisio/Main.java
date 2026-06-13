@@ -28,7 +28,7 @@ public class Main extends Application {
         
         // Add application icon if logo exists
         try {
-            Image icon = new Image(getClass().getResource("/com/teknisio/images/logo.png").toExternalForm());
+Image icon = new Image(getClass().getResource("/com/teknisio/assets/logo/logo.png").toExternalForm());
             stage.getIcons().add(icon);
         } catch (Exception e) {
             System.err.println("Could not load application icon: " + e.getMessage());

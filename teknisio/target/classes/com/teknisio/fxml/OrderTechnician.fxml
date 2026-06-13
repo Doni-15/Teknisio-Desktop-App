@@ -212,7 +212,7 @@
                      <children>
                         <ImageView fx:id="techImageView" fitHeight="48.0" fitWidth="48.0" pickOnBounds="true" preserveRatio="false">
                            <image>
-                              <Image url="@../images/tech_ahmed.png" />
+                              <Image url="@../assets/technicians/tech_ahmed.png" />
                            </image>
                         </ImageView>
                      </children>

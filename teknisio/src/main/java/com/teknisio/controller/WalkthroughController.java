@@ -45,9 +45,9 @@ public class WalkthroughController implements Initializable {
         // Load the slide images
         try {
             slideImages = new Image[] {
-                new Image(getClass().getResource("/com/teknisio/images/slide1.png").toExternalForm()),
-                new Image(getClass().getResource("/com/teknisio/images/slide2.png").toExternalForm()),
-                new Image(getClass().getResource("/com/teknisio/images/slide3.png").toExternalForm())
+                new Image(getClass().getResource("/com/teknisio/assets/onboarding/onboarding_1.png").toExternalForm()),
+                new Image(getClass().getResource("/com/teknisio/assets/onboarding/onboarding_2.png").toExternalForm()),
+                new Image(getClass().getResource("/com/teknisio/assets/onboarding/onboarding_3.png").toExternalForm())
             };
         } catch (Exception e) {
             System.err.println("Error loading slide images: " + e.getMessage());
