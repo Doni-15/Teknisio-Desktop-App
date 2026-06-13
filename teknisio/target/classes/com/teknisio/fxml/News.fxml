@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.SVGPath?>
+
+<BorderPane prefHeight="740.0" prefWidth="360.0" style="-fx-background-color: #EBF1F6;" stylesheets="@../css/style.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.teknisio.controller.NewsController">
+
+   <!-- Top Header -->
+   <top>
+      <HBox alignment="CENTER_LEFT" minHeight="54.0" style="-fx-background-color: transparent;" BorderPane.alignment="CENTER">
+         <padding>
+            <Insets left="22.0" right="22.0" top="38.0" />
+         </padding>
+         <children>
+            <Button mnemonicParsing="false" onAction="#handleBack" styleClass="back-btn">
+               <graphic>
+                  <SVGPath content="M15.41 16.59L10.83 12l4.58-4.59L14 6l-6 6 6 6 1.41-1.41z" fill="#2D4B73" />
+               </graphic>
+            </Button>
+            <Region HBox.hgrow="ALWAYS" />
+            <Label styleClass="section-title" text="Artikel & Tips" style="-fx-font-size: 18px;" />
+            <Region HBox.hgrow="ALWAYS" />
+            <Region prefWidth="44.0" />
+         </children>
+      </HBox>
+   </top>
+
+   <!-- Scrollable News Content -->
+   <center>
+      <ScrollPane fitToHeight="false" fitToWidth="true" hbarPolicy="NEVER" styleClass="hide-scrollbars" vbarPolicy="NEVER" BorderPane.alignment="CENTER">
+         <content>
+            <VBox spacing="16.0" style="-fx-background-color: transparent;">
+               <padding>
+                  <Insets bottom="34.0" left="22.0" right="22.0" top="14.0" />
+               </padding>
+               <children>
+
+                  <!-- Tips Artikel Card 1 -->
+                  <VBox spacing="10.0" styleClass="form-card">
+                     <padding>
+                        <Insets bottom="14.0" left="14.0" right="14.0" top="14.0" />
+                     </padding>
+                     <children>
+                        <ImageView fitHeight="160.0" fitWidth="300.0" pickOnBounds="true" preserveRatio="false">
+                           <image>
+                              <Image url="@../assets/news/tips_news.png" />
+                           </image>
+                        </ImageView>
+                        <Label style="-fx-font-size: 17px; -fx-font-weight: bold; -fx-text-fill: #1F2329;" text="Tips merawat alat elektronik rumah tangga" wrapText="true" />
+                        <Label style="-fx-font-size: 12px; -fx-text-fill: #69757E;" text="Panduan singkat agar perangkat lebih awet dan tahan lama digunakan sehari-hari." wrapText="true" />
+                        <Label style="-fx-font-size: 12px; -fx-text-fill: #8B949C;" text="2 April 2026" />
+                     </children>
+                  </VBox>
+
+                  <!-- Tips Artikel Card 2 -->
+                  <VBox spacing="10.0" styleClass="form-card">
+                     <padding>
+                        <Insets bottom="14.0" left="14.0" right="14.0" top="14.0" />
+                     </padding>
+                     <children>
+                        <ImageView fitHeight="160.0" fitWidth="300.0" pickOnBounds="true" preserveRatio="false">
+                           <image>
+                              <Image url="@../assets/news/alert_news.png" />
+                           </image>
+                        </ImageView>
+                        <Label style="-fx-font-size: 17px; -fx-font-weight: bold; -fx-text-fill: #1F2329;" text="Waspada arus listrik di rumahmu" wrapText="true" />
+                        <Label style="-fx-font-size: 12px; -fx-text-fill: #69757E;" text="Hindari tindakan ini kalau kamu ga mau perangkat elektronik rusak." wrapText="true" />
+                        <Label style="-fx-font-size: 12px; -fx-text-fill: #8B949C;" text="2 April 2026" />
+                     </children>
+                  </VBox>
+
+               </children>
+            </VBox>
+         </content>
+      </ScrollPane>
+   </center>
+
+</BorderPane>

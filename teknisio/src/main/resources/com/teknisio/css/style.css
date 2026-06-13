@@ -1314,3 +1314,51 @@
     -fx-background-color: #3A5F90;
 }
 
+/* ==========================================
+   Auth Input Styles (Login / Register)
+   ========================================== */
+
+.auth-input {
+    -fx-background-color: #FFFFFF;
+    -fx-background-radius: 10px;
+    -fx-border-color: #E0E6ED;
+    -fx-border-radius: 10px;
+    -fx-border-width: 1px;
+    -fx-padding: 10px 16px;
+    -fx-text-fill: #1F2329;
+    -fx-prompt-text-fill: #A6ABB1;
+    -fx-font-size: 14px;
+}
+
+.auth-input:focused {
+    -fx-border-color: #2D4B73;
+    -fx-effect: dropshadow(three-pass-box, rgba(45, 75, 115, 0.15), 6, 0, 0, 2);
+}
+
+.auth-input .content {
+    -fx-background-color: #FFFFFF;
+    -fx-background-radius: 10px;
+}
+
+.text-area.auth-input .content {
+    -fx-background-color: #FFFFFF;
+    -fx-background-radius: 10px;
+}
+
+.text-area.auth-input {
+    -fx-padding: 4px;
+}
+
+.text-area.auth-input .scroll-pane {
+    -fx-background-color: transparent;
+}
+
+.text-area.auth-input .scroll-pane .viewport {
+    -fx-background-color: transparent;
+}
+
+.text-area.auth-input .scroll-pane .content {
+    -fx-background-color: #FFFFFF;
+    -fx-padding: 10px 16px;
+}
+

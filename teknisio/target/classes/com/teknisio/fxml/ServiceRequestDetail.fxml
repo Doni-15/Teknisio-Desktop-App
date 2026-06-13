@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.SVGPath?>
+
+<BorderPane prefHeight="740.0" prefWidth="360.0" style="-fx-background-color: #EBF1F6;" stylesheets="@../css/style.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.teknisio.controller.ServiceRequestDetailController">
+
+   <!-- Top Header -->
+   <top>
+      <HBox alignment="CENTER_LEFT" minHeight="54.0" style="-fx-background-color: transparent;" BorderPane.alignment="CENTER">
+         <padding>
+            <Insets left="22.0" right="22.0" top="38.0" />
+         </padding>
+         <children>
+            <Button mnemonicParsing="false" onAction="#handleBack" styleClass="back-btn">
+               <graphic>
+                  <SVGPath content="M15.41 16.59L10.83 12l4.58-4.59L14 6l-6 6 6 6 1.41-1.41z" fill="#2D4B73" />
+               </graphic>
+            </Button>
+            <Region HBox.hgrow="ALWAYS" />
+            <Label styleClass="section-title" text="Detail Pesanan" style="-fx-font-size: 18px;" />
+            <Region HBox.hgrow="ALWAYS" />
+            <Region prefWidth="44.0" />
+         </children>
+      </HBox>
+   </top>
+
+   <!-- Scrollable Main Content -->
+   <center>
+      <ScrollPane fitToHeight="false" fitToWidth="true" hbarPolicy="NEVER" styleClass="hide-scrollbars" vbarPolicy="NEVER" BorderPane.alignment="CENTER">
+         <content>
+            <VBox spacing="20.0" style="-fx-background-color: transparent;">
+               <padding>
+                  <Insets bottom="34.0" left="22.0" right="22.0" top="10.0" />
+               </padding>
+               <children>
+
+                   <!-- Order Info Card -->
+                   <VBox spacing="10.0" styleClass="form-card">
+                      <padding>
+                         <Insets bottom="16.0" left="16.0" right="16.0" top="16.0" />
+                      </padding>
+                      <children>
+                         <Label fx:id="txtOrderCode" style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #1F2329;" text="REQ-" />
+                         <StackPane fx:id="statusBadgeContainer" alignment="CENTER_LEFT">
+                            <children>
+                               <Label fx:id="txtOrderStatus" style="-fx-font-size: 12px; -fx-font-weight: bold; -fx-text-fill: white; -fx-padding: 5 12;" text="Waiting" />
+                            </children>
+                         </StackPane>
+                         <Label fx:id="txtOrderTime" style="-fx-font-size: 12px; -fx-text-fill: #6B7680;" text="Waktu request" />
+                      </children>
+                   </VBox>
+
+                   <!-- Technician Summary Card -->
+                   <VBox fx:id="layoutOrderTechnicianSummary" spacing="10.0" styleClass="form-card" visible="false">
+                      <padding>
+                         <Insets bottom="16.0" left="16.0" right="16.0" top="16.0" />
+                      </padding>
+                      <children>
+                         <Label style="-fx-font-size: 15px; -fx-font-weight: bold; -fx-text-fill: #1F2329;" text="Teknisi yang Mengerjakan" />
+                         <Label fx:id="txtOrderTechnicianName" style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #243B7A;" text="Memuat data teknisi..." />
+                         <Label fx:id="txtOrderTechnicianMeta" style="-fx-font-size: 12px; -fx-text-fill: #6B7680;" text="-" />
+                         <Label fx:id="txtOrderTechnicianCategories" style="-fx-font-size: 12px; -fx-text-fill: #5F6B73;" text="-" wrapText="true" />
+                      </children>
+                   </VBox>
+
+                   <!-- Kategori Perangkat Section -->
+                   <VBox spacing="8.0">
+                      <children>
+                         <Label styleClass="section-title" text="Kategori Perangkat" />
+                         <Label fx:id="txtOrderCategories" styleClass="form-card" style="-fx-font-size: 13px; -fx-text-fill: #5F6B73;" text="-" wrapText="true">
+                            <padding>
+                               <Insets bottom="14.0" left="14.0" right="14.0" top="14.0" />
+                            </padding>
+                         </Label>
+                      </children>
+                   </VBox>
+
+                   <!-- Deskripsi Kerusakan Section -->
+                   <VBox spacing="8.0">
+                      <children>
+                         <Label styleClass="section-title" text="Deskripsi Kerusakan" />
+                         <Label fx:id="txtOrderIssue" styleClass="form-card" style="-fx-font-size: 13px; -fx-text-fill: #5F6B73; -fx-line-spacing: 4px;" text="-" wrapText="true">
+                            <padding>
+                               <Insets bottom="14.0" left="14.0" right="14.0" top="14.0" />
+                            </padding>
+                         </Label>
+                      </children>
+                   </VBox>
+
+                   <!-- Alamat Servis Section -->
+                   <VBox spacing="8.0">
+                      <children>
+                         <Label styleClass="section-title" text="Alamat Servis" />
+                         <Label fx:id="txtOrderAddress" styleClass="form-card" style="-fx-font-size: 13px; -fx-text-fill: #5F6B73; -fx-line-spacing: 4px;" text="-" wrapText="true">
+                            <padding>
+                               <Insets bottom="14.0" left="14.0" right="14.0" top="14.0" />
+                            </padding>
+                         </Label>
+                      </children>
+                   </VBox>
+
+                   <!-- Cancel Reason -->
+                   <Label fx:id="txtCancelReason" styleClass="form-card" style="-fx-font-size: 13px; -fx-text-fill: #C62828; -fx-line-spacing: 4px;" text="" visible="false" wrapText="true">
+                      <padding>
+                         <Insets bottom="14.0" left="14.0" right="14.0" top="14.0" />
+                      </padding>
+                   </Label>
+
+                   <!-- Completion Summary -->
+                   <VBox fx:id="layoutCompletionSummary" spacing="10.0" styleClass="form-card" visible="false">
+                      <padding>
+                         <Insets bottom="16.0" left="16.0" right="16.0" top="16.0" />
+                      </padding>
+                      <children>
+                         <Label style="-fx-font-size: 15px; -fx-font-weight: bold; -fx-text-fill: #1F2329;" text="Ringkasan Penyelesaian" />
+                         <Label style="-fx-font-size: 12px; -fx-text-fill: #6B7680;" text="Biaya akhir" />
+                         <Label fx:id="txtFinalCostValue" style="-fx-font-size: 26px; -fx-font-weight: bold; -fx-text-fill: #243B7A;" text="Rp0" />
+                         <Label fx:id="txtCompletionSummaryNoteLabel" style="-fx-font-size: 12px; -fx-font-weight: bold; -fx-text-fill: #6B7680;" text="Catatan teknisi" visible="false" />
+                         <Label fx:id="txtCompletionSummaryNote" style="-fx-font-size: 13px; -fx-text-fill: #5F6B73; -fx-line-spacing: 4px; -fx-background-color: #F7FAFC; -fx-padding: 12;" text="-" visible="false" wrapText="true" />
+                      </children>
+                   </VBox>
+
+                   <!-- Riwayat Status -->
+                   <VBox spacing="8.0">
+                      <children>
+                         <Label fx:id="txtStatusHistoryLabel" styleClass="section-title" text="Riwayat Status" visible="false" />
+                         <VBox fx:id="layoutStatusHistory" spacing="8.0" styleClass="form-card" visible="false">
+                            <padding>
+                               <Insets bottom="14.0" left="14.0" right="14.0" top="14.0" />
+                            </padding>
+                         </VBox>
+                      </children>
+                   </VBox>
+
+                   <!-- Status Message -->
+                   <Label fx:id="txtDetailMessage" style="-fx-font-size: 12px; -fx-text-fill: #6B7680;" text="" wrapText="true" />
+
+                   <!-- Action Buttons -->
+                   <Button fx:id="btnCancelOrder" mnemonicParsing="false" onAction="#handleCancelOrder" prefHeight="52.0" prefWidth="320.0" style="-fx-background-color: #FFE5E5; -fx-background-radius: 12px; -fx-text-fill: #FF5A5A; -fx-font-size: 16px; -fx-font-weight: bold; -fx-cursor: hand;" text="Batalkan Pesanan" visible="false" />
+                   <Button fx:id="btnWriteReview" mnemonicParsing="false" onAction="#handleWriteReview" prefHeight="52.0" prefWidth="320.0" styleClass="primary-btn" text="Tulis Ulasan" visible="false" />
+                   <Button fx:id="btnTrackTechnician" mnemonicParsing="false" onAction="#handleTrackTechnician" prefHeight="52.0" prefWidth="320.0" styleClass="primary-btn" text="🗺 Lacak Teknisi" visible="false" />
+                   <Button fx:id="btnOpenChat" mnemonicParsing="false" onAction="#handleOpenChat" prefHeight="52.0" prefWidth="320.0" styleClass="form-card" style="-fx-text-fill: #2F4A8A; -fx-font-size: 16px; -fx-font-weight: bold; -fx-cursor: hand;" text="💬 Chat Teknisi" visible="false" />
+
+               </children>
+            </VBox>
+         </content>
+      </ScrollPane>
+   </center>
+
+</BorderPane>

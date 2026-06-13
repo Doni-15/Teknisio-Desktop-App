@@ -4,83 +4,73 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox alignment="TOP_CENTER" prefHeight="740.0" prefWidth="360.0" spacing="0.0" styleClass="main-bg" stylesheets="@../css/style.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.teknisio.controller.RegisterController">
-    <children>
-        <!-- Top Logo and Tagline Area -->
-        <VBox alignment="CENTER" spacing="12.0">
-            <VBox.margin>
-                <Insets top="40.0" bottom="30.0" />
-            </VBox.margin>
-            <children>
-                <ImageView fitHeight="80.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true">
-                    <image>
-                        <Image url="@../assets/logo/logo.png" />
-                    </image>
-                </ImageView>
-                <VBox alignment="CENTER" spacing="2.0">
-                    <children>
-                        <Label styleClass="title-large" text="TEKNISIO" />
-                        <Label styleClass="tagline" text="Your Service Solution" />
-                    </children>
-                </VBox>
-            </children>
-        </VBox>
-        
-        <!-- Input Fields Form Container -->
-        <VBox maxWidth="312.0" spacing="18.0" VBox.vgrow="ALWAYS">
-            <children>
-                <!-- Email Field -->
-                <VBox spacing="4.0">
-                    <children>
-                        <Label styleClass="input-label" text="Email" />
-                        <TextField fx:id="emailField" prefHeight="44.0" promptText="Enter your Email" styleClass="text-field" />
-                    </children>
-                </VBox>
-                
-                <!-- Password Field -->
-                <VBox spacing="4.0">
-                    <children>
-                        <Label styleClass="input-label" text="Password" />
-                        <PasswordField fx:id="passwordField" prefHeight="44.0" promptText="Enter your Password" styleClass="password-field" />
-                    </children>
-                </VBox>
-                
-                <!-- Phone Number Field -->
-                <VBox spacing="4.0">
-                    <children>
-                        <Label styleClass="input-label" text="Phone Number" />
-                        <TextField fx:id="phoneField" prefHeight="44.0" promptText="Enter your phone number" styleClass="text-field" />
-                    </children>
-                </VBox>
-            </children>
-            <padding>
-                <Insets top="10.0" bottom="20.0" />
-            </padding>
-        </VBox>
-        
-        <!-- Bottom Actions (Confirm button & login link) -->
-        <VBox alignment="CENTER" spacing="20.0">
-            <VBox.margin>
-                <Insets bottom="30.0" />
-            </VBox.margin>
-            <children>
-                <!-- Confirm Button -->
-                <Button fx:id="confirmButton" mnemonicParsing="false" onAction="#handleRegister" prefHeight="48.0" prefWidth="312.0" styleClass="primary-btn" text="Confirm" />
-                
-                <!-- Navigation Link -->
-                <HBox alignment="CENTER" spacing="4.0">
-                    <children>
-                        <Label styleClass="nav-link" text="Already have account?" />
-                        <Label fx:id="loginLink" onMouseClicked="#goToLogin" styleClass="nav-link, nav-link-bold" text="Login now" />
-                    </children>
-                </HBox>
-            </children>
-        </VBox>
-    </children>
-</VBox>
+<BorderPane prefHeight="740.0" prefWidth="360.0" style="-fx-background-color: #EEF7FA;" stylesheets="@../css/style.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.teknisio.controller.RegisterController">
+
+   <center>
+      <ScrollPane fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" styleClass="hide-scrollbars" vbarPolicy="AS_NEEDED" BorderPane.alignment="CENTER">
+         <content>
+            <VBox alignment="TOP_CENTER" spacing="16.0" style="-fx-background-color: transparent;">
+               <padding>
+                  <Insets bottom="40.0" left="28.0" right="28.0" top="46.0" />
+               </padding>
+               <children>
+
+                  <!-- Logo -->
+                  <ImageView fitHeight="92.0" fitWidth="92.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../assets/logo_teknisio.png" />
+                     </image>
+                  </ImageView>
+
+                  <!-- Brand -->
+                  <Label style="-fx-font-size: 28px; -fx-font-weight: bold; -fx-text-fill: #4E6FDB; -fx-letter-spacing: 0.08em;" text="TEKNISIO" />
+                  <Label style="-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: #1F2329;" text="Buat akun kamu" />
+
+                  <!-- Role Tabs -->
+                  <HBox alignment="CENTER" prefHeight="42.0" spacing="10.0">
+                     <children>
+                        <Label fx:id="txtTabCustomer" alignment="CENTER" maxWidth="Infinity" onMouseClicked="#switchToCustomer" style="-fx-background-color: #4F70D9; -fx-background-radius: 8px; -fx-text-fill: white; -fx-font-size: 13px; -fx-font-weight: bold; -fx-padding: 10 0; -fx-cursor: hand;" text="Pelanggan" HBox.hgrow="ALWAYS" />
+                        <Label fx:id="txtTabTechnician" alignment="CENTER" maxWidth="Infinity" onMouseClicked="#switchToTechnician" style="-fx-background-color: #D3DFF5; -fx-background-radius: 8px; -fx-text-fill: #2F4A8A; -fx-font-size: 13px; -fx-font-weight: bold; -fx-padding: 10 0; -fx-cursor: hand;" text="Teknisi" HBox.hgrow="ALWAYS" />
+                     </children>
+                  </HBox>
+
+                  <!-- Form Fields -->
+                  <VBox spacing="12.0">
+                     <children>
+                        <TextField fx:id="nameField" prefHeight="50.0" promptText="Nama lengkap" styleClass="auth-input" />
+                        <TextField fx:id="emailField" prefHeight="50.0" promptText="Email" styleClass="auth-input" />
+                        <TextField fx:id="phoneField" prefHeight="50.0" promptText="Nomor telepon" styleClass="auth-input" />
+                        <PasswordField fx:id="passwordField" prefHeight="50.0" promptText="Password" styleClass="auth-input" />
+                        <TextArea fx:id="addressField" prefHeight="76.0" prefWidth="304.0" promptText="Alamat" styleClass="auth-input" wrapText="true" />
+
+                        <!-- Technician description (hidden by default) -->
+                        <VBox fx:id="layoutDescription" spacing="10.0" visible="false" managed="false">
+                           <children>
+                              <TextArea fx:id="edtDescription" prefHeight="84.0" prefWidth="304.0" promptText="Deskripsi teknisi" styleClass="auth-input" wrapText="true" />
+                           </children>
+                        </VBox>
+                     </children>
+                  </VBox>
+
+                  <!-- Register Button -->
+                  <Button fx:id="confirmButton" mnemonicParsing="false" onAction="#handleRegister" prefHeight="52.0" prefWidth="304.0" styleClass="primary-btn" text="Daftar" />
+
+                  <!-- Login Link -->
+                  <Label fx:id="loginLink" alignment="CENTER" onMouseClicked="#goToLogin" style="-fx-font-size: 13px; -fx-text-fill: #1F2329; -fx-cursor: hand;" text="Sudah punya akun? Masuk sekarang" />
+
+               </children>
+            </VBox>
+         </content>
+      </ScrollPane>
+   </center>
+</BorderPane>

@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.SVGPath?>
+
+<BorderPane prefHeight="740.0" prefWidth="360.0" style="-fx-background-color: #EBF1F6;" stylesheets="@../css/style.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.teknisio.controller.TechnicianDetailController">
+
+   <!-- Top Header -->
+   <top>
+      <HBox alignment="CENTER_LEFT" minHeight="54.0" style="-fx-background-color: transparent;" BorderPane.alignment="CENTER">
+         <padding>
+            <Insets left="22.0" right="22.0" top="38.0" />
+         </padding>
+         <children>
+            <Button mnemonicParsing="false" onAction="#handleBack" styleClass="back-btn">
+               <graphic>
+                  <SVGPath content="M15.41 16.59L10.83 12l4.58-4.59L14 6l-6 6 6 6 1.41-1.41z" fill="#2D4B73" />
+               </graphic>
+            </Button>
+            <Region HBox.hgrow="ALWAYS" />
+            <Label styleClass="section-title" text="Detail Teknisi" style="-fx-font-size: 18px;" />
+            <Region HBox.hgrow="ALWAYS" />
+            <Region prefWidth="44.0" />
+         </children>
+      </HBox>
+   </top>
+
+   <!-- Scrollable Main Content -->
+   <center>
+      <ScrollPane fitToHeight="false" fitToWidth="true" hbarPolicy="NEVER" styleClass="hide-scrollbars" vbarPolicy="NEVER" BorderPane.alignment="CENTER">
+         <content>
+            <VBox spacing="20.0" style="-fx-background-color: transparent;">
+               <padding>
+                  <Insets bottom="34.0" left="22.0" right="22.0" top="10.0" />
+               </padding>
+               <children>
+
+                   <!-- Technician Profile Card -->
+                   <VBox spacing="14.0" styleClass="form-card">
+                      <padding>
+                         <Insets bottom="22.0" left="22.0" right="22.0" top="22.0" />
+                      </padding>
+                      <children>
+                         <!-- Avatar Initial -->
+                         <Label fx:id="txtTechnicianInitial" alignment="CENTER" minHeight="86.0" minWidth="86.0" style="-fx-background-color: #E8EDF5; -fx-background-radius: 44px; -fx-font-size: 32px; -fx-font-weight: bold; -fx-text-fill: #2F4A8A;" text="T" />
+                         
+                         <!-- Name -->
+                         <Label fx:id="txtTechnicianName" alignment="CENTER" maxWidth="Infinity" style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #1F2329;" text="Teknisi" />
+                         
+                         <!-- Status Badge -->
+                         <HBox alignment="CENTER">
+                            <children>
+                               <Label fx:id="txtTechnicianStatus" alignment="CENTER" style="-fx-font-size: 12px; -fx-font-weight: bold; -fx-text-fill: white; -fx-padding: 5 12;" text="Tersedia" />
+                            </children>
+                         </HBox>
+
+                         <!-- Stats Row -->
+                         <HBox alignment="CENTER" spacing="20.0">
+                            <children>
+                               <VBox alignment="CENTER" HBox.hgrow="ALWAYS">
+                                  <children>
+                                     <Label fx:id="txtRating" alignment="CENTER" style="-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: #1F2329;" text="★ 0.0&#10;Rating" />
+                                  </children>
+                               </VBox>
+                               <VBox alignment="CENTER" HBox.hgrow="ALWAYS">
+                                  <children>
+                                     <Label fx:id="txtJobs" alignment="CENTER" style="-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: #1F2329;" text="0&#10;Pekerjaan" />
+                                  </children>
+                               </VBox>
+                               <VBox alignment="CENTER" HBox.hgrow="ALWAYS">
+                                  <children>
+                                     <Label fx:id="txtReviews" alignment="CENTER" style="-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: #1F2329;" text="0&#10;Ulasan" />
+                                  </children>
+                               </VBox>
+                            </children>
+                         </HBox>
+                      </children>
+                   </VBox>
+
+                   <!-- Tentang Teknisi Section -->
+                   <VBox spacing="8.0">
+                      <children>
+                         <Label styleClass="section-title" text="Tentang Teknisi" />
+                         <Label fx:id="txtDescription" styleClass="form-card" style="-fx-font-size: 13px; -fx-text-fill: #5F6B73; -fx-line-spacing: 4px;" text="Memuat data teknisi..." wrapText="true">
+                            <padding>
+                               <Insets bottom="14.0" left="14.0" right="14.0" top="14.0" />
+                            </padding>
+                         </Label>
+                      </children>
+                   </VBox>
+
+                   <!-- Perangkat yang Didukung Section -->
+                   <VBox spacing="8.0">
+                      <children>
+                         <Label styleClass="section-title" text="Perangkat yang Didukung" />
+                         <VBox fx:id="layoutSupportedCategories" spacing="10.0" styleClass="form-card">
+                            <padding>
+                               <Insets bottom="14.0" left="14.0" right="14.0" top="14.0" />
+                            </padding>
+                         </VBox>
+                      </children>
+                   </VBox>
+
+                   <!-- Status Message -->
+                   <Label fx:id="txtDetailMessage" alignment="CENTER" maxWidth="Infinity" style="-fx-font-size: 12px; -fx-text-fill: #6B7680;" text="" wrapText="true" />
+
+                   <!-- Order Button -->
+                   <Button fx:id="btnOrderTechnician" mnemonicParsing="false" onAction="#handleOrderTechnician" prefHeight="54.0" prefWidth="320.0" styleClass="primary-btn" text="Pesan Teknisi" />
+
+               </children>
+            </VBox>
+         </content>
+      </ScrollPane>
+   </center>
+
+</BorderPane>

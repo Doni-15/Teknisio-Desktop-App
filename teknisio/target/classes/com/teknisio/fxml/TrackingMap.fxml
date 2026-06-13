@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.SVGPath?>
+
+<BorderPane prefHeight="740.0" prefWidth="360.0" style="-fx-background-color: #0D0D1A;" stylesheets="@../css/style.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.teknisio.controller.TrackingMapController">
+
+   <!-- Floating Top Bar Overlay -->
+   <top>
+      <HBox alignment="CENTER_LEFT" minHeight="56.0" style="-fx-background-color: #CC0D0D1A; -fx-padding: 12 12 12 12;" BorderPane.alignment="CENTER">
+         <children>
+            <!-- Back Button -->
+            <Button mnemonicParsing="false" onAction="#handleBack" styleClass="back-btn">
+               <graphic>
+                  <Label style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: white;" text="‹" />
+               </graphic>
+            </Button>
+
+            <!-- Title -->
+            <Label fx:id="txtTrackingTitle" style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: white;" text="Lacak Teknisi" HBox.hgrow="ALWAYS">
+               <HBox.margin>
+                  <Insets left="12.0" />
+               </HBox.margin>
+            </Label>
+
+            <!-- Live Badge -->
+            <Label fx:id="txtLiveBadge" style="-fx-font-size: 11px; -fx-font-weight: bold; -fx-text-fill: #FF4444;" text="● LIVE" visible="false" />
+         </children>
+      </HBox>
+   </top>
+
+   <!-- Map Area (Center) -->
+   <center>
+      <StackPane fx:id="mapContainer" style="-fx-background-color: #0D0D1A;" BorderPane.alignment="CENTER">
+         <children>
+            <!-- Map placeholder - this will be replaced or drawn programmatically -->
+            <Label fx:id="mapPlaceholder" alignment="CENTER" maxHeight="Infinity" maxWidth="Infinity" style="-fx-font-size: 14px; -fx-text-fill: #888AAA;" text="🗺 Peta Loading..." />
+
+            <!-- Tracking Status -->
+            <VBox alignment="TOP_CENTER" spacing="6.0" StackPane.alignment="TOP_CENTER">
+               <StackPane.margin>
+                  <Insets top="8.0" />
+               </StackPane.margin>
+               <children>
+                  <HBox alignment="CENTER">
+                     <children>
+                        <Label fx:id="txtTrackingStatus" style="-fx-font-size: 12px; -fx-text-fill: #AAAACC; -fx-background-color: #CC1A1A2E; -fx-padding: 5 14;" text="Menghubungkan..." />
+                     </children>
+                  </HBox>
+               </children>
+            </VBox>
+         </children>
+      </StackPane>
+   </center>
+
+   <!-- Bottom Info Card -->
+   <bottom>
+      <VBox spacing="8.0" style="-fx-background-color: transparent;" BorderPane.alignment="CENTER">
+         <padding>
+            <Insets bottom="20.0" left="16.0" right="16.0" top="10.0" />
+         </padding>
+         <children>
+            <!-- Info Card -->
+            <VBox fx:id="layoutInfoCard" spacing="12.0" style="-fx-background-color: #1A1A2E; -fx-background-radius: 16px; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.4), 10, 0, 0, 4);">
+               <padding>
+                  <Insets bottom="16.0" left="16.0" right="16.0" top="16.0" />
+               </padding>
+               <children>
+                  <!-- Technician Row -->
+                  <HBox alignment="CENTER_LEFT" spacing="12.0">
+                     <children>
+                        <!-- Icon -->
+                        <Label alignment="CENTER" minHeight="38.0" minWidth="38.0" style="-fx-background-color: #2A2A55; -fx-background-radius: 19px; -fx-font-size: 18px;" text="🔧" />
+
+                        <!-- Info -->
+                        <VBox alignment="CENTER_LEFT" HBox.hgrow="ALWAYS" spacing="4.0">
+                           <children>
+                              <Label fx:id="txtTechnicianName" style="-fx-font-size: 15px; -fx-font-weight: bold; -fx-text-fill: white;" text="Teknisi" />
+                              <Label fx:id="txtLastUpdate" style="-fx-font-size: 12px; -fx-text-fill: #888AAA;" text="Menunggu lokasi..." />
+                           </children>
+                        </VBox>
+
+                        <!-- Distance -->
+                        <Label fx:id="txtDistance" style="-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: #7C83FF;" text="— km" />
+                     </children>
+                  </HBox>
+
+                  <!-- Hint -->
+                  <Label fx:id="txtInfoHint" style="-fx-font-size: 12px; -fx-text-fill: #888AAA;" text="Teknisi sedang menuju lokasi Anda" />
+               </children>
+            </VBox>
+
+            <!-- Center Map Button -->
+            <HBox alignment="BOTTOM_RIGHT">
+               <children>
+                  <Region HBox.hgrow="ALWAYS" />
+                  <Button fx:id="btnCenterMap" mnemonicParsing="false" onAction="#handleCenterMap" style="-fx-background-color: #7C83FF; -fx-background-radius: 28px; -fx-min-height: 48px; -fx-min-width: 48px; -fx-cursor: hand;">
+                     <graphic>
+                        <SVGPath content="M12 8c-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4-1.79-4-4-4zm-7 7H3v4c0 1.1.9 2 2 2h4v-2H5v-4zM5 5h4V3H5c-1.1 0-2 .9-2 2v4h2V5zm14-2h-4v2h4v4h2V5c0-1.1-.9-2-2-2zm0 16h-4v2h4c1.1 0 2-.9 2-2v-4h-2v4z" fill="white" scaleX="0.8" scaleY="0.8" />
+                     </graphic>
+                  </Button>
+               </children>
+            </HBox>
+         </children>
+      </VBox>
+   </bottom>
+</BorderPane>
