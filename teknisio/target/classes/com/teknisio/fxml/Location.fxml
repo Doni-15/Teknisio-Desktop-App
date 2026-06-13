@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.SVGPath?>
+
+<ScrollPane fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" style="-fx-background-color: #EBF1F6;" styleClass="hide-scrollbars" stylesheets="@../css/style.css" vbarPolicy="NEVER" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.teknisio.controller.LocationController">
+   <content>
+      <VBox prefHeight="740.0" prefWidth="360.0" spacing="20.0" style="-fx-background-color: #EBF1F6;">
+         <padding>
+            <Insets bottom="30.0" left="20.0" right="20.0" top="10.0" />
+         </padding>
+         <children>
+            
+            <!-- Header: Back Button & Title -->
+            <StackPane prefHeight="50.0">
+               <children>
+                  <Button alignment="CENTER" mnemonicParsing="false" onAction="#handleBack" styleClass="back-btn" StackPane.alignment="CENTER_LEFT">
+                     <graphic>
+                        <SVGPath content="M15.41 16.59L10.83 12l4.58-4.59L14 6l-6 6 6 6 1.41-1.41z" fill="#2D4B73" />
+                     </graphic>
+                  </Button>
+                  
+                  <Label styleClass="section-title" style="-fx-font-size: 16px;" text="Select Location" StackPane.alignment="CENTER" />
+               </children>
+            </StackPane>
+            
+            <!-- Search Address -->
+            <VBox spacing="8.0">
+               <children>
+                  <Label style="-fx-font-size: 12px; -fx-font-weight: bold; -fx-text-fill: #2D4B73;" text="Search Address" />
+                  
+                  <HBox alignment="CENTER_LEFT" spacing="8.0" styleClass="location-search-bar">
+                     <children>
+                        <SVGPath content="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z" fill="#6F7E91" scaleX="0.8" scaleY="0.8" />
+                        <TextField fx:id="searchAddressField" promptText="Search your address..." styleClass="chat-search-input" HBox.hgrow="ALWAYS" />
+                     </children>
+                  </HBox>
+               </children>
+            </VBox>
+            
+            <!-- Current Location Button -->
+            <Button mnemonicParsing="false" onAction="#handleUseCurrentLocation" styleClass="location-current-btn">
+               <graphic>
+                  <HBox alignment="CENTER" spacing="10.0">
+                     <children>
+                        <SVGPath content="M12 8c-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4-1.79-4-4-4zm8.94 3c-.46-4.17-3.77-7.48-7.94-7.94V1h-2v2.06C6.83 3.52 3.52 6.83 3.06 11H1v2h2.06c.46 4.17 3.77 7.48 7.94 7.94V23h2v-2.06c4.17-.46 7.48-3.77 7.94-7.94H23v-2h-2.06zM12 19c-3.87 0-7-3.13-7-7s3.13-7 7-7 7 3.13 7 7-3.13 7-7 7z" fill="#FFFFFF" scaleX="1.0" scaleY="1.0" />
+                        <Label style="-fx-font-size: 13px; -fx-font-weight: bold; -fx-text-fill: #FFFFFF;" text="Use Current Location" />
+                     </children>
+                  </HBox>
+               </graphic>
+            </Button>
+            
+            <!-- Saved Addresses Section -->
+            <VBox spacing="6.0">
+               <children>
+                  <Label styleClass="chat-section-label" text="Saved Addresses" />
+                  
+                  <VBox fx:id="savedAddressContainer" styleClass="chat-card">
+                     <!-- Dynamically filled -->
+                  </VBox>
+               </children>
+            </VBox>
+            
+            <!-- Recent Locations Section -->
+            <VBox spacing="6.0">
+               <children>
+                  <Label styleClass="chat-section-label" text="Recent Locations" />
+                  
+                  <VBox fx:id="recentLocationContainer" styleClass="chat-card">
+                     <!-- Dynamically filled -->
+                  </VBox>
+               </children>
+            </VBox>
+            
+         </children>
+      </VBox>
+   </content>
+</ScrollPane>

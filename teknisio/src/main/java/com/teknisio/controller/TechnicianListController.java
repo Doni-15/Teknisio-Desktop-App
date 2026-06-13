@@ -147,44 +147,44 @@ public class TechnicianListController implements Initializable {
         allTechnicians.clear();
         
         // AC Specialists
-        allTechnicians.add(new Technician("Ahmed Rush", "AC Specialist", 5.0, "Rp50.000 - Rp200.000", "/com/teknisio/images/tech_ahmed.png", false));
-        allTechnicians.add(new Technician("Evan Bran", "AC Specialist", 4.0, "Rp75.000 - Rp270.000", "/com/teknisio/images/tech_devon.png", false));
-        allTechnicians.add(new Technician("Irvan Bran", "AC Specialist", 3.0, "Rp50.000 - Rp180.000", "/com/teknisio/images/tech_devon.png", false));
+        allTechnicians.add(new Technician("Ahmed Rush", "AC Specialist", 5.0, "Rp50.000 - Rp200.000", "/com/teknisio/assets/technicians/tech_ahmed.png", false));
+        allTechnicians.add(new Technician("Evan Bran", "AC Specialist", 4.0, "Rp75.000 - Rp270.000", "/com/teknisio/assets/technicians/tech_devon.png", false));
+        allTechnicians.add(new Technician("Irvan Bran", "AC Specialist", 3.0, "Rp50.000 - Rp180.000", "/com/teknisio/assets/technicians/tech_devon.png", false));
         
         // Fridge Specialists
-        allTechnicians.add(new Technician("Ben Adams", "Fridge Specialist", 5.0, "Rp45.000 - Rp180.000", "/com/teknisio/images/tech_devon.png", false));
-        allTechnicians.add(new Technician("Charlie Hugh", "Fridge Specialist", 4.0, "Rp40.000 - Rp150.000", "/com/teknisio/images/tech_cedric.png", false));
-        allTechnicians.add(new Technician("Ahmed Rush", "Fridge Specialist", 5.0, "Rp50.000 - Rp200.000", "/com/teknisio/images/tech_ahmed.png", false));
+        allTechnicians.add(new Technician("Ben Adams", "Fridge Specialist", 5.0, "Rp45.000 - Rp180.000", "/com/teknisio/assets/technicians/tech_devon.png", false));
+        allTechnicians.add(new Technician("Charlie Hugh", "Fridge Specialist", 4.0, "Rp40.000 - Rp150.000", "/com/teknisio/assets/technicians/tech_cedric.png", false));
+        allTechnicians.add(new Technician("Ahmed Rush", "Fridge Specialist", 5.0, "Rp50.000 - Rp200.000", "/com/teknisio/assets/technicians/tech_ahmed.png", false));
         
         // Washing Machine Specialists
-        allTechnicians.add(new Technician("Hendra Wijaya", "Washing Machine Specialist", 4.0, "Rp45.000 - Rp190.000", "/com/teknisio/images/tech_ahmed.png", false));
-        allTechnicians.add(new Technician("Ben Adams", "Washing Machine Specialist", 5.0, "Rp45.000 - Rp180.000", "/com/teknisio/images/tech_devon.png", false));
-        allTechnicians.add(new Technician("Charlie Hugh", "Washing Machine Specialist", 4.0, "Rp40.000 - Rp150.000", "/com/teknisio/images/tech_cedric.png", false));
+        allTechnicians.add(new Technician("Hendra Wijaya", "Washing Machine Specialist", 4.0, "Rp45.000 - Rp190.000", "/com/teknisio/assets/technicians/tech_ahmed.png", false));
+        allTechnicians.add(new Technician("Ben Adams", "Washing Machine Specialist", 5.0, "Rp45.000 - Rp180.000", "/com/teknisio/assets/technicians/tech_devon.png", false));
+        allTechnicians.add(new Technician("Charlie Hugh", "Washing Machine Specialist", 4.0, "Rp40.000 - Rp150.000", "/com/teknisio/assets/technicians/tech_cedric.png", false));
         
         // Filter Camera Specialists
-        allTechnicians.add(new Technician("Fajar Siddik", "Filter Camera Specialist", 5.0, "Rp60.000 - Rp220.000", "/com/teknisio/images/tech_cedric.png", false));
-        allTechnicians.add(new Technician("Ahmed Rush", "Filter Camera Specialist", 5.0, "Rp50.000 - Rp200.000", "/com/teknisio/images/tech_ahmed.png", false));
-        allTechnicians.add(new Technician("Evan Bran", "Filter Camera Specialist", 4.0, "Rp75.000 - Rp270.000", "/com/teknisio/images/tech_devon.png", false));
+        allTechnicians.add(new Technician("Fajar Siddik", "Filter Camera Specialist", 5.0, "Rp60.000 - Rp220.000", "/com/teknisio/assets/technicians/tech_cedric.png", false));
+        allTechnicians.add(new Technician("Ahmed Rush", "Filter Camera Specialist", 5.0, "Rp50.000 - Rp200.000", "/com/teknisio/assets/technicians/tech_ahmed.png", false));
+        allTechnicians.add(new Technician("Evan Bran", "Filter Camera Specialist", 4.0, "Rp75.000 - Rp270.000", "/com/teknisio/assets/technicians/tech_devon.png", false));
         
         // Oven Specialists
-        allTechnicians.add(new Technician("Charlie Hugh", "Oven Specialist", 4.0, "Rp40.000 - Rp150.000", "/com/teknisio/images/tech_cedric.png", false));
-        allTechnicians.add(new Technician("Devon Lores", "Oven Specialist", 3.0, "Rp45.000 - Rp180.000", "/com/teknisio/images/tech_devon.png", false));
-        allTechnicians.add(new Technician("Ben Adams", "Oven Specialist", 5.0, "Rp45.000 - Rp180.000", "/com/teknisio/images/tech_devon.png", false));
+        allTechnicians.add(new Technician("Charlie Hugh", "Oven Specialist", 4.0, "Rp40.000 - Rp150.000", "/com/teknisio/assets/technicians/tech_cedric.png", false));
+        allTechnicians.add(new Technician("Devon Lores", "Oven Specialist", 3.0, "Rp45.000 - Rp180.000", "/com/teknisio/assets/technicians/tech_devon.png", false));
+        allTechnicians.add(new Technician("Ben Adams", "Oven Specialist", 5.0, "Rp45.000 - Rp180.000", "/com/teknisio/assets/technicians/tech_devon.png", false));
         
         // Television Specialists
-        allTechnicians.add(new Technician("Irvan Bran", "Television Specialist", 4.0, "Rp55.000 - Rp210.000", "/com/teknisio/images/tech_devon.png", false));
-        allTechnicians.add(new Technician("Ahmed Rush", "Television Specialist", 5.0, "Rp50.000 - Rp200.000", "/com/teknisio/images/tech_ahmed.png", false));
-        allTechnicians.add(new Technician("Hendra Wijaya", "Television Specialist", 4.0, "Rp45.000 - Rp190.000", "/com/teknisio/images/tech_ahmed.png", false));
+        allTechnicians.add(new Technician("Irvan Bran", "Television Specialist", 4.0, "Rp55.000 - Rp210.000", "/com/teknisio/assets/technicians/tech_devon.png", false));
+        allTechnicians.add(new Technician("Ahmed Rush", "Television Specialist", 5.0, "Rp50.000 - Rp200.000", "/com/teknisio/assets/technicians/tech_ahmed.png", false));
+        allTechnicians.add(new Technician("Hendra Wijaya", "Television Specialist", 4.0, "Rp45.000 - Rp190.000", "/com/teknisio/assets/technicians/tech_ahmed.png", false));
         
         // Fan Specialists
-        allTechnicians.add(new Technician("Rian Kusuma", "Fan Specialist", 5.0, "Rp35.000 - Rp120.000", "/com/teknisio/images/tech_cedric.png", false));
-        allTechnicians.add(new Technician("Evan Bran", "Fan Specialist", 4.0, "Rp75.000 - Rp270.000", "/com/teknisio/images/tech_devon.png", false));
-        allTechnicians.add(new Technician("Charlie Hugh", "Fan Specialist", 4.0, "Rp40.000 - Rp150.000", "/com/teknisio/images/tech_cedric.png", false));
+        allTechnicians.add(new Technician("Rian Kusuma", "Fan Specialist", 5.0, "Rp35.000 - Rp120.000", "/com/teknisio/assets/technicians/tech_cedric.png", false));
+        allTechnicians.add(new Technician("Evan Bran", "Fan Specialist", 4.0, "Rp75.000 - Rp270.000", "/com/teknisio/assets/technicians/tech_devon.png", false));
+        allTechnicians.add(new Technician("Charlie Hugh", "Fan Specialist", 4.0, "Rp40.000 - Rp150.000", "/com/teknisio/assets/technicians/tech_cedric.png", false));
         
         // Mixer Specialists
-        allTechnicians.add(new Technician("Budi Santoso", "Mixer Specialist", 4.0, "Rp30.000 - Rp110.000", "/com/teknisio/images/tech_devon.png", false));
-        allTechnicians.add(new Technician("Devon Lores", "Mixer Specialist", 3.0, "Rp45.000 - Rp180.000", "/com/teknisio/images/tech_devon.png", false));
-        allTechnicians.add(new Technician("Ben Adams", "Mixer Specialist", 5.0, "Rp45.000 - Rp180.000", "/com/teknisio/images/tech_devon.png", false));
+        allTechnicians.add(new Technician("Budi Santoso", "Mixer Specialist", 4.0, "Rp30.000 - Rp110.000", "/com/teknisio/assets/technicians/tech_devon.png", false));
+        allTechnicians.add(new Technician("Devon Lores", "Mixer Specialist", 3.0, "Rp45.000 - Rp180.000", "/com/teknisio/assets/technicians/tech_devon.png", false));
+        allTechnicians.add(new Technician("Ben Adams", "Mixer Specialist", 5.0, "Rp45.000 - Rp180.000", "/com/teknisio/assets/technicians/tech_devon.png", false));
     }
 
     private void applyAvatarClips() {

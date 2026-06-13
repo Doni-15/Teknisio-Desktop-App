@@ -4,6 +4,7 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.HBox?>
@@ -12,7 +13,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.SVGPath?>
 
-<ScrollPane fitToHeight="false" fitToWidth="true" hbarPolicy="NEVER" styleClass="hide-scrollbars" style="-fx-background-color: #EBF1F6;" stylesheets="@../css/style.css" vbarPolicy="NEVER" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.teknisio.controller.ChatController">
+<ScrollPane fitToHeight="false" fitToWidth="true" hbarPolicy="NEVER" style="-fx-background-color: #EBF1F6;" styleClass="hide-scrollbars" stylesheets="@../css/style.css" vbarPolicy="NEVER" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.teknisio.controller.ChatController">
    <content>
       <VBox alignment="TOP_CENTER" spacing="20.0" style="-fx-background-color: transparent;">
          <padding>
@@ -20,92 +21,54 @@
          </padding>
          <children>
             
-            <!-- Header: Back Button & Title -->
-            <StackPane prefHeight="50.0">
+            <!-- Header: Back Button & Title & Search -->
+            <VBox spacing="12.0">
                <children>
-                  <!-- Back button left aligned -->
-                  <Button alignment="CENTER" mnemonicParsing="false" onAction="#handleBack" styleClass="back-btn" StackPane.alignment="CENTER_LEFT">
-                     <graphic>
-                        <SVGPath content="M15.41 16.59L10.83 12l4.58-4.59L14 6l-6 6 6 6 1.41-1.41z" fill="#2D4B73" />
-                     </graphic>
-                  </Button>
+                  <StackPane prefHeight="50.0">
+                     <children>
+                        <!-- Back button left aligned -->
+                        <Button alignment="CENTER" mnemonicParsing="false" onAction="#handleBack" styleClass="back-btn" StackPane.alignment="CENTER_LEFT">
+                           <graphic>
+                              <SVGPath content="M15.41 16.59L10.83 12l4.58-4.59L14 6l-6 6 6 6 1.41-1.41z" fill="#2D4B73" />
+                           </graphic>
+                        </Button>
+                        
+                        <!-- Centered Title -->
+                        <Label styleClass="section-title" style="-fx-font-size: 16px;" text="Messages" StackPane.alignment="CENTER" />
+                     </children>
+                  </StackPane>
                   
-                  <!-- Centered Title -->
-                  <Label styleClass="section-title" text="Chat" style="-fx-font-size: 16px;" StackPane.alignment="CENTER" />
+                  <!-- Search Bar -->
+                  <HBox alignment="CENTER_LEFT" spacing="8.0" styleClass="chat-search-bar">
+                     <children>
+                        <SVGPath content="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z" fill="#6F7E91" scaleX="0.8" scaleY="0.8" />
+                        <TextField fx:id="searchField" promptText="Search conversations..." styleClass="chat-search-input" HBox.hgrow="ALWAYS" />
+                     </children>
+                  </HBox>
                </children>
-            </StackPane>
+            </VBox>
             
-            <!-- Card Section: Chat List -->
-            <VBox styleClass="chat-card">
+            <!-- Active Chats Section -->
+            <VBox spacing="6.0">
                <children>
+                  <Label styleClass="chat-section-label" text="Active Conversations" />
                   
-                  <!-- Chat Row 1: Ahmed Rush -->
-                  <HBox fx:id="chatAhmedRow" alignment="CENTER_LEFT" onMouseClicked="#handleAhmedClick" styleClass="chat-row">
-                     <children>
-                        <!-- Avatar -->
-                        <StackPane styleClass="chat-avatar-wrapper">
-                           <children>
-                              <ImageView fx:id="ahmedAvatar" fitHeight="48.0" fitWidth="48.0" pickOnBounds="true" preserveRatio="false">
-                                 <image>
-                                    <Image url="@../images/tech_ahmed.png" />
-                                 </image>
-                              </ImageView>
-                           </children>
-                        </StackPane>
-                        
-                        <!-- Middle Details -->
-                        <VBox alignment="CENTER_LEFT" spacing="4.0" HBox.hgrow="ALWAYS">
-                           <children>
-                              <Label styleClass="chat-name" text="Ahmed Rush" />
-                              <Label styleClass="chat-message" text="I will come around 2 PM, Please be at home" />
-                           </children>
-                        </VBox>
-                        
-                        <!-- Right Status Details -->
-                        <VBox alignment="TOP_RIGHT" spacing="6.0" prefWidth="60.0">
-                           <children>
-                              <Label styleClass="chat-time" text="08.43" />
-                              <StackPane styleClass="chat-unread-badge">
-                                 <children>
-                                    <Label styleClass="chat-unread-text" text="2" />
-                                 </children>
-                              </StackPane>
-                           </children>
-                        </VBox>
-                     </children>
-                  </HBox>
+                  <!-- Card Section: Chat List -->
+                  <VBox fx:id="activeChatContainer" styleClass="chat-card">
+                     <!-- Chats will be dynamically added -->
+                  </VBox>
+               </children>
+            </VBox>
+            
+            <!-- Technician Contacts Section -->
+            <VBox spacing="6.0">
+               <children>
+                  <Label styleClass="chat-section-label" text="Available Technicians" />
                   
-                  <!-- Chat Row 2: Evan Bran -->
-                  <HBox fx:id="chatEvanRow" alignment="CENTER_LEFT" onMouseClicked="#handleEvanClick" styleClass="chat-row-last">
-                     <children>
-                        <!-- Avatar -->
-                        <StackPane styleClass="chat-avatar-wrapper">
-                           <children>
-                              <ImageView fx:id="evanAvatar" fitHeight="48.0" fitWidth="48.0" pickOnBounds="true" preserveRatio="false">
-                                 <image>
-                                    <Image url="@../images/tech_devon.png" />
-                                 </image>
-                              </ImageView>
-                           </children>
-                        </StackPane>
-                        
-                        <!-- Middle Details -->
-                        <VBox alignment="CENTER_LEFT" spacing="4.0" HBox.hgrow="ALWAYS">
-                           <children>
-                              <Label styleClass="chat-name" text="Evan Bran" />
-                              <Label styleClass="chat-message" text="Thank you for calling me" />
-                           </children>
-                        </VBox>
-                        
-                        <!-- Right Status Details -->
-                        <VBox alignment="TOP_RIGHT" prefWidth="60.0">
-                           <children>
-                              <Label styleClass="chat-time" text="4/22/46" />
-                           </children>
-                        </VBox>
-                     </children>
-                  </HBox>
-                  
+                  <!-- Card Section -->
+                  <VBox fx:id="technicianChatContainer" styleClass="chat-card">
+                     <!-- Chats will be dynamically added -->
+                  </VBox>
                </children>
             </VBox>
             

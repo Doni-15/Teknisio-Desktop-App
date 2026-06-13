@@ -1085,8 +1085,232 @@
     -fx-fill: #FFFFFF;
 }
 
+/* ==========================================
+   Chat Detail Screen (Conversation) Styles
+   ========================================== */
 
+.chat-detail-header {
+    -fx-background-color: #FFFFFF;
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.05), 6, 0, 0, 2);
+}
 
+.chat-detail-avatar-wrapper {
+    -fx-min-width: 40px;
+    -fx-min-height: 40px;
+    -fx-max-width: 40px;
+    -fx-max-height: 40px;
+    -fx-alignment: center;
+}
 
+.chat-detail-name {
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #2D4B73;
+}
 
+.chat-detail-status {
+    -fx-font-size: 11px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #27AE60;
+}
+
+.chat-action-btn {
+    -fx-background-color: #F1F5F9;
+    -fx-background-radius: 50%;
+    -fx-min-width: 36px;
+    -fx-min-height: 36px;
+    -fx-max-width: 36px;
+    -fx-max-height: 36px;
+    -fx-alignment: center;
+    -fx-cursor: hand;
+    -fx-padding: 0px;
+}
+
+.chat-action-btn:hover {
+    -fx-background-color: #E2ECF7;
+}
+
+.chat-date-separator {
+    -fx-font-size: 10px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #6F7E91;
+    -fx-background-color: rgba(226, 232, 240, 0.8);
+    -fx-background-radius: 12px;
+    -fx-padding: 4px 14px;
+    -fx-alignment: center;
+}
+
+/* Message Bubbles */
+.chat-bubble-sent {
+    -fx-background-color: #2D4B73;
+    -fx-text-fill: #FFFFFF;
+    -fx-font-size: 12px;
+    -fx-padding: 10px 14px;
+    -fx-background-radius: 16px 16px 4px 16px;
+    -fx-wrap-text: true;
+}
+
+.chat-bubble-received {
+    -fx-background-color: #FFFFFF;
+    -fx-text-fill: #2D4B73;
+    -fx-font-size: 12px;
+    -fx-padding: 10px 14px;
+    -fx-background-radius: 16px 16px 16px 4px;
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.03), 3, 0, 0, 1);
+    -fx-wrap-text: true;
+}
+
+.chat-bubble-time {
+    -fx-font-size: 9px;
+    -fx-text-fill: #94A3B8;
+    -fx-padding: 2px 4px 0 4px;
+}
+
+/* Input Bar */
+.chat-message-input {
+    -fx-background-color: #F1F5F9;
+    -fx-background-radius: 20px;
+    -fx-border-color: transparent;
+    -fx-border-radius: 20px;
+    -fx-padding: 10px 16px;
+    -fx-font-size: 12px;
+    -fx-text-fill: #2D4B73;
+    -fx-prompt-text-fill: #94A3B8;
+}
+
+.chat-message-input:focused {
+    -fx-background-color: #FFFFFF;
+    -fx-border-color: #2D4B73;
+    -fx-border-width: 1px;
+}
+
+.chat-input-action-btn {
+    -fx-background-color: #F1F5F9;
+    -fx-background-radius: 50%;
+    -fx-min-width: 40px;
+    -fx-min-height: 40px;
+    -fx-max-width: 40px;
+    -fx-max-height: 40px;
+    -fx-alignment: center;
+    -fx-cursor: hand;
+    -fx-padding: 0px;
+}
+
+.chat-input-action-btn:hover {
+    -fx-background-color: #E2ECF7;
+}
+
+.chat-send-btn {
+    -fx-background-color: #2D4B73;
+    -fx-background-radius: 50%;
+    -fx-min-width: 40px;
+    -fx-min-height: 40px;
+    -fx-max-width: 40px;
+    -fx-max-height: 40px;
+    -fx-alignment: center;
+    -fx-cursor: hand;
+    -fx-padding: 0px;
+    -fx-effect: dropshadow(three-pass-box, rgba(45, 75, 115, 0.3), 6, 0, 0, 3);
+}
+
+.chat-send-btn:hover {
+    -fx-background-color: #3A5F90;
+}
+
+/* ==========================================
+   Chat List Screen Additional Styles
+   ========================================== */
+
+.chat-search-bar {
+    -fx-background-color: #FFFFFF;
+    -fx-background-radius: 14px;
+    -fx-padding: 8px 14px;
+    -fx-border-color: #E2E8F0;
+    -fx-border-radius: 14px;
+    -fx-border-width: 1px;
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.02), 4, 0, 0, 2);
+}
+
+.chat-search-input {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-padding: 4px 0px;
+    -fx-font-size: 12px;
+    -fx-text-fill: #2D4B73;
+    -fx-prompt-text-fill: #94A3B8;
+}
+
+.chat-search-input:focused {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+}
+
+.chat-section-label {
+    -fx-font-size: 11px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #6F7E91;
+    -fx-padding: 0 0 2px 4px;
+}
+
+/* ==========================================
+   Location Screen Styles
+   ========================================== */
+
+.location-search-bar {
+    -fx-background-color: #FFFFFF;
+    -fx-background-radius: 14px;
+    -fx-padding: 8px 14px;
+    -fx-border-color: #E2E8F0;
+    -fx-border-radius: 14px;
+    -fx-border-width: 1px;
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.02), 4, 0, 0, 2);
+}
+
+.location-current-btn {
+    -fx-background-color: linear-gradient(to right, #2D4B73, #527EBF);
+    -fx-background-radius: 14px;
+    -fx-text-fill: #FFFFFF;
+    -fx-font-weight: bold;
+    -fx-padding: 14px 0px;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(three-pass-box, rgba(45, 75, 115, 0.3), 8, 0, 0, 4);
+}
+
+.location-current-btn:hover {
+    -fx-background-color: linear-gradient(to right, #3A5F90, #618CD0);
+    -fx-effect: dropshadow(three-pass-box, rgba(45, 75, 115, 0.45), 10, 0, 0, 5);
+}
+
+.location-current-btn:pressed {
+    -fx-background-color: linear-gradient(to right, #243B5B, #416499);
+}
+
+/* ==========================================
+   Alert Dialog
+   ========================================== */
+
+.alert-dialog {
+    -fx-background-color: #FFFFFF;
+}
+
+.alert-dialog .header-panel {
+    -fx-background-color: #FFFFFF;
+}
+
+.alert-dialog .content.label {
+    -fx-font-size: 13px;
+    -fx-text-fill: #2D4B73;
+}
+
+.alert-dialog .button {
+    -fx-background-color: #2D4B73;
+    -fx-text-fill: #FFFFFF;
+    -fx-font-weight: bold;
+    -fx-background-radius: 8px;
+    -fx-cursor: hand;
+}
+
+.alert-dialog .button:hover {
+    -fx-background-color: #3A5F90;
+}
 
