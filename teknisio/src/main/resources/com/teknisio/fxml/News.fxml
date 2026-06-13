@@ -27,7 +27,7 @@
                </graphic>
             </Button>
             <Region HBox.hgrow="ALWAYS" />
-            <Label styleClass="section-title" text="Artikel & Tips" style="-fx-font-size: 18px;" />
+            <Label styleClass="section-title" text="Artikel &amp; Tips" style="-fx-font-size: 18px;" />
             <Region HBox.hgrow="ALWAYS" />
             <Region prefWidth="44.0" />
          </children>

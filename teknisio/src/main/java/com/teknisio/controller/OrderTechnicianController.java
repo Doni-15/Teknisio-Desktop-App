@@ -1,6 +1,13 @@
 package com.teknisio.controller;
 
 import com.teknisio.Main;
+import com.teknisio.dto.CreateServiceRequestDto;
+import com.teknisio.dto.DeviceCategoryDto;
+import com.teknisio.dto.TechnicianDto;
+import com.teknisio.service.ServiceRequestService;
+import com.teknisio.service.SessionManager;
+import com.teknisio.util.ImageUtil;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -10,10 +17,12 @@ import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.ToggleButton;
-import javafx.scene.control.ToggleGroup;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.SVGPath;
@@ -21,183 +30,270 @@ import javafx.scene.shape.SVGPath;
 import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 
 public class OrderTechnicianController implements Initializable {
 
-    @FXML
-    private ToggleButton categoryAc;
+    // ---- Static state: set before navigating to this screen ----
+    private static TechnicianDto currentTechnician;
 
-    @FXML
-    private ToggleButton categoryFridge;
+    public static void setSelectedTechnician(TechnicianDto tech) {
+        currentTechnician = tech;
+    }
 
-    @FXML
-    private TextArea descriptionField;
+    // ---- FXML bindings (fixed elements) ----
+    @FXML private FlowPane categoryContainer;   // dynamic toggle buttons go here
+    @FXML private TextArea descriptionField;
+    @FXML private DatePicker datePicker;
+    @FXML private ToggleButton timeMorning;
+    @FXML private ToggleButton timeAfternoon;
+    @FXML private ToggleButton timeEvening;
+    @FXML private StackPane techImageWrapper;
+    @FXML private ImageView techImageView;
+    @FXML private Label techNameLabel;
+    @FXML private HBox techRatingBox;
+    @FXML private Label techDistanceLabel;
+    @FXML private Label techPriceLabel;
+    @FXML private HBox techBadgesBox;
 
-    @FXML
-    private DatePicker datePicker;
-
-    @FXML
-    private ToggleButton timeMorning;
-
-    @FXML
-    private ToggleButton timeAfternoon;
-
-    @FXML
-    private ToggleButton timeEvening;
-
-    @FXML
-    private StackPane techImageWrapper;
-
-    @FXML
-    private ImageView techImageView;
-
-    @FXML
-    private Label techNameLabel;
-
-    @FXML
-    private HBox techRatingBox;
-
-    @FXML
-    private Label techDistanceLabel;
-
-    @FXML
-    private Label techPriceLabel;
-
-    @FXML
-    private HBox techBadgesBox;
-
-    private ToggleGroup categoryGroup;
-    private ToggleGroup timeGroup;
+    private javafx.scene.control.ToggleGroup timeGroup;
+    private List<ToggleButton> categoryToggleButtons = new ArrayList<>();
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        // 1. Crop technician headshot to circular bounds
-        Circle clip = new Circle(24, 24, 24);
-        techImageView.setClip(clip);
+        // 1. Crop technician headshot to circle
+        if (techImageView != null) {
+            Circle clip = new Circle(24, 24, 24);
+            techImageView.setClip(clip);
+        }
 
-        // 2. Group Categories ToggleButtons
-        categoryGroup = new ToggleGroup();
-        categoryAc.setToggleGroup(categoryGroup);
-        categoryFridge.setToggleGroup(categoryGroup);
-        categoryAc.setSelected(true); // Default category selection
+        // 2. Time group
+        timeGroup = new javafx.scene.control.ToggleGroup();
+        if (timeMorning != null) timeMorning.setToggleGroup(timeGroup);
+        if (timeAfternoon != null) timeAfternoon.setToggleGroup(timeGroup);
+        if (timeEvening != null) timeEvening.setToggleGroup(timeGroup);
+        if (timeAfternoon != null) timeAfternoon.setSelected(true);
 
-        // 3. Group Time Segments ToggleButtons
-        timeGroup = new ToggleGroup();
-        timeMorning.setToggleGroup(timeGroup);
-        timeAfternoon.setToggleGroup(timeGroup);
-        timeEvening.setToggleGroup(timeGroup);
-        timeAfternoon.setSelected(true); // Default active segment matching mockup
+        // 3. Default date (tomorrow)
+        if (datePicker != null) datePicker.setValue(LocalDate.now().plusDays(1));
 
-        // 4. Default Date Selection to Today or Tomorrow
-        datePicker.setValue(LocalDate.now().plusDays(1));
+        // 4. Fill technician details from selected technician
+        loadTechnicianData();
+    }
 
-        // 5. Populate Rating Stars for Ahmed Rush (5.0 rating)
-        populateStars(5);
+    private void loadTechnicianData() {
+        TechnicianDto tech = currentTechnician;
+        if (tech == null) return;
 
-        // 6. Populate Specialization Badges
-        populateBadges();
+        // Name
+        if (techNameLabel != null) techNameLabel.setText(tech.getName());
+
+        // Rating stars
+        if (techRatingBox != null) populateStars((int) Math.round(tech.getRatingDouble()));
+
+        // Distance (placeholder, no GPS)
+        if (techDistanceLabel != null) techDistanceLabel.setText("Location: ±2 Km");
+
+        // Price range / job count
+        if (techPriceLabel != null) {
+            String jobsText = tech.getTotalJobs() != null ? tech.getTotalJobs() + " pekerjaan" : "—";
+            techPriceLabel.setText("Total Pekerjaan: " + jobsText);
+        }
+
+        // Profile photo from base64
+        if (techImageView != null) {
+            String photo = tech.getProfilePhoto();
+            if (photo != null && !photo.isBlank()) {
+                ImageUtil.applyBase64ToImageView(techImageView, photo);
+            } else {
+                try {
+                    techImageView.setImage(new Image(
+                        getClass().getResource("/com/teknisio/assets/profile/profile.png").toExternalForm()));
+                } catch (Exception ignored) {}
+            }
+        }
+
+        // Badges
+        if (techBadgesBox != null) populateBadges(tech);
+
+        // Category toggles (all categories technician supports, multi-select)
+        if (categoryContainer != null) buildCategoryToggles(tech);
+    }
+
+    private void buildCategoryToggles(TechnicianDto tech) {
+        categoryContainer.getChildren().clear();
+        categoryToggleButtons.clear();
+
+        List<DeviceCategoryDto> cats = tech.getSupportedDeviceCategories();
+        if (cats == null || cats.isEmpty()) return;
+
+        for (DeviceCategoryDto cat : cats) {
+            VBox tile = new VBox();
+            tile.getStyleClass().add("category-toggle-tile");
+            tile.setAlignment(Pos.CENTER);
+
+            ToggleButton toggle = new ToggleButton();
+            toggle.getStyleClass().add("category-toggle");
+            toggle.setUserData(cat.getDeviceCategoryId());
+
+            SVGPath icon = new SVGPath();
+            icon.setContent(HomeUserController.getCategoryIcon(cat.getName()));
+            toggle.setGraphic(icon);
+
+            Label lbl = new Label(cat.getName());
+            lbl.getStyleClass().add("category-toggle-label");
+
+            tile.getChildren().addAll(toggle, lbl);
+            categoryContainer.getChildren().add(tile);
+            categoryToggleButtons.add(toggle);
+        }
+
+        // Select first by default if only one; or leave all unselected for multi-choice
+        if (!categoryToggleButtons.isEmpty()) {
+            categoryToggleButtons.get(0).setSelected(true);
+        }
     }
 
     private void populateStars(int rating) {
+        if (techRatingBox == null) return;
         techRatingBox.getChildren().clear();
         for (int i = 0; i < 5; i++) {
             SVGPath star = new SVGPath();
             star.setContent("M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z");
-            star.setScaleX(0.45);
-            star.setScaleY(0.45);
-
-            if (i < rating) {
-                star.setFill(Color.web("#F1C40F")); // Gold
-            } else {
-                star.setFill(Color.web("#BDC3C7")); // Gray
-            }
-
-            StackPane starWrapper = new StackPane(star);
-            starWrapper.setMinSize(11, 11);
-            starWrapper.setPrefSize(11, 11);
-            starWrapper.setMaxSize(11, 11);
-            starWrapper.setAlignment(Pos.CENTER);
-            techRatingBox.getChildren().add(starWrapper);
+            star.setScaleX(0.45); star.setScaleY(0.45);
+            star.setFill(i < rating ? Color.web("#F1C40F") : Color.web("#BDC3C7"));
+            StackPane sw = new StackPane(star);
+            sw.setMinSize(11, 11); sw.setPrefSize(11, 11); sw.setMaxSize(11, 11);
+            sw.setAlignment(Pos.CENTER);
+            techRatingBox.getChildren().add(sw);
         }
     }
 
-    private void populateBadges() {
+    private void populateBadges(TechnicianDto tech) {
         techBadgesBox.getChildren().clear();
-        // AC Icon Badge
-        techBadgesBox.getChildren().add(createBadge("M19 19H5V5h14v14M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2"));
-        // Fridge Icon Badge
-        techBadgesBox.getChildren().add(createBadge("M19 2H5c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-2 8H7V5h10v5z"));
+        if (tech.getSupportedDeviceCategories() == null) return;
+        int count = 0;
+        for (DeviceCategoryDto cat : tech.getSupportedDeviceCategories()) {
+            if (count >= 3) break;
+            techBadgesBox.getChildren().add(createBadge(HomeUserController.getCategoryIcon(cat.getName())));
+            count++;
+        }
     }
 
     private StackPane createBadge(String svgPathContent) {
         SVGPath path = new SVGPath();
         path.setContent(svgPathContent);
-        path.setScaleX(0.45);
-        path.setScaleY(0.45);
+        path.setScaleX(0.45); path.setScaleY(0.45);
         path.setFill(Color.web("#2D4B73"));
-        
         StackPane badge = new StackPane(path);
         badge.getStyleClass().add("tech-badge");
         return badge;
     }
 
-    @FXML
-    private void handleBack(ActionEvent event) {
-        navigateHome();
-    }
+    @FXML private void handleBack(ActionEvent event) { navigateBack(); }
 
     @FXML
     private void handleConfirmOrder(ActionEvent event) {
-        // Validation Checks
-        if (categoryGroup.getSelectedToggle() == null) {
-            showAlert(Alert.AlertType.WARNING, "Validation Error", "Please select a category.");
+        // Gather selected categories (multi-select)
+        List<String> selectedCatIds = new ArrayList<>();
+        for (ToggleButton tb : categoryToggleButtons) {
+            if (tb.isSelected() && tb.getUserData() != null) {
+                selectedCatIds.add(tb.getUserData().toString());
+            }
+        }
+
+        if (selectedCatIds.isEmpty()) {
+            showAlert(Alert.AlertType.WARNING, "Validasi", "Pilih minimal satu kategori perbaikan.");
             return;
         }
 
-        String description = descriptionField.getText().trim();
+        String description = descriptionField != null ? descriptionField.getText().trim() : "";
         if (description.isEmpty()) {
-            showAlert(Alert.AlertType.WARNING, "Validation Error", "Please describe the damages.");
+            showAlert(Alert.AlertType.WARNING, "Validasi", "Harap deskripsikan kerusakan yang perlu diperbaiki.");
             return;
         }
 
-        if (datePicker.getValue() == null) {
-            showAlert(Alert.AlertType.WARNING, "Validation Error", "Please pick a date for the schedule.");
+        if (datePicker != null && datePicker.getValue() == null) {
+            showAlert(Alert.AlertType.WARNING, "Validasi", "Pilih tanggal jadwal kunjungan.");
             return;
         }
 
         if (timeGroup.getSelectedToggle() == null) {
-            showAlert(Alert.AlertType.WARNING, "Validation Error", "Please select a preferred time segment.");
+            showAlert(Alert.AlertType.WARNING, "Validasi", "Pilih waktu kunjungan (pagi/siang/malam).");
             return;
         }
 
-        // Show Success popup
-        showAlert(Alert.AlertType.INFORMATION, "Order Placed", 
-            "Order Confirmed!\nYour repair request has been successfully assigned to " + techNameLabel.getText() + 
-            " for " + datePicker.getValue() + ".");
-
-        // Redirect back home
-        navigateHome();
-    }
-
-    private void navigateHome() {
-        try {
-            Main.setRoot("/com/teknisio/fxml/home_user.fxml");
-        } catch (IOException e) {
-            System.err.println("Failed to navigate to dashboard: " + e.getMessage());
-            e.printStackTrace();
+        if (currentTechnician == null) {
+            showAlert(Alert.AlertType.ERROR, "Error", "Tidak ada teknisi yang dipilih.");
+            return;
         }
+
+        // Build time note
+        ToggleButton selectedTime = (ToggleButton) timeGroup.getSelectedToggle();
+        String timeNote = selectedTime != null ? ((VBox) selectedTime.getGraphic() != null
+                ? getTimeLabel(selectedTime) : "") : "";
+
+        String address = SessionManager.getAddress();
+        if (address == null || address.isBlank()) address = "Alamat belum diatur";
+
+        String addressDetail = "Jadwal: " + datePicker.getValue() + " " + timeNote;
+
+        CreateServiceRequestDto request = new CreateServiceRequestDto(
+            currentTechnician.getTechnicianProfileId(),
+            selectedCatIds,
+            description,
+            address,
+            addressDetail
+        );
+
+        // Disable confirm button during submission
+        // Submit in background thread
+        final String techName = currentTechnician.getName();
+        final String schedDate = datePicker.getValue().toString();
+
+        Thread t = new Thread(() -> {
+            try {
+                ServiceRequestService.createServiceRequest(request);
+                Platform.runLater(() -> {
+                    showAlert(Alert.AlertType.INFORMATION, "Order Berhasil",
+                        "Order berhasil dibuat!\nTeknisi " + techName + " telah dihubungi.\nJadwal: " + schedDate);
+                    navigateBack();
+                });
+            } catch (IOException | InterruptedException e) {
+                String msg = e.getMessage();
+                Platform.runLater(() ->
+                    showAlert(Alert.AlertType.ERROR, "Gagal Membuat Order", msg != null ? msg : "Terjadi kesalahan."));
+                Thread.currentThread().interrupt();
+            }
+        });
+        t.setDaemon(true);
+        t.start();
     }
 
-    private void showAlert(Alert.AlertType alertType, String title, String content) {
-        Alert alert = new Alert(alertType);
+    private String getTimeLabel(ToggleButton tb) {
+        if (tb == timeMorning) return "(08:00 - 11:00)";
+        if (tb == timeAfternoon) return "(12:00 - 15:00)";
+        if (tb == timeEvening) return "(16:00 - 18:00)";
+        return "";
+    }
+
+    private void navigateBack() {
+        try { Main.setRoot("/com/teknisio/fxml/home_user.fxml"); }
+        catch (IOException e) { e.printStackTrace(); }
+    }
+
+    private void showAlert(Alert.AlertType type, String title, String content) {
+        Alert alert = new Alert(type);
         alert.setTitle(title);
         alert.setHeaderText(null);
         alert.setContentText(content);
-        
-        alert.getDialogPane().getStylesheets().add(getClass().getResource("/com/teknisio/css/style.css").toExternalForm());
-        alert.getDialogPane().getStyleClass().add("alert-dialog");
-        
+        try {
+            alert.getDialogPane().getStylesheets().add(
+                getClass().getResource("/com/teknisio/css/style.css").toExternalForm());
+            alert.getDialogPane().getStyleClass().add("alert-dialog");
+        } catch (Exception ignored) {}
         alert.showAndWait();
     }
 }

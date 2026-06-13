@@ -16,6 +16,8 @@ public class SessionManager {
     private static String phone;
     private static String address;
     private static UserRole role;
+    private static String profilePhoto; // base64 string from backend
+    private static String technicianProfileId; // UUID string, only for TECHNICIAN role
 
     public static void login(Long userId, String email, String name, String phone, String address, String roleStr) {
         SessionManager.userId = userId;
@@ -30,6 +32,11 @@ public class SessionManager {
         }
     }
 
+    public static void setProfilePhoto(String photo) { profilePhoto = photo; }
+    public static void setTechnicianProfileId(String id) { technicianProfileId = id; }
+    public static String getProfilePhoto() { return profilePhoto; }
+    public static String getTechnicianProfileId() { return technicianProfileId; }
+
     public static void logout() {
         userId = null;
         email = null;
@@ -37,6 +44,8 @@ public class SessionManager {
         phone = null;
         address = null;
         role = null;
+        profilePhoto = null;
+        technicianProfileId = null;
         ApiClient.clearToken();
     }
 

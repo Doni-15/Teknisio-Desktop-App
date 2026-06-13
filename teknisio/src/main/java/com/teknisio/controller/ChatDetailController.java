@@ -1,6 +1,7 @@
 package com.teknisio.controller;
 
 import com.teknisio.Main;
+import com.teknisio.util.ImageUtil;
 
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -59,7 +60,7 @@ public class ChatDetailController implements Initializable {
     private Button sendBtn;
 
     private String contactName;
-    private String contactAvatarPath;
+    private String contactAvatarBase64; // base64 string
     private String contactStatus;
     private List<ChatMessage> messages = new ArrayList<>();
     private DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
@@ -71,8 +72,8 @@ public class ChatDetailController implements Initializable {
         contactAvatar.setClip(clip);
 
         // Load default data (will be overridden if setData is called)
-        contactName = "Ahmed Rush";
-contactAvatarPath = "/com/teknisio/assets/technicians/tech_ahmed.png";
+        contactName = "Teknisi";
+        contactAvatarBase64 = null;
         contactStatus = "Online";
 
         applyContactData();
@@ -91,9 +92,9 @@ contactAvatarPath = "/com/teknisio/assets/technicians/tech_ahmed.png";
     /**
      * Set contact data before this controller displays.
      */
-    public void setContactData(String name, String avatarPath, String status) {
+    public void setContactData(String name, String avatarBase64, String status) {
         this.contactName = name;
-        this.contactAvatarPath = avatarPath;
+        this.contactAvatarBase64 = avatarBase64;
         this.contactStatus = status;
     }
 
@@ -101,17 +102,22 @@ contactAvatarPath = "/com/teknisio/assets/technicians/tech_ahmed.png";
         contactNameLabel.setText(contactName);
         contactStatusLabel.setText(contactStatus);
 
-        // Set status color
-        if (contactStatus.contains("Online")) {
+        if (contactStatus != null && contactStatus.contains("Online")) {
             contactStatusLabel.setStyle("-fx-text-fill: #27AE60;");
         } else {
             contactStatusLabel.setStyle("-fx-text-fill: #95A5A6;");
         }
 
-        try {
-            contactAvatar.setImage(new Image(getClass().getResource(contactAvatarPath).toExternalForm()));
-        } catch (Exception e) {
-            System.err.println("Failed to load chat avatar: " + contactAvatarPath);
+        // Load base64 photo or fallback to placeholder
+        if (contactAvatarBase64 != null && !contactAvatarBase64.isBlank()) {
+            ImageUtil.applyBase64ToImageView(contactAvatar, contactAvatarBase64);
+        } else {
+            try {
+                contactAvatar.setImage(new javafx.scene.image.Image(
+                    getClass().getResource("/com/teknisio/assets/profile/profile.png").toExternalForm()));
+            } catch (Exception e) {
+                System.err.println("Failed to load default chat avatar");
+            }
         }
     }
 

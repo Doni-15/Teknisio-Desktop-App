@@ -1,6 +1,10 @@
 package com.teknisio.controller;
 
 import com.teknisio.Main;
+import com.teknisio.dto.TechnicianDto;
+import com.teknisio.service.TechnicianService;
+import com.teknisio.util.ImageUtil;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -8,16 +12,15 @@ import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.shape.Circle;
-
-import javafx.scene.control.Label;
 
 import java.io.IOException;
 import java.net.URL;
@@ -28,116 +31,72 @@ import java.util.stream.Collectors;
 
 public class ChatController implements Initializable {
 
-    @FXML
-    private VBox activeChatContainer;
+    @FXML private VBox activeChatContainer;
+    @FXML private VBox technicianChatContainer;
+    @FXML private TextField searchField;
 
-    @FXML
-    private VBox technicianChatContainer;
+    // Active conversations are stored per-session (not from backend)
+    private static final List<ChatContact> SESSION_ACTIVE_CONTACTS = new ArrayList<>();
 
-    @FXML
-    private TextField searchField;
-
-    private List<ChatContact> activeContacts = new ArrayList<>();
     private List<ChatContact> technicianContacts = new ArrayList<>();
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        loadContacts();
-        renderAllContacts();
+        renderActiveContacts(SESSION_ACTIVE_CONTACTS);
+
+        // Load technicians from backend API
+        Thread t = new Thread(() -> {
+            List<TechnicianDto> techs = TechnicianService.searchTechnicians(null);
+            Platform.runLater(() -> {
+                technicianContacts.clear();
+                for (TechnicianDto tech : techs) {
+                    String spec = tech.getSupportedDeviceCategories() != null
+                            && !tech.getSupportedDeviceCategories().isEmpty()
+                            ? tech.getSupportedDeviceCategories().get(0).getName() + " Specialist"
+                            : "General Specialist";
+
+                    String status = tech.isAvailable() ? "Online" : "Offline";
+
+                    technicianContacts.add(new ChatContact(
+                        tech.getName(),
+                        spec + " — " + (tech.isAvailable() ? "tersedia" : "tidak tersedia"),
+                        "",
+                        tech.getProfilePhoto(),
+                        status,
+                        0,
+                        false,
+                        tech
+                    ));
+                }
+                renderTechnicianContacts(technicianContacts);
+            });
+        });
+        t.setDaemon(true);
+        t.start();
 
         // Live search filter
-        searchField.textProperty().addListener((obs, oldVal, newVal) -> {
-            filterContacts(newVal);
-        });
-    }
-
-    private void loadContacts() {
-        // Active conversations (ongoing)
-        activeContacts.add(new ChatContact(
-            "Ahmed Rush",
-            "I will come around 2 PM, Please be at home",
-            "08:43",
-"/com/teknisio/assets/technicians/tech_ahmed.png",
-            "Online",
-            2,
-            true
-        ));
-
-        activeContacts.add(new ChatContact(
-            "Evan Bran",
-            "Thank you for calling me",
-            "4/22/46",
-"/com/teknisio/assets/technicians/tech_devon.png",
-            "Offline",
-            0,
-            true
-        ));
-
-        // Available technicians (not yet chatting)
-        technicianContacts.add(new ChatContact(
-            "Charlie Hugh",
-            "Oven Specialist — available for new orders",
-            "",
-"/com/teknisio/assets/technicians/tech_cedric.png",
-            "Online",
-            0,
-            false
-        ));
-
-        technicianContacts.add(new ChatContact(
-            "Ben Adams",
-            "Fridge Specialist — ready to help",
-            "",
-            "/com/teknisio/assets/technicians/tech_devon.png",
-            "Offline",
-            0,
-            false
-        ));
-
-        technicianContacts.add(new ChatContact(
-            "Diana Rose",
-            "Washing Machine Specialist — available",
-            "",
-            "/com/teknisio/assets/technicians/tech_ahmed.png",
-            "Online",
-            0,
-            false
-        ));
-
-        technicianContacts.add(new ChatContact(
-            "Franklin Park",
-            "TV Specialist — away",
-            "",
-            "/com/teknisio/assets/technicians/tech_cedric.png",
-            "Offline",
-            0,
-            false
-        ));
-    }
-
-    private void renderAllContacts() {
-        renderActiveContacts(activeContacts);
-        renderTechnicianContacts(technicianContacts);
+        if (searchField != null) {
+            searchField.textProperty().addListener((obs, oldVal, newVal) -> filterContacts(newVal));
+        }
     }
 
     private void filterContacts(String query) {
-        String lowerQuery = query.toLowerCase().trim();
-
+        String lq = query.toLowerCase().trim();
         List<ChatContact> filteredActive;
         List<ChatContact> filteredTech;
 
-        if (lowerQuery.isEmpty()) {
-            filteredActive = activeContacts;
+        if (lq.isEmpty()) {
+            filteredActive = SESSION_ACTIVE_CONTACTS;
             filteredTech = technicianContacts;
         } else {
-            filteredActive = activeContacts.stream()
-                .filter(c -> c.getName().toLowerCase().contains(lowerQuery)
-                    || c.getLastMessage().toLowerCase().contains(lowerQuery))
+            filteredActive = SESSION_ACTIVE_CONTACTS.stream()
+                .filter(c -> c.getName().toLowerCase().contains(lq)
+                    || c.getLastMessage().toLowerCase().contains(lq))
                 .collect(Collectors.toList());
 
             filteredTech = technicianContacts.stream()
-                .filter(c -> c.getName().toLowerCase().contains(lowerQuery)
-                    || c.getLastMessage().toLowerCase().contains(lowerQuery))
+                .filter(c -> c.getName().toLowerCase().contains(lq)
+                    || c.getLastMessage().toLowerCase().contains(lq))
                 .collect(Collectors.toList());
         }
 
@@ -146,38 +105,38 @@ public class ChatController implements Initializable {
     }
 
     private void renderActiveContacts(List<ChatContact> contacts) {
+        if (activeChatContainer == null) return;
         activeChatContainer.getChildren().clear();
 
-        for (int i = 0; i < contacts.size(); i++) {
-            ChatContact contact = contacts.get(i);
-            boolean isLast = (i == contacts.size() - 1);
-            HBox row = createContactRow(contact, isLast, true);
-            activeChatContainer.getChildren().add(row);
+        if (contacts.isEmpty()) {
+            Label lbl = new Label("Belum ada percakapan aktif.");
+            lbl.setStyle("-fx-font-size: 12px; -fx-text-fill: #6F7E91; -fx-padding: 16px;");
+            lbl.setMaxWidth(Double.MAX_VALUE);
+            activeChatContainer.getChildren().add(lbl);
+            return;
         }
 
-        if (contacts.isEmpty()) {
-            Label emptyLabel = new Label("No active conversations found.");
-            emptyLabel.setStyle("-fx-font-size: 12px; -fx-text-fill: #6F7E91; -fx-padding: 20px; -fx-alignment: center;");
-            emptyLabel.setMaxWidth(Double.MAX_VALUE);
-            activeChatContainer.getChildren().add(emptyLabel);
+        for (int i = 0; i < contacts.size(); i++) {
+            HBox row = createContactRow(contacts.get(i), i == contacts.size() - 1, true);
+            activeChatContainer.getChildren().add(row);
         }
     }
 
     private void renderTechnicianContacts(List<ChatContact> contacts) {
+        if (technicianChatContainer == null) return;
         technicianChatContainer.getChildren().clear();
 
-        for (int i = 0; i < contacts.size(); i++) {
-            ChatContact contact = contacts.get(i);
-            boolean isLast = (i == contacts.size() - 1);
-            HBox row = createContactRow(contact, isLast, false);
-            technicianChatContainer.getChildren().add(row);
+        if (contacts.isEmpty()) {
+            Label lbl = new Label("Tidak ada teknisi yang ditemukan.");
+            lbl.setStyle("-fx-font-size: 12px; -fx-text-fill: #6F7E91; -fx-padding: 16px;");
+            lbl.setMaxWidth(Double.MAX_VALUE);
+            technicianChatContainer.getChildren().add(lbl);
+            return;
         }
 
-        if (contacts.isEmpty()) {
-            Label emptyLabel = new Label("No technicians found.");
-            emptyLabel.setStyle("-fx-font-size: 12px; -fx-text-fill: #6F7E91; -fx-padding: 20px; -fx-alignment: center;");
-            emptyLabel.setMaxWidth(Double.MAX_VALUE);
-            technicianChatContainer.getChildren().add(emptyLabel);
+        for (int i = 0; i < contacts.size(); i++) {
+            HBox row = createContactRow(contacts.get(i), i == contacts.size() - 1, false);
+            technicianChatContainer.getChildren().add(row);
         }
     }
 
@@ -187,21 +146,12 @@ public class ChatController implements Initializable {
         row.setSpacing(12);
         row.setPadding(new Insets(14, 18, 14, 18));
 
-        if (!isLast) {
-            row.setStyle("-fx-border-color: transparent transparent #F1F5F9 transparent; -fx-border-width: 0 0 1px 0; -fx-cursor: hand;");
-        } else {
-            row.setStyle("-fx-border-color: transparent; -fx-border-width: 0; -fx-cursor: hand;");
-        }
+        String border = isLast ? "-fx-border-color: transparent; -fx-border-width: 0; -fx-cursor: hand;"
+                : "-fx-border-color: transparent transparent #F1F5F9 transparent; -fx-border-width: 0 0 1px 0; -fx-cursor: hand;";
+        row.setStyle(border);
 
-        // Add hover style
         row.setOnMouseEntered(e -> row.setStyle(row.getStyle() + "-fx-background-color: #F8FAFC;"));
-        row.setOnMouseExited(e -> {
-            if (!isLast) {
-                row.setStyle("-fx-border-color: transparent transparent #F1F5F9 transparent; -fx-border-width: 0 0 1px 0; -fx-cursor: hand;");
-            } else {
-                row.setStyle("-fx-border-color: transparent; -fx-border-width: 0; -fx-cursor: hand;");
-            }
-        });
+        row.setOnMouseExited(e -> row.setStyle(border));
 
         // Avatar
         ImageView avatar = new ImageView();
@@ -210,10 +160,13 @@ public class ChatController implements Initializable {
         avatar.setPickOnBounds(true);
         avatar.setPreserveRatio(false);
 
-        try {
-            avatar.setImage(new Image(getClass().getResource(contact.getAvatarPath()).toExternalForm()));
-        } catch (Exception e) {
-            System.err.println("Failed to load avatar: " + contact.getAvatarPath());
+        String photo = contact.getAvatarBase64();
+        if (photo != null && !photo.isBlank()) {
+            ImageUtil.applyBase64ToImageView(avatar, photo);
+        } else {
+            try {
+                avatar.setImage(new Image(getClass().getResource("/com/teknisio/assets/profile/profile.png").toExternalForm()));
+            } catch (Exception ignored) {}
         }
 
         Circle clip = new Circle(24, 24, 24);
@@ -222,32 +175,30 @@ public class ChatController implements Initializable {
         StackPane avatarWrapper = new StackPane(avatar);
         avatarWrapper.setMinSize(48, 48);
         avatarWrapper.setMaxSize(48, 48);
-        avatarWrapper.setAlignment(Pos.CENTER);
 
-        // Online/Offline indicator
+        // Online dot
         StackPane onlineDot = new StackPane();
         onlineDot.setMinSize(12, 12);
         onlineDot.setMaxSize(12, 12);
         onlineDot.setStyle("-fx-background-radius: 50%; -fx-background-color: "
-            + (contact.getStatus().equals("Online") ? "#27AE60" : "#95A5A6") + ";");
+            + ("Online".equals(contact.getStatus()) ? "#27AE60" : "#95A5A6") + ";");
 
         StackPane avatarStack = new StackPane(avatarWrapper, onlineDot);
         StackPane.setAlignment(onlineDot, Pos.BOTTOM_RIGHT);
-        StackPane.setMargin(onlineDot, new Insets(0, 0, 0, 0));
 
-        // Middle details
+        // Middle
         VBox details = new VBox();
         details.setAlignment(Pos.CENTER_LEFT);
         details.setSpacing(4);
-        HBox.setHgrow(details, javafx.scene.layout.Priority.ALWAYS);
+        HBox.setHgrow(details, Priority.ALWAYS);
 
         Label nameLabel = new Label(contact.getName());
         nameLabel.getStyleClass().add("chat-name");
 
-        Label messageLabel = new Label(contact.getLastMessage());
-        messageLabel.getStyleClass().add("chat-message");
+        Label msgLabel = new Label(contact.getLastMessage());
+        msgLabel.getStyleClass().add("chat-message");
 
-        details.getChildren().addAll(nameLabel, messageLabel);
+        details.getChildren().addAll(nameLabel, msgLabel);
 
         // Right side
         VBox rightBox = new VBox();
@@ -258,32 +209,25 @@ public class ChatController implements Initializable {
         if (isActiveChat) {
             Label timeLabel = new Label(contact.getTime());
             timeLabel.getStyleClass().add("chat-time");
-
             rightBox.getChildren().add(timeLabel);
 
             if (contact.getUnreadCount() > 0) {
                 StackPane badge = new StackPane();
                 badge.getStyleClass().add("chat-unread-badge");
-
                 Label badgeText = new Label(String.valueOf(contact.getUnreadCount()));
                 badgeText.getStyleClass().add("chat-unread-text");
-
                 badge.getChildren().add(badgeText);
                 rightBox.getChildren().add(badge);
             }
         } else {
-            // "Start Chat" label for technicians
             Label startChatLabel = new Label("Chat");
-            startChatLabel.setStyle(
-                "-fx-font-size: 10px; -fx-font-weight: bold; -fx-text-fill: #2D4B73;"
-                + "-fx-background-color: #E2ECF7; -fx-background-radius: 12px; -fx-padding: 4px 10px;"
-            );
+            startChatLabel.setStyle("-fx-font-size: 10px; -fx-font-weight: bold; -fx-text-fill: #2D4B73;"
+                + "-fx-background-color: #E2ECF7; -fx-background-radius: 12px; -fx-padding: 4px 10px;");
             rightBox.getChildren().add(startChatLabel);
         }
 
         row.getChildren().addAll(avatarStack, details, rightBox);
 
-        // Click handler
         row.setOnMouseClicked(event -> {
             openChatDetail(contact);
             event.consume();
@@ -296,15 +240,23 @@ public class ChatController implements Initializable {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/teknisio/fxml/ChatDetail.fxml"));
             Parent root = loader.load();
-
             ChatDetailController detailController = loader.getController();
-            detailController.setContactData(contact.getName(), contact.getAvatarPath(), contact.getStatus());
+            detailController.setContactData(contact.getName(), contact.getAvatarBase64(), contact.getStatus());
 
-            // Set the scene root
-            javafx.scene.Scene scene = searchField.getScene();
-            if (scene != null) {
-                scene.setRoot(root);
+            // Add to active conversations if not already present
+            if (!contact.isActiveChat()) {
+                boolean exists = SESSION_ACTIVE_CONTACTS.stream()
+                    .anyMatch(c -> c.getName().equals(contact.getName()));
+                if (!exists) {
+                    ChatContact active = new ChatContact(
+                        contact.getName(), "", "", contact.getAvatarBase64(),
+                        contact.getStatus(), 0, true, contact.getTechnicianDto());
+                    SESSION_ACTIVE_CONTACTS.add(0, active);
+                }
             }
+
+            javafx.scene.Scene scene = searchField != null ? searchField.getScene() : null;
+            if (scene != null) scene.setRoot(root);
         } catch (IOException e) {
             System.err.println("Failed to open chat detail: " + e.getMessage());
             e.printStackTrace();
@@ -313,42 +265,43 @@ public class ChatController implements Initializable {
 
     @FXML
     private void handleBack(ActionEvent event) {
-        try {
-            Main.setRoot("/com/teknisio/fxml/home_user.fxml");
-        } catch (IOException e) {
-            System.err.println("Failed to navigate to dashboard: " + e.getMessage());
-            e.printStackTrace();
-        }
+        try { Main.setRoot("/com/teknisio/fxml/home_user.fxml"); }
+        catch (IOException e) { e.printStackTrace(); }
     }
 
     /**
-     * Inner class representing a chat contact.
+     * Represents a chat contact (technician or active conversation).
      */
     public static class ChatContact {
         private String name;
         private String lastMessage;
         private String time;
-        private String avatarPath;
+        private String avatarBase64; // base64 photo
         private String status;
         private int unreadCount;
         private boolean isActiveChat;
+        private TechnicianDto technicianDto;
 
-        public ChatContact(String name, String lastMessage, String time, String avatarPath, String status, int unreadCount, boolean isActiveChat) {
+        public ChatContact(String name, String lastMessage, String time, String avatarBase64,
+                           String status, int unreadCount, boolean isActiveChat, TechnicianDto dto) {
             this.name = name;
             this.lastMessage = lastMessage;
             this.time = time;
-            this.avatarPath = avatarPath;
+            this.avatarBase64 = avatarBase64;
             this.status = status;
             this.unreadCount = unreadCount;
             this.isActiveChat = isActiveChat;
+            this.technicianDto = dto;
         }
 
         public String getName() { return name; }
         public String getLastMessage() { return lastMessage; }
+        public void setLastMessage(String msg) { this.lastMessage = msg; }
         public String getTime() { return time; }
-        public String getAvatarPath() { return avatarPath; }
+        public String getAvatarBase64() { return avatarBase64; }
         public String getStatus() { return status; }
         public int getUnreadCount() { return unreadCount; }
         public boolean isActiveChat() { return isActiveChat; }
+        public TechnicianDto getTechnicianDto() { return technicianDto; }
     }
 }
