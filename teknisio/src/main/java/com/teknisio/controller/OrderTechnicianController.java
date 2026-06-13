@@ -136,10 +136,36 @@ public class OrderTechnicianController implements Initializable {
 
             ToggleButton toggle = new ToggleButton();
             toggle.getStyleClass().add("category-toggle");
+            toggle.setEllipsisString("");
             toggle.setUserData(cat.getDeviceCategoryId());
 
-            SVGPath icon = new SVGPath();
-            icon.setContent(HomeUserController.getCategoryIcon(cat.getName()));
+            ImageView icon = new ImageView();
+            icon.setFitWidth(24);
+            icon.setFitHeight(24);
+            icon.setPreserveRatio(true);
+            try {
+                String path = getCategoryIconPath(cat.getName());
+                icon.setImage(new Image(getClass().getResource(path).toExternalForm()));
+            } catch (Exception ignored) {}
+
+            javafx.scene.effect.ColorAdjust whiteAdjust = new javafx.scene.effect.ColorAdjust();
+            whiteAdjust.setBrightness(1.0);
+
+            toggle.selectedProperty().addListener((obs, oldVal, newVal) -> {
+                if (newVal) {
+                    icon.setEffect(whiteAdjust);
+                } else {
+                    icon.setEffect(null);
+                }
+            });
+
+            // Initial selection state listener setup
+            if (toggle.isSelected()) {
+                icon.setEffect(whiteAdjust);
+            } else {
+                icon.setEffect(null);
+            }
+
             toggle.setGraphic(icon);
 
             Label lbl = new Label(cat.getName());
@@ -153,6 +179,44 @@ public class OrderTechnicianController implements Initializable {
         // Select first by default if only one; or leave all unselected for multi-choice
         if (!categoryToggleButtons.isEmpty()) {
             categoryToggleButtons.get(0).setSelected(true);
+            // Trigger selection effect update for the default selected item
+            ImageView iv = (ImageView) categoryToggleButtons.get(0).getGraphic();
+            if (iv != null) {
+                javafx.scene.effect.ColorAdjust whiteAdjust = new javafx.scene.effect.ColorAdjust();
+                whiteAdjust.setBrightness(1.0);
+                iv.setEffect(whiteAdjust);
+            }
+        }
+    }
+
+    private String getCategoryIconPath(String categoryName) {
+        if (categoryName == null) return "/com/teknisio/assets/devices/ac.png";
+        switch (categoryName.toLowerCase().trim()) {
+            case "ac":
+            case "air conditioner":
+                return "/com/teknisio/assets/devices/ac.png";
+            case "fan":
+            case "kipas":
+                return "/com/teknisio/assets/devices/fan.png";
+            case "mixer":
+                return "/com/teknisio/assets/devices/mixer.png";
+            case "oven":
+                return "/com/teknisio/assets/devices/oven.png";
+            case "fridge":
+            case "refrigerator":
+            case "kulkas":
+                return "/com/teknisio/assets/devices/refrigerator.png";
+            case "rice cooker":
+                return "/com/teknisio/assets/devices/rice_cooker.png";
+            case "tv":
+            case "television":
+            case "televisi":
+                return "/com/teknisio/assets/devices/television.png";
+            case "washing machine":
+            case "mesin cuci":
+                return "/com/teknisio/assets/devices/washing_machine.png";
+            default:
+                return "/com/teknisio/assets/devices/ac.png";
         }
     }
 

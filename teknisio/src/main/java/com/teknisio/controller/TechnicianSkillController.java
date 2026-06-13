@@ -104,26 +104,43 @@ public class TechnicianSkillController implements Initializable {
     private HBox buildSkillRow(DeviceCategoryDto cat, boolean isCurrent) {
         HBox row = new HBox();
         row.setAlignment(Pos.CENTER_LEFT);
-        row.setSpacing(10);
+        row.setSpacing(12);
         row.setPadding(new Insets(10, 14, 10, 14));
-        row.setStyle("-fx-background-color: #F8FAFC; -fx-background-radius: 12px; -fx-border-color: #E2E8F0; -fx-border-radius: 12px; -fx-border-width: 1px;");
+        row.setStyle("-fx-background-color: #F8FAFC; -fx-background-radius: 10px; -fx-border-color: #E2E8F0; -fx-border-radius: 10px; -fx-border-width: 1px;");
+
+        // Hover effect
+        row.setOnMouseEntered(e -> row.setStyle("-fx-background-color: #EBF1F6; -fx-background-radius: 10px; -fx-border-color: #CBD5E1; -fx-border-radius: 10px; -fx-border-width: 1px;"));
+        row.setOnMouseExited(e -> row.setStyle("-fx-background-color: #F8FAFC; -fx-background-radius: 10px; -fx-border-color: #E2E8F0; -fx-border-radius: 10px; -fx-border-width: 1px;"));
+
+        // Category Icon
+        javafx.scene.shape.SVGPath icon = new javafx.scene.shape.SVGPath();
+        String svgPath = HomeUserController.getCategoryIcon(cat.getName());
+        icon.setContent(svgPath);
+        icon.setFill(javafx.scene.paint.Color.web("#2D4B73"));
+        icon.setScaleX(0.55);
+        icon.setScaleY(0.55);
+
+        javafx.scene.layout.StackPane iconWrapper = new javafx.scene.layout.StackPane(icon);
+        iconWrapper.setMinSize(36, 36);
+        iconWrapper.setMaxSize(36, 36);
+        iconWrapper.setStyle("-fx-background-color: #E2ECF7; -fx-background-radius: 50%;");
 
         Label nameLabel = new Label(cat.getName() != null ? cat.getName() : "Kategori");
-        nameLabel.setStyle("-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: #1E293B;");
+        nameLabel.setStyle("-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: #2D4B73;");
         HBox.setHgrow(nameLabel, Priority.ALWAYS);
 
         Button actionBtn = new Button();
         if (isCurrent) {
             actionBtn.setText("Hapus");
-            actionBtn.setStyle("-fx-background-color: #FFE5E5; -fx-text-fill: #EF4444; -fx-background-radius: 8px; -fx-font-weight: bold; -fx-padding: 6 12; -fx-cursor: hand;");
+            actionBtn.setStyle("-fx-background-color: #FFE5E5; -fx-text-fill: #EF4444; -fx-background-radius: 16px; -fx-font-weight: bold; -fx-padding: 6 14; -fx-cursor: hand; -fx-font-size: 12px;");
             actionBtn.setOnAction(e -> handleRemoveSkill(cat));
         } else {
             actionBtn.setText("Tambah");
-            actionBtn.setStyle("-fx-background-color: #E0F2FE; -fx-text-fill: #0284C7; -fx-background-radius: 8px; -fx-font-weight: bold; -fx-padding: 6 12; -fx-cursor: hand;");
+            actionBtn.setStyle("-fx-background-color: #E2ECF7; -fx-text-fill: #2D4B73; -fx-background-radius: 16px; -fx-font-weight: bold; -fx-padding: 6 14; -fx-cursor: hand; -fx-font-size: 12px;");
             actionBtn.setOnAction(e -> handleAddSkill(cat));
         }
 
-        row.getChildren().addAll(nameLabel, actionBtn);
+        row.getChildren().addAll(iconWrapper, nameLabel, actionBtn);
         return row;
     }
 

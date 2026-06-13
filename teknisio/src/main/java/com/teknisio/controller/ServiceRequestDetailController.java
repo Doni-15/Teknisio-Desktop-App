@@ -59,6 +59,7 @@ public class ServiceRequestDetailController implements Initializable {
 
     private static ServiceRequestDto selectedOrder = null;
     private ServiceRequestDto currentOrder = null;
+    private com.teknisio.dto.TechnicianDto currentTechnician = null;
 
     public static void setSelectedOrder(ServiceRequestDto order) {
         selectedOrder = order;
@@ -125,7 +126,8 @@ public class ServiceRequestDetailController implements Initializable {
         t.start();
     }
 
-    private void bindData(ServiceRequestDto req, TechnicianDto tech, List<StatusHistoryDto> history) {
+    private void bindData(ServiceRequestDto req, com.teknisio.dto.TechnicianDto tech, List<StatusHistoryDto> history) {
+        this.currentTechnician = tech;
         txtOrderCode.setText(req.getServiceRequestCode() != null ? req.getServiceRequestCode() : "REQ-???");
         txtOrderStatus.setText(req.getStatusLabel());
         txtOrderStatus.setStyle("-fx-font-size: 12px; -fx-font-weight: bold; -fx-text-fill: white; -fx-padding: 5 12;");
@@ -377,9 +379,29 @@ public class ServiceRequestDetailController implements Initializable {
     private void handleOpenChat() {
         if (currentOrder == null) return;
         try {
-            Main.setRoot("/com/teknisio/fxml/Chat.fxml");
+            String techName = (currentTechnician != null && currentTechnician.getName() != null) ? currentTechnician.getName() : "Teknisi";
+            String techPhoto = currentTechnician != null ? currentTechnician.getProfilePhoto() : null;
+            String techStatus = "Online";
+
+            // Add to active conversations in ChatController if not already present
+            boolean exists = ChatController.SESSION_ACTIVE_CONTACTS.stream()
+                .anyMatch(c -> c.getName().equals(techName));
+            if (!exists) {
+                ChatController.ChatContact active = new ChatController.ChatContact(
+                    techName, "", "", techPhoto,
+                    techStatus, 0, true, null);
+                ChatController.SESSION_ACTIVE_CONTACTS.add(0, active);
+            }
+
+            // Load ChatDetail FXML and set data
+            javafx.fxml.FXMLLoader loader = new javafx.fxml.FXMLLoader(getClass().getResource("/com/teknisio/fxml/ChatDetail.fxml"));
+            javafx.scene.Parent root = loader.load();
+            ChatDetailController detailController = loader.getController();
+            detailController.setContactData(techName, techPhoto, techStatus);
+
+            btnOpenChat.getScene().setRoot(root);
         } catch (IOException e) {
-            System.err.println("Failed to navigate to Chat: " + e.getMessage());
+            System.err.println("Failed to open chat: " + e.getMessage());
             e.printStackTrace();
         }
     }

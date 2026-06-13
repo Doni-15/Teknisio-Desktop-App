@@ -126,7 +126,7 @@
                               <HBox alignment="CENTER">
                                  <children>
                                     <!-- Morning Segment -->
-                                    <ToggleButton fx:id="timeMorning" mnemonicParsing="false" prefWidth="102.0" styleClass="time-toggle, time-toggle-first" HBox.hgrow="ALWAYS">
+                                    <ToggleButton fx:id="timeMorning" mnemonicParsing="false" prefWidth="102.0" styleClass="time-toggle time-toggle-first" HBox.hgrow="ALWAYS">
                                        <graphic>
                                           <VBox alignment="CENTER" spacing="3.0">
                                              <children>
@@ -152,7 +152,7 @@
                                     </ToggleButton>
                                     
                                     <!-- Evening Segment -->
-                                    <ToggleButton fx:id="timeEvening" mnemonicParsing="false" prefWidth="102.0" styleClass="time-toggle, time-toggle-last" HBox.hgrow="ALWAYS">
+                                    <ToggleButton fx:id="timeEvening" mnemonicParsing="false" prefWidth="102.0" styleClass="time-toggle time-toggle-last" HBox.hgrow="ALWAYS">
                                        <graphic>
                                           <VBox alignment="CENTER" spacing="3.0">
                                              <children>

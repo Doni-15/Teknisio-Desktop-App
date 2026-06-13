@@ -52,9 +52,9 @@ public class OrderHistoryController implements Initializable {
 
         String[][] filters = {
             {null, "Semua"},
-            {"PENDING", "Menunggu"},
+            {"WAITING", "Menunggu"},
             {"ACCEPTED", "Diterima"},
-            {"IN_PROGRESS", "Dikerjakan"},
+            {"ON_PROGRESS", "Dikerjakan"},
             {"COMPLETED", "Selesai"},
             {"CANCELLED", "Batal"},
             {"REJECTED", "Ditolak"}
@@ -161,20 +161,14 @@ public class OrderHistoryController implements Initializable {
         avatar.setPreserveRatio(false);
         Circle clip = new Circle(18, 18, 18);
         avatar.setClip(clip);
-
-        String photo = req.getTechnicianProfilePhoto();
-        if (photo != null && !photo.isBlank()) {
-            ImageUtil.applyBase64ToImageView(avatar, photo);
-        } else {
-            try {
-                avatar.setImage(new Image(
-                    getClass().getResource("/com/teknisio/assets/profile/profile.png").toExternalForm()));
-            } catch (Exception ignored) {}
-        }
+        try {
+            avatar.setImage(new Image(
+                getClass().getResource("/com/teknisio/assets/profile/profile.png").toExternalForm()));
+        } catch (Exception ignored) {}
 
         VBox techInfo = new VBox();
         techInfo.setSpacing(2);
-        Label techName = new Label(req.getTechnicianName() != null ? req.getTechnicianName() : "Teknisi");
+        Label techName = new Label("Memuat...");
         techName.setStyle("-fx-font-size: 13px; -fx-font-weight: bold; -fx-text-fill: #2D4B73;");
 
         String categories = "-";
@@ -189,6 +183,28 @@ public class OrderHistoryController implements Initializable {
         techInfo.getChildren().addAll(techName, techSpec);
 
         techRow.getChildren().addAll(avatar, techInfo);
+
+        String techId = req.getTechnicianProfileId();
+        if (techId != null) {
+            Thread t = new Thread(() -> {
+                com.teknisio.dto.TechnicianDto tech = com.teknisio.service.TechnicianService.getTechnicianDetail(techId);
+                if (tech != null) {
+                    Platform.runLater(() -> {
+                        techName.setText(tech.getName());
+                        String photo = tech.getProfilePhoto();
+                        if (photo != null && !photo.isBlank()) {
+                            ImageUtil.applyBase64ToImageView(avatar, photo);
+                        }
+                    });
+                } else {
+                    Platform.runLater(() -> techName.setText("Teknisi"));
+                }
+            });
+            t.setDaemon(true);
+            t.start();
+        } else {
+            techName.setText("Mencari Teknisi");
+        }
 
         // Time
         String time = req.getRequestTime();
@@ -242,6 +258,16 @@ public class OrderHistoryController implements Initializable {
             Main.setRoot("/com/teknisio/fxml/home_user.fxml");
         } catch (IOException e) {
             System.err.println("Failed to navigate to Home: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    private void handleChatTab(MouseEvent event) {
+        try {
+            Main.setRoot("/com/teknisio/fxml/Chat.fxml");
+        } catch (IOException e) {
+            System.err.println("Failed to navigate to Chat: " + e.getMessage());
             e.printStackTrace();
         }
     }

@@ -15,6 +15,7 @@ public record CustomerTechnicianResponse(
   Integer ratingCount,
   Integer totalJobs,
   String description,
-  List<DeviceCategoryResponse> supportedDeviceCategories
+  List<DeviceCategoryResponse> supportedDeviceCategories,
+  String phoneNumber
 ) {
 }

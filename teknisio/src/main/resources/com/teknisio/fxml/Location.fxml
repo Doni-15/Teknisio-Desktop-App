@@ -47,7 +47,7 @@
             </VBox>
             
             <!-- Current Location Button -->
-            <Button mnemonicParsing="false" onAction="#handleUseCurrentLocation" styleClass="location-current-btn">
+            <Button mnemonicParsing="false" onAction="#handleUseCurrentLocation" prefHeight="48.0" prefWidth="320.0" styleClass="location-current-btn">
                <graphic>
                   <HBox alignment="CENTER" spacing="10.0">
                      <children>

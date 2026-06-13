@@ -1,7 +1,7 @@
 package com.teknisio.controller;
 
 import com.teknisio.Main;
-import com.teknisio.dto.TechnicianServiceRequestDto;
+import com.teknisio.dto.ServiceRequestDto;
 import com.teknisio.service.TechnicianRequestService;
 import com.teknisio.util.ImageUtil;
 import javafx.application.Platform;
@@ -98,7 +98,7 @@ public class TechnicianHistoryController implements Initializable {
         }
 
         Thread t = new Thread(() -> {
-            List<TechnicianServiceRequestDto> list = TechnicianRequestService.getMyServiceRequests(selectedStatusFilter);
+            List<ServiceRequestDto> list = TechnicianRequestService.getMyRequests(selectedStatusFilter);
             Platform.runLater(() -> {
                 if (list == null || list.isEmpty()) {
                     if (txtTechnicianHistoryEmpty != null) {
@@ -109,7 +109,7 @@ public class TechnicianHistoryController implements Initializable {
                     if (txtTechnicianHistoryEmpty != null) {
                         txtTechnicianHistoryEmpty.setVisible(false);
                     }
-                    for (TechnicianServiceRequestDto req : list) {
+                    for (ServiceRequestDto req : list) {
                         if (layoutTechnicianHistoryRequests != null) {
                             layoutTechnicianHistoryRequests.getChildren().add(buildRequestCard(req));
                         }
@@ -121,7 +121,7 @@ public class TechnicianHistoryController implements Initializable {
         t.start();
     }
 
-    private VBox buildRequestCard(TechnicianServiceRequestDto req) {
+    private VBox buildRequestCard(ServiceRequestDto req) {
         VBox card = new VBox();
         card.setSpacing(10);
         card.setPadding(new Insets(14));
@@ -191,7 +191,7 @@ public class TechnicianHistoryController implements Initializable {
 
         // Click handler to open detail page
         card.setOnMouseClicked(e -> {
-            TechnicianRequestDetailController.setSelectedRequest(req);
+            TechnicianRequestDetailController.setCurrentRequest(req);
             try {
                 Main.setRoot("/com/teknisio/fxml/TechnicianRequestDetail.fxml");
             } catch (IOException ex) {

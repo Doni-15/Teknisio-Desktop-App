@@ -37,6 +37,12 @@ public class LocationController implements Initializable {
     @FXML
     private VBox recentLocationContainer;
 
+    private static String backRoute = "/com/teknisio/fxml/home_user.fxml";
+
+    public static void setBackRoute(String route) {
+        backRoute = route;
+    }
+
     private List<LocationItem> savedAddresses = new ArrayList<>();
     private List<LocationItem> recentLocations = new ArrayList<>();
 
@@ -261,6 +267,13 @@ public class LocationController implements Initializable {
         // Re-render to reflect selection
         renderSavedAddresses(savedAddresses);
 
+        // Save selected address to backend database asynchronously
+        Thread t = new Thread(() -> {
+            com.teknisio.service.UserService.updateProfile(java.util.Map.of("address", item.getFullAddress()));
+        });
+        t.setDaemon(true);
+        t.start();
+
         // Show confirmation and navigate back
         showLocationSelectedAlert(item);
     }
@@ -275,7 +288,7 @@ public class LocationController implements Initializable {
 
         alert.setOnHidden(e -> {
             try {
-                Main.setRoot("/com/teknisio/fxml/home_user.fxml");
+                Main.setRoot(backRoute);
             } catch (IOException ex) {
                 System.err.println("Failed to navigate back: " + ex.getMessage());
                 ex.printStackTrace();
@@ -288,24 +301,26 @@ public class LocationController implements Initializable {
     @FXML
     private void handleBack(ActionEvent event) {
         try {
-            Main.setRoot("/com/teknisio/fxml/home_user.fxml");
+            Main.setRoot(backRoute);
         } catch (IOException e) {
-            System.err.println("Failed to navigate back to dashboard: " + e.getMessage());
+            System.err.println("Failed to navigate back: " + e.getMessage());
             e.printStackTrace();
         }
     }
 
     @FXML
     private void handleUseCurrentLocation(ActionEvent event) {
-        // Simulate GPS fetch
-        LocationItem gpsLocation = new LocationItem(
-            "Current Location",
-            "Detecting your GPS location...",
-            "GPS Location",
-            false
-        );
+        // Simulate GPS fetch and update backend
+        String gpsAddr = "Jl. Gatot Subroto No. 88, Medan, North Sumatra";
+        Thread t = new Thread(() -> {
+            com.teknisio.service.UserService.updateProfile(java.util.Map.of("address", gpsAddr));
+            javafx.application.Platform.runLater(() -> {
+                HomeUserController.setSelectedLocation("GPS — Medan");
+            });
+        });
+        t.setDaemon(true);
+        t.start();
 
-        // Simulate a short delay then navigate back
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Current Location");
         alert.setHeaderText(null);
@@ -314,9 +329,8 @@ public class LocationController implements Initializable {
         alert.getDialogPane().getStyleClass().add("alert-dialog");
 
         alert.setOnHidden(e -> {
-            HomeUserController.setSelectedLocation("GPS — Medan");
             try {
-                Main.setRoot("/com/teknisio/fxml/home_user.fxml");
+                Main.setRoot(backRoute);
             } catch (IOException ex) {
                 System.err.println("Failed to navigate back: " + ex.getMessage());
                 ex.printStackTrace();
