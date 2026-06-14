@@ -72,10 +72,15 @@ public class TechnicianListController implements Initializable {
     @FXML private Label tech3Price;
     @FXML private Label tech4Price;
 
+    @FXML private HBox badge1;
+    @FXML private HBox badge2;
+    @FXML private HBox badge3;
+    @FXML private HBox badge4;
+
     // -- Overlay & category selector --
     @FXML private VBox floatingOverlay;
     @FXML private Label sliderLabel;
-    @FXML private SVGPath sliderIcon;
+    @FXML private ImageView sliderIconView;
     @FXML private GridPane overlayCategoryGrid; // dynamic grid in FXML
 
     // Data
@@ -85,6 +90,7 @@ public class TechnicianListController implements Initializable {
     private CheckBox[] checkboxes;
     private Label[] nameLabels;
     private Label[] priceLabels;
+    private HBox[] badges;
 
     private List<TechnicianDto> currentTechnicians = new ArrayList<>();
     private List<DeviceCategoryDto> allCategories = new ArrayList<>();
@@ -98,6 +104,7 @@ public class TechnicianListController implements Initializable {
         checkboxes = new CheckBox[]{check1, check2, check3, check4};
         nameLabels = new Label[]{tech1Name, tech2Name, tech3Name, tech4Name};
         priceLabels = new Label[]{tech1Price, tech2Price, tech3Price, tech4Price};
+        badges = new HBox[]{badge1, badge2, badge3, badge4};
 
         applyAvatarClips();
         hideAllCards();
@@ -172,18 +179,24 @@ public class TechnicianListController implements Initializable {
     private VBox createOverlayCategoryItem(DeviceCategoryDto cat) {
         VBox item = new VBox();
         item.setAlignment(Pos.CENTER);
-        item.setSpacing(4);
+        item.setSpacing(6);
         item.setPrefWidth(72);
         item.getStyleClass().add("floating-category-item");
         item.setUserData(cat);
 
-        SVGPath icon = new SVGPath();
-        icon.setContent(HomeUserController.getCategoryIcon(cat.getName()));
-        icon.setScaleX(0.7);
-        icon.setScaleY(0.7);
-        icon.setFill(Color.web("#2D4B73"));
+        // Use PNG image like home_user screen
+        ImageView icon = new ImageView();
+        icon.setFitWidth(28);
+        icon.setFitHeight(28);
+        icon.setPreserveRatio(true);
+        icon.setPickOnBounds(true);
+        try {
+            String path = getCategoryIconPath(cat.getName());
+            icon.setImage(new Image(getClass().getResource(path).toExternalForm()));
+        } catch (Exception ignored) {}
+
         StackPane iconWrapper = new StackPane(icon);
-        iconWrapper.getStyleClass().add("category-icon-circle-wrapper");
+        iconWrapper.getStyleClass().add("category-icon-container");
         iconWrapper.setMinSize(44, 44);
         iconWrapper.setMaxSize(44, 44);
 
@@ -202,10 +215,47 @@ public class TechnicianListController implements Initializable {
         return item;
     }
 
+    private String getCategoryIconPath(String categoryName) {
+        if (categoryName == null) return "/com/teknisio/assets/devices/ac.png";
+        switch (categoryName.toLowerCase().trim()) {
+            case "ac":
+            case "air conditioner":
+                return "/com/teknisio/assets/devices/ac.png";
+            case "fan":
+            case "kipas":
+                return "/com/teknisio/assets/devices/fan.png";
+            case "mixer":
+                return "/com/teknisio/assets/devices/mixer.png";
+            case "oven":
+                return "/com/teknisio/assets/devices/oven.png";
+            case "fridge":
+            case "refrigerator":
+            case "kulkas":
+                return "/com/teknisio/assets/devices/refrigerator.png";
+            case "rice cooker":
+                return "/com/teknisio/assets/devices/rice_cooker.png";
+            case "tv":
+            case "television":
+            case "televisi":
+                return "/com/teknisio/assets/devices/television.png";
+            case "washing machine":
+            case "mesin cuci":
+                return "/com/teknisio/assets/devices/washing_machine.png";
+            default:
+                return "/com/teknisio/assets/devices/ac.png";
+        }
+    }
+
     private void applyCategory(DeviceCategoryDto cat) {
         selectedCategoryId = cat.getDeviceCategoryId();
         if (sliderLabel != null) sliderLabel.setText(cat.getName());
-        if (sliderIcon != null) sliderIcon.setContent(HomeUserController.getCategoryIcon(cat.getName()));
+        // Update slider icon image (PNG like home_user)
+        if (sliderIconView != null) {
+            try {
+                String path = getCategoryIconPath(cat.getName());
+                sliderIconView.setImage(new Image(getClass().getResource(path).toExternalForm()));
+            } catch (Exception ignored) {}
+        }
 
         // Highlight selected in overlay
         if (overlayCategoryGrid != null) {
@@ -260,6 +310,9 @@ public class TechnicianListController implements Initializable {
                 }
 
                 populateStars(ratings[i], (int) Math.round(tech.getRatingDouble()));
+
+                // Fill badge icons with PNG images like home_user
+                if (badges[i] != null) populateBadges(badges[i], tech);
             } else {
                 cards[i].setVisible(false);
                 cards[i].setManaged(false);
@@ -281,6 +334,33 @@ public class TechnicianListController implements Initializable {
             return tech.getSupportedDeviceCategories().get(0).getName() + " Specialist";
         }
         return "General Specialist";
+    }
+
+    private void populateBadges(HBox container, TechnicianDto tech) {
+        container.getChildren().clear();
+        if (tech.getSupportedDeviceCategories() == null) return;
+        int count = 0;
+        for (DeviceCategoryDto cat : tech.getSupportedDeviceCategories()) {
+            if (count >= 3) break;
+            StackPane badge = new StackPane();
+            badge.getStyleClass().add("tech-badge");
+            badge.setMinSize(20, 20);
+            badge.setMaxSize(20, 20);
+            badge.setAlignment(Pos.CENTER);
+
+            ImageView icon = new ImageView();
+            icon.setFitWidth(13);
+            icon.setFitHeight(13);
+            icon.setPreserveRatio(true);
+            try {
+                String path = getCategoryIconPath(cat.getName());
+                icon.setImage(new Image(getClass().getResource(path).toExternalForm()));
+            } catch (Exception ignored) {}
+
+            badge.getChildren().add(icon);
+            container.getChildren().add(badge);
+            count++;
+        }
     }
 
     private void applyAvatarClips() {

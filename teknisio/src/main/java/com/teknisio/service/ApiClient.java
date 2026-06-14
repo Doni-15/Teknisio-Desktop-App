@@ -19,6 +19,18 @@ public class ApiClient {
 
     private static final String DEFAULT_BASE_URL = "https://teknisio-desktop-app-production.up.railway.app";
     private static String BASE_URL = DEFAULT_BASE_URL;
+
+    static {
+        // Auto-detect local backend for local development & testing
+        try (java.net.Socket socket = new java.net.Socket()) {
+            socket.connect(new java.net.InetSocketAddress("127.0.0.1", 8080), 200);
+            BASE_URL = "http://localhost:8080";
+            System.out.println("[ApiClient] Detected local backend. Routing to http://localhost:8080");
+        } catch (Exception e) {
+            System.out.println("[ApiClient] Local backend not detected. Defaulting to production: " + BASE_URL);
+        }
+    }
+
     private static final HttpClient httpClient = HttpClient.newBuilder()
             .connectTimeout(Duration.ofSeconds(10))
             .build();

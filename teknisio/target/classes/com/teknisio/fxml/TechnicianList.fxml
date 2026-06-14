@@ -46,11 +46,15 @@
             <HBox onMouseClicked="#handleCategorySelectorClick" styleClass="category-selector-card" style="-fx-cursor: hand;">
                <children>
                   <!-- Icon container -->
-                  <StackPane styleClass="category-icon-circle-wrapper">
-                     <children>
-                        <SVGPath fx:id="sliderIcon" content="M19 19H5V5h14v14M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2m-1 7h-2V8h2v2m-3 0h-2V8h2v2m-3 0H8V8h2v2m-2 2h8v-2H8v2z" fill="#2D4B73" scaleX="0.75" scaleY="0.75" />
-                     </children>
-                  </StackPane>
+                   <StackPane styleClass="category-icon-container">
+                      <children>
+                         <ImageView fx:id="sliderIconView" fitHeight="36.0" fitWidth="36.0" pickOnBounds="true" preserveRatio="true">
+                            <image>
+                               <Image url="@../assets/devices/ac.png" />
+                            </image>
+                         </ImageView>
+                      </children>
+                   </StackPane>
                   
                   <!-- Label -->
                   <Label fx:id="sliderLabel" styleClass="category-selector-text" text="AC" />
@@ -130,20 +134,7 @@
                               <!-- Right Badges & Checkbox -->
                               <VBox alignment="CENTER_RIGHT" spacing="22.0">
                                  <children>
-                                    <HBox alignment="CENTER_RIGHT" spacing="4.0">
-                                       <children>
-                                          <StackPane styleClass="tech-badge">
-                                             <children>
-                                                <SVGPath content="M19 19H5V5h14v14M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2" fill="#2D4B73" scaleX="0.45" scaleY="0.45" />
-                                             </children>
-                                          </StackPane>
-                                          <StackPane styleClass="tech-badge">
-                                             <children>
-                                                <SVGPath content="M19 2H5c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-2 8H7V5h10v5z" fill="#2D4B73" scaleX="0.45" scaleY="0.45" />
-                                             </children>
-                                          </StackPane>
-                                       </children>
-                                    </HBox>
+                                    <HBox fx:id="badge1" alignment="CENTER_RIGHT" spacing="4.0" />
                                     <CheckBox fx:id="check1" mnemonicParsing="false" onAction="#handleCheckbox1" selected="true" styleClass="custom-checkbox" />
                                  </children>
                               </VBox>
@@ -205,15 +196,7 @@
                               <!-- Right Badges & Checkbox -->
                               <VBox alignment="CENTER_RIGHT" spacing="22.0">
                                  <children>
-                                    <HBox alignment="CENTER_RIGHT" spacing="4.0">
-                                       <children>
-                                          <StackPane styleClass="tech-badge">
-                                             <children>
-                                                <SVGPath content="M19 19H5V5h14v14M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2" fill="#2D4B73" scaleX="0.45" scaleY="0.45" />
-                                             </children>
-                                          </StackPane>
-                                       </children>
-                                    </HBox>
+                                    <HBox fx:id="badge2" alignment="CENTER_RIGHT" spacing="4.0" />
                                     <CheckBox fx:id="check2" mnemonicParsing="false" onAction="#handleCheckbox2" styleClass="custom-checkbox" />
                                  </children>
                               </VBox>
@@ -275,15 +258,7 @@
                               <!-- Right Badges & Checkbox -->
                               <VBox alignment="CENTER_RIGHT" spacing="22.0">
                                  <children>
-                                    <HBox alignment="CENTER_RIGHT" spacing="4.0">
-                                       <children>
-                                          <StackPane styleClass="tech-badge">
-                                             <children>
-                                                <SVGPath content="M19 19H5V5h14v14M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2" fill="#2D4B73" scaleX="0.45" scaleY="0.45" />
-                                             </children>
-                                          </StackPane>
-                                       </children>
-                                    </HBox>
+                                    <HBox fx:id="badge3" alignment="CENTER_RIGHT" spacing="4.0" />
                                     <CheckBox fx:id="check3" mnemonicParsing="false" onAction="#handleCheckbox3" styleClass="custom-checkbox" />
                                  </children>
                               </VBox>
@@ -345,15 +320,7 @@
                               <!-- Right Badges & Checkbox -->
                               <VBox alignment="CENTER_RIGHT" spacing="22.0">
                                  <children>
-                                    <HBox alignment="CENTER_RIGHT" spacing="4.0">
-                                       <children>
-                                          <StackPane styleClass="tech-badge">
-                                             <children>
-                                                <SVGPath content="M19 19H5V5h14v14M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2" fill="#2D4B73" scaleX="0.45" scaleY="0.45" />
-                                             </children>
-                                          </StackPane>
-                                       </children>
-                                    </HBox>
+                                    <HBox fx:id="badge4" alignment="CENTER_RIGHT" spacing="4.0" />
                                     <CheckBox fx:id="check4" mnemonicParsing="false" onAction="#handleCheckbox4" styleClass="custom-checkbox" />
                                  </children>
                               </VBox>
@@ -408,24 +375,41 @@
                         <!-- Row 1: AC, Fridge, Washing Machine -->
                         <HBox alignment="CENTER" spacing="10.0">
                            <children>
-                              <!-- AC Item -->
-                              <VBox fx:id="overlayAC" alignment="CENTER" onMouseClicked="#handleSelectCategory" spacing="6.0" styleClass="floating-category-item floating-category-item-selected" userData="AC">
+                              <VBox fx:id="overlayAC" alignment="CENTER" onMouseClicked="#handleSelectCategory" spacing="6.0" styleClass="floating-category-item" userData="AC">
                                  <children>
-                                    <SVGPath content="M19 19H5V5h14v14M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2m-1 7h-2V8h2v2m-3 0h-2V8h2v2m-3 0H8V8h2v2m-2 2h8v-2H8v2z" scaleX="0.7" scaleY="0.7" />
+                                    <StackPane styleClass="category-icon-container">
+                                       <children>
+                                          <ImageView fitHeight="28.0" fitWidth="28.0" pickOnBounds="true" preserveRatio="true">
+                                             <image><Image url="@../assets/devices/ac.png" /></image>
+                                          </ImageView>
+                                       </children>
+                                    </StackPane>
                                     <Label styleClass="category-name" style="-fx-font-size: 9px; -fx-font-weight: bold; -fx-text-fill: inherit;" text="AC" />
                                  </children>
                               </VBox>
                               <!-- Fridge Item -->
                               <VBox fx:id="overlayFridge" alignment="CENTER" onMouseClicked="#handleSelectCategory" spacing="6.0" styleClass="floating-category-item" userData="Fridge">
                                  <children>
-                                    <SVGPath content="M19 2H5c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-2 8H7V5h10v5zm0 10H7v-8h10v8z" scaleX="0.7" scaleY="0.7" />
+                                    <StackPane styleClass="category-icon-container">
+                                       <children>
+                                          <ImageView fitHeight="28.0" fitWidth="28.0" pickOnBounds="true" preserveRatio="true">
+                                             <image><Image url="@../assets/devices/refrigerator.png" /></image>
+                                          </ImageView>
+                                       </children>
+                                    </StackPane>
                                     <Label styleClass="category-name" style="-fx-font-size: 9px; -fx-font-weight: bold; -fx-text-fill: inherit;" text="Fridge" />
                                  </children>
                               </VBox>
                               <!-- Washing Machine Item -->
                               <VBox fx:id="overlayWashing" alignment="CENTER" onMouseClicked="#handleSelectCategory" spacing="6.0" styleClass="floating-category-item" userData="Washing Machine">
                                  <children>
-                                    <SVGPath content="M17 1H7c-1.1 0-2 .9-2 2v18c0 1.1.9 2 2 2h10c1.1 0 2-.9 2-2V3c0-1.1-.9-2-2-2zm-5 18c-2.21 0-4-1.79-4-4s1.79-4 4-4 4 1.79 4 4-1.79 4-4 4zm0-6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z" scaleX="0.7" scaleY="0.7" />
+                                    <StackPane styleClass="category-icon-container">
+                                       <children>
+                                          <ImageView fitHeight="28.0" fitWidth="28.0" pickOnBounds="true" preserveRatio="true">
+                                             <image><Image url="@../assets/devices/washing_machine.png" /></image>
+                                          </ImageView>
+                                       </children>
+                                    </StackPane>
                                     <Label styleClass="category-name" style="-fx-font-size: 9px; -fx-font-weight: bold; -fx-text-fill: inherit;" text="Washing" />
                                  </children>
                               </VBox>
@@ -438,21 +422,39 @@
                               <!-- Oven Item -->
                               <VBox fx:id="overlayOven" alignment="CENTER" onMouseClicked="#handleSelectCategory" spacing="6.0" styleClass="floating-category-item" userData="Oven">
                                  <children>
-                                    <SVGPath content="M21 4H3c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-1 12H4V8h16v8zm-2-6h-4v2h4v-2z" scaleX="0.7" scaleY="0.7" />
+                                    <StackPane styleClass="category-icon-container">
+                                       <children>
+                                          <ImageView fitHeight="28.0" fitWidth="28.0" pickOnBounds="true" preserveRatio="true">
+                                             <image><Image url="@../assets/devices/oven.png" /></image>
+                                          </ImageView>
+                                       </children>
+                                    </StackPane>
                                     <Label styleClass="category-name" style="-fx-font-size: 9px; -fx-font-weight: bold; -fx-text-fill: inherit;" text="Oven" />
                                  </children>
                               </VBox>
                               <!-- Television Item -->
                               <VBox fx:id="overlayTV" alignment="CENTER" onMouseClicked="#handleSelectCategory" spacing="6.0" styleClass="floating-category-item" userData="Television">
                                  <children>
-                                    <SVGPath content="M21 3H3c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h5v2h8v-2h5c1.1 0 1.99-.9 1.99-2L23 5c0-1.1-.9-2-2-2zm0 14H3V5h18v12z" scaleX="0.7" scaleY="0.7" />
+                                    <StackPane styleClass="category-icon-container">
+                                       <children>
+                                          <ImageView fitHeight="28.0" fitWidth="28.0" pickOnBounds="true" preserveRatio="true">
+                                             <image><Image url="@../assets/devices/television.png" /></image>
+                                          </ImageView>
+                                       </children>
+                                    </StackPane>
                                     <Label styleClass="category-name" style="-fx-font-size: 9px; -fx-font-weight: bold; -fx-text-fill: inherit;" text="TV" />
                                  </children>
                               </VBox>
                               <!-- Fan Item -->
                               <VBox fx:id="overlayFan" alignment="CENTER" onMouseClicked="#handleSelectCategory" spacing="6.0" styleClass="floating-category-item" userData="Fan">
                                  <children>
-                                    <SVGPath content="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm0-10c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z" scaleX="0.7" scaleY="0.7" />
+                                    <StackPane styleClass="category-icon-container">
+                                       <children>
+                                          <ImageView fitHeight="28.0" fitWidth="28.0" pickOnBounds="true" preserveRatio="true">
+                                             <image><Image url="@../assets/devices/fan.png" /></image>
+                                          </ImageView>
+                                       </children>
+                                    </StackPane>
                                     <Label styleClass="category-name" style="-fx-font-size: 9px; -fx-font-weight: bold; -fx-text-fill: inherit;" text="Fan" />
                                  </children>
                               </VBox>
@@ -465,14 +467,26 @@
                               <!-- Filter Camera Item -->
                               <VBox fx:id="overlayCamera" alignment="CENTER" onMouseClicked="#handleSelectCategory" spacing="6.0" styleClass="floating-category-item" userData="Filter Camera">
                                  <children>
-                                    <SVGPath content="M12 2L1 21h22L12 2zm0 4l7.5 13h-15L12 6zm-1 8h2v2h-2v-2zm0-4h2v2h-2v-2z" scaleX="0.7" scaleY="0.7" />
+                                    <StackPane styleClass="category-icon-container">
+                                       <children>
+                                          <ImageView fitHeight="28.0" fitWidth="28.0" pickOnBounds="true" preserveRatio="true">
+                                             <image><Image url="@../assets/devices/television.png" /></image>
+                                          </ImageView>
+                                       </children>
+                                    </StackPane>
                                     <Label styleClass="category-name" style="-fx-font-size: 9px; -fx-font-weight: bold; -fx-text-fill: inherit;" text="Camera" />
                                  </children>
                               </VBox>
                               <!-- Mixer Item -->
                               <VBox fx:id="overlayMixer" alignment="CENTER" onMouseClicked="#handleSelectCategory" spacing="6.0" styleClass="floating-category-item" userData="Mixer">
                                  <children>
-                                    <SVGPath content="M18 4H6v2h12V4zm-2 4H8v2h8V8zm-1 4H9v6c0 1.66 1.34 3 3 3s3-1.34 3-3v-6z" scaleX="0.7" scaleY="0.7" />
+                                    <StackPane styleClass="category-icon-container">
+                                       <children>
+                                          <ImageView fitHeight="28.0" fitWidth="28.0" pickOnBounds="true" preserveRatio="true">
+                                             <image><Image url="@../assets/devices/mixer.png" /></image>
+                                          </ImageView>
+                                       </children>
+                                    </StackPane>
                                     <Label styleClass="category-name" style="-fx-font-size: 9px; -fx-font-weight: bold; -fx-text-fill: inherit;" text="Mixer" />
                                  </children>
                               </VBox>

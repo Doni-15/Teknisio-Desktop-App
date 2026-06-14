@@ -281,9 +281,13 @@ public class ChatDetailController implements Initializable {
     private void handleBack(ActionEvent event) {
         stopPolling();
         try {
-            Main.setRoot("/com/teknisio/fxml/Chat.fxml");
+            if (com.teknisio.service.SessionManager.isTechnician()) {
+                Main.setRoot("/com/teknisio/fxml/TechnicianRequestDetail.fxml");
+            } else {
+                Main.setRoot("/com/teknisio/fxml/Chat.fxml");
+            }
         } catch (IOException e) {
-            System.err.println("Failed to navigate back to Chat: " + e.getMessage());
+            System.err.println("Failed to navigate back: " + e.getMessage());
         }
     }
 

@@ -240,7 +240,11 @@ public class OrderHistoryController implements Initializable {
     @FXML
     private void handleBack() {
         try {
-            Main.setRoot("/com/teknisio/fxml/home_user.fxml");
+            if (com.teknisio.service.SessionManager.isTechnician()) {
+                Main.setRoot("/com/teknisio/fxml/TechnicianHome.fxml");
+            } else {
+                Main.setRoot("/com/teknisio/fxml/home_user.fxml");
+            }
         } catch (IOException e) {
             System.err.println("Failed to navigate back: " + e.getMessage());
             e.printStackTrace();
@@ -255,7 +259,11 @@ public class OrderHistoryController implements Initializable {
     @FXML
     private void handleHomeTab(MouseEvent event) {
         try {
-            Main.setRoot("/com/teknisio/fxml/home_user.fxml");
+            if (com.teknisio.service.SessionManager.isTechnician()) {
+                Main.setRoot("/com/teknisio/fxml/TechnicianHome.fxml");
+            } else {
+                Main.setRoot("/com/teknisio/fxml/home_user.fxml");
+            }
         } catch (IOException e) {
             System.err.println("Failed to navigate to Home: " + e.getMessage());
             e.printStackTrace();

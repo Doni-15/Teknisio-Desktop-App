@@ -292,8 +292,25 @@ public class TechnicianRequestDetailController implements Initializable {
 
     @FXML
     private void handleOpenChat() {
-        try { Main.setRoot("/com/teknisio/fxml/Chat.fxml"); }
-        catch (IOException e) { e.printStackTrace(); }
+        if (currentRequest == null) return;
+        try {
+            String custName = currentRequest.getCustomerName() != null ? currentRequest.getCustomerName() : "Pelanggan";
+            String custPhoto = currentRequest.getCustomerProfilePhoto();
+            String custStatus = "Online";
+            String serviceRequestId = currentRequest.getServiceRequestId();
+
+            // Load ChatDetail FXML and set data
+            javafx.fxml.FXMLLoader loader = new javafx.fxml.FXMLLoader(getClass().getResource("/com/teknisio/fxml/ChatDetail.fxml"));
+            javafx.scene.Parent root = loader.load();
+            ChatDetailController detailController = loader.getController();
+            detailController.setContactData(custName, custPhoto, custStatus);
+            detailController.setServiceRequestId(serviceRequestId);
+
+            btnTechnicianChat.getScene().setRoot(root);
+        } catch (IOException e) {
+            System.err.println("Failed to open chat: " + e.getMessage());
+            e.printStackTrace();
+        }
     }
 
     private void showAlert(String message) {

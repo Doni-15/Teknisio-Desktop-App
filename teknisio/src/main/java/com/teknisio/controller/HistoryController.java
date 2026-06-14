@@ -19,7 +19,11 @@ public class HistoryController implements Initializable {
     @FXML
     private void handleBack(ActionEvent event) {
         try {
-            Main.setRoot("/com/teknisio/fxml/home_user.fxml");
+            if (com.teknisio.service.SessionManager.isTechnician()) {
+                Main.setRoot("/com/teknisio/fxml/TechnicianHome.fxml");
+            } else {
+                Main.setRoot("/com/teknisio/fxml/home_user.fxml");
+            }
         } catch (IOException e) {
             System.err.println("Failed to navigate to dashboard: " + e.getMessage());
             e.printStackTrace();

@@ -241,19 +241,25 @@ public class OrderTechnicianController implements Initializable {
         int count = 0;
         for (DeviceCategoryDto cat : tech.getSupportedDeviceCategories()) {
             if (count >= 3) break;
-            techBadgesBox.getChildren().add(createBadge(HomeUserController.getCategoryIcon(cat.getName())));
+            StackPane badge = new StackPane();
+            badge.getStyleClass().add("tech-badge");
+            badge.setMinSize(20, 20);
+            badge.setMaxSize(20, 20);
+            badge.setAlignment(Pos.CENTER);
+
+            ImageView icon = new ImageView();
+            icon.setFitWidth(13);
+            icon.setFitHeight(13);
+            icon.setPreserveRatio(true);
+            try {
+                String path = getCategoryIconPath(cat.getName());
+                icon.setImage(new Image(getClass().getResource(path).toExternalForm()));
+            } catch (Exception ignored) {}
+
+            badge.getChildren().add(icon);
+            techBadgesBox.getChildren().add(badge);
             count++;
         }
-    }
-
-    private StackPane createBadge(String svgPathContent) {
-        SVGPath path = new SVGPath();
-        path.setContent(svgPathContent);
-        path.setScaleX(0.45); path.setScaleY(0.45);
-        path.setFill(Color.web("#2D4B73"));
-        StackPane badge = new StackPane(path);
-        badge.getStyleClass().add("tech-badge");
-        return badge;
     }
 
     @FXML private void handleBack(ActionEvent event) { navigateBack(); }
