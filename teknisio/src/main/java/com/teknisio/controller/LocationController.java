@@ -1,6 +1,9 @@
 package com.teknisio.controller;
 
 import com.teknisio.Main;
+import com.teknisio.util.GeoLocationUtil;
+import java.util.Optional;
+import javafx.scene.control.ButtonType;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -313,36 +316,64 @@ public class LocationController implements Initializable {
 
     @FXML
     private void handleUseCurrentLocation(ActionEvent event) {
-        // Simulate GPS fetch and update backend
-        String gpsAddr = "Jl. Gatot Subroto No. 88, Medan, North Sumatra";
+        // 1. Ask for Location Permission
+        Alert permissionAlert = new Alert(Alert.AlertType.CONFIRMATION);
+        permissionAlert.setTitle("Izin Lokasi");
+        permissionAlert.setHeaderText("Izinkan Teknisio mengakses lokasi perangkat ini?");
+        permissionAlert.setContentText("Kami menggunakan lokasi Anda untuk mencari teknisi terdekat dan menghitung jarak secara akurat.");
         
-        // Update local session and home screen immediately to prevent race conditions
-        com.teknisio.service.SessionManager.setAddress(gpsAddr);
-        HomeUserController.setSelectedLocation("GPS — Medan");
+        ButtonType allowButton = new ButtonType("Izinkan");
+        ButtonType denyButton = new ButtonType("Tolak", javafx.scene.control.ButtonBar.ButtonData.CANCEL_CLOSE);
+        permissionAlert.getButtonTypes().setAll(allowButton, denyButton);
+        
+        permissionAlert.getDialogPane().getStylesheets().add(getClass().getResource("/com/teknisio/css/style.css").toExternalForm());
+        permissionAlert.getDialogPane().getStyleClass().add("alert-dialog");
 
-        Thread t = new Thread(() -> {
-            com.teknisio.service.UserService.updateProfile(java.util.Map.of("address", gpsAddr));
-        });
-        t.setDaemon(true);
-        t.start();
+        Optional<ButtonType> result = permissionAlert.showAndWait();
+        if (result.isPresent() && result.get() == allowButton) {
+            // Fetch real location
+            GeoLocationUtil.LocationResult loc = GeoLocationUtil.fetchLocation();
+            
+            // Update local coordinates
+            com.teknisio.service.SessionManager.setCoordinates(loc.lat, loc.lon);
+            
+            String gpsAddr = loc.city + ", " + loc.region + ", " + loc.country;
+            com.teknisio.service.SessionManager.setAddress(gpsAddr);
+            HomeUserController.setSelectedLocation("GPS — " + loc.city);
 
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Current Location");
-        alert.setHeaderText(null);
-        alert.setContentText("Using your current GPS location.\nLat: 3.5952, Long: 98.6722\n(Medan, North Sumatra)");
-        alert.getDialogPane().getStylesheets().add(getClass().getResource("/com/teknisio/css/style.css").toExternalForm());
-        alert.getDialogPane().getStyleClass().add("alert-dialog");
+            // Sync with backend
+            Thread t = new Thread(() -> {
+                com.teknisio.service.UserService.updateProfile(java.util.Map.of("address", gpsAddr));
+            });
+            t.setDaemon(true);
+            t.start();
 
-        alert.setOnHidden(e -> {
-            try {
-                Main.setRoot(backRoute);
-            } catch (IOException ex) {
-                System.err.println("Failed to navigate back: " + ex.getMessage());
-                ex.printStackTrace();
-            }
-        });
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Lokasi Saat Ini");
+            alert.setHeaderText(null);
+            alert.setContentText(String.format("Menggunakan lokasi GPS Anda.\nLat: %.4f, Long: %.4f\n(%s, %s)", loc.lat, loc.lon, loc.city, loc.region));
+            alert.getDialogPane().getStylesheets().add(getClass().getResource("/com/teknisio/css/style.css").toExternalForm());
+            alert.getDialogPane().getStyleClass().add("alert-dialog");
 
-        alert.showAndWait();
+            alert.setOnHidden(e -> {
+                try {
+                    Main.setRoot(backRoute);
+                } catch (IOException ex) {
+                    System.err.println("Failed to navigate back: " + ex.getMessage());
+                    ex.printStackTrace();
+                }
+            });
+            alert.showAndWait();
+        } else {
+            // Permission Denied
+            Alert deniedAlert = new Alert(Alert.AlertType.WARNING);
+            deniedAlert.setTitle("Izin Ditolak");
+            deniedAlert.setHeaderText(null);
+            deniedAlert.setContentText("Akses lokasi ditolak. Teknisio tidak dapat mengambil koordinat GPS Anda.");
+            deniedAlert.getDialogPane().getStylesheets().add(getClass().getResource("/com/teknisio/css/style.css").toExternalForm());
+            deniedAlert.getDialogPane().getStyleClass().add("alert-dialog");
+            deniedAlert.showAndWait();
+        }
     }
 
     /**

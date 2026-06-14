@@ -45,6 +45,7 @@ com\teknisio\controller\ChatController$ChatContact.class
 com\teknisio\controller\LocationController$LocationItem.class
 com\teknisio\controller\TechnicianDetailController.class
 com\teknisio\service\ApiClient.class
+com\teknisio\util\GeoLocationUtil.class
 com\teknisio\service\DeviceCategoryService.class
 com\teknisio\service\UserService$ProfileResponse.class
 com\teknisio\service\SessionManager.class
@@ -54,4 +55,5 @@ com\teknisio\model\News.class
 com\teknisio\controller\RegisterController.class
 com\teknisio\dto\RegisterRequest.class
 com\teknisio\controller\ChatDetailController.class
+com\teknisio\util\GeoLocationUtil$LocationResult.class
 com\teknisio\dto\ServiceRequestDto.class
