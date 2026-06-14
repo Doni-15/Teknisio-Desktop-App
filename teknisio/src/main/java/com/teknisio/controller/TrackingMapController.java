@@ -2,12 +2,7 @@ package com.teknisio.controller;
 
 import com.teknisio.Main;
 import com.teknisio.util.GeoLocationUtil;
-import javafx.animation.Animation;
-import javafx.animation.FadeTransition;
 import javafx.animation.KeyFrame;
-import javafx.animation.ParallelTransition;
-import javafx.animation.PathTransition;
-import javafx.animation.ScaleTransition;
 import javafx.animation.Timeline;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -15,16 +10,9 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
-import javafx.scene.shape.Line;
-import javafx.scene.shape.LineTo;
-import javafx.scene.shape.MoveTo;
-import javafx.scene.shape.Path;
-import javafx.scene.shape.Polyline;
+import javafx.scene.web.WebView;
 import javafx.util.Duration;
 
 import java.io.IOException;
@@ -61,13 +49,8 @@ public class TrackingMapController implements Initializable {
     private static String targetName = "Doni (Teknisi)";
     private static String targetAddress = "Jl. Gatot Subroto No. 88, Medan";
 
-    private Pane mapPane;
-    private PathTransition pathTransition;
+    private WebView webView;
     private Timeline updateTimeline;
-    private Timeline dashAnimation;
-    private Polyline routeLine;
-    private StackPane techMarker;
-    private Path trackPath;
     
     private double simulatedDistance = 2.5;
     private int secondsElapsed = 0;
@@ -116,18 +99,51 @@ public class TrackingMapController implements Initializable {
 
         // 4. Configure coordinates and initial distance
         if (permissionGranted) {
-            Double customerLat = com.teknisio.service.SessionManager.getLatitude();
-            Double customerLon = com.teknisio.service.SessionManager.getLongitude();
-            if (customerLat == null || customerLon == null) {
-                GeoLocationUtil.LocationResult loc = GeoLocationUtil.fetchLocation();
-                customerLat = loc.lat;
-                customerLon = loc.lon;
-                com.teknisio.service.SessionManager.setCoordinates(loc.lat, loc.lon);
+            if ("TECHNICIAN".equals(trackerRole)) {
+                // The technician is running the app, so technician location is real-time IP Geolocation
+                Double techLat = com.teknisio.service.SessionManager.getLatitude();
+                Double techLon = com.teknisio.service.SessionManager.getLongitude();
+                if (techLat == null || techLon == null) {
+                    GeoLocationUtil.LocationResult loc = GeoLocationUtil.fetchLocation();
+                    techLat = loc.lat;
+                    techLon = loc.lon;
+                    com.teknisio.service.SessionManager.setCoordinates(loc.lat, loc.lon);
+                }
+                startLat = techLat;
+                startLon = techLon;
+                
+                // Destination is customer's request address text
+                GeoLocationUtil.LocationResult destLoc = GeoLocationUtil.geocodeAddress(targetAddress);
+                if (destLoc != null) {
+                    destLat = destLoc.lat;
+                    destLon = destLoc.lon;
+                } else {
+                    destLat = startLat + 0.015;
+                    destLon = startLon + 0.015;
+                }
+            } else {
+                // The customer is running the app, so customer location is real-time IP Geolocation
+                Double customerLat = com.teknisio.service.SessionManager.getLatitude();
+                Double customerLon = com.teknisio.service.SessionManager.getLongitude();
+                if (customerLat == null || customerLon == null) {
+                    GeoLocationUtil.LocationResult loc = GeoLocationUtil.fetchLocation();
+                    customerLat = loc.lat;
+                    customerLon = loc.lon;
+                    com.teknisio.service.SessionManager.setCoordinates(loc.lat, loc.lon);
+                }
+                destLat = customerLat;
+                destLon = customerLon;
+                
+                // Starting point is technician's profile address text
+                GeoLocationUtil.LocationResult startLoc = GeoLocationUtil.geocodeAddress(targetAddress);
+                if (startLoc != null) {
+                    startLat = startLoc.lat;
+                    startLon = startLoc.lon;
+                } else {
+                    startLat = destLat - 0.015;
+                    startLon = destLon - 0.015;
+                }
             }
-            destLat = customerLat;
-            destLon = customerLon;
-            startLat = destLat - 0.015;
-            startLon = destLon - 0.015;
             
             simulatedDistance = GeoLocationUtil.calculateDistance(startLat, startLon, destLat, destLon);
         } else {
@@ -158,110 +174,15 @@ public class TrackingMapController implements Initializable {
         if (txtDistance != null) txtDistance.setText(String.format("%.1f km", simulatedDistance));
         if (txtLastUpdate != null) txtLastUpdate.setText("Terakhir diupdate: Baru saja");
 
-        // 6. Create and add drawing pane
-        mapPane = new Pane();
-        mapPane.setPrefSize(360, 450);
-        mapPane.setStyle("-fx-background-color: #0E0F26;");
-        mapContainer.getChildren().add(0, mapPane); // Add at bottom of StackPane so status overlays are on top
+        // 6. Create and add WebView to show the real interactive map
+        webView = new WebView();
+        webView.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+        mapContainer.getChildren().add(0, webView); // Add at bottom of StackPane so overlays are on top
 
-        // 7. Draw background streets (Road lines)
-        // Horizontal streets
-        drawRoad(20, 200, 340, 200);
-        drawRoad(20, 300, 340, 300);
-        // Vertical streets
-        drawRoad(80, 50, 80, 450);
-        drawRoad(250, 50, 250, 450);
-        drawRoad(180, 50, 180, 200);
+        // 7. Load real Leaflet dark matter map content
+        webView.getEngine().loadContent(getMapHtmlContent());
 
-        // 8. Draw route path
-        routeLine = new Polyline();
-        routeLine.getPoints().addAll(
-            80.0, 420.0,
-            80.0, 300.0,
-            250.0, 300.0,
-            250.0, 200.0,
-            180.0, 200.0
-        );
-        routeLine.setStroke(Color.web("#7C83FF"));
-        routeLine.setStrokeWidth(4.0);
-        routeLine.getStrokeDashArray().addAll(10.0, 10.0);
-        mapPane.getChildren().add(routeLine);
-
-        // Animate route dashes flowing
-        dashAnimation = new Timeline(new KeyFrame(Duration.millis(50), e -> {
-            routeLine.setStrokeDashOffset(routeLine.getStrokeDashOffset() - 1);
-        }));
-        dashAnimation.setCycleCount(Timeline.INDEFINITE);
-        dashAnimation.play();
-
-        // 9. Draw Destination Marker (Red pin with pulse ring)
-        StackPane destMarker = new StackPane();
-        destMarker.setLayoutX(180 - 15);
-        destMarker.setLayoutY(200 - 15);
-        destMarker.setPrefSize(30, 30);
-
-        Circle pulseCircle = new Circle(15, 15, 6);
-        pulseCircle.setStroke(Color.web("#FF4444"));
-        pulseCircle.setStrokeWidth(2.0);
-        pulseCircle.setFill(Color.TRANSPARENT);
-
-        Circle outerCircle = new Circle(15, 15, 8);
-        outerCircle.setFill(Color.web("#FF4444"));
-
-        Circle innerCircle = new Circle(15, 15, 3);
-        innerCircle.setFill(Color.WHITE);
-
-        destMarker.getChildren().addAll(pulseCircle, outerCircle, innerCircle);
-        mapPane.getChildren().add(destMarker);
-
-        // Pulse animation
-        ScaleTransition st = new ScaleTransition(Duration.seconds(1.5), pulseCircle);
-        st.setToX(4.0); st.setToY(4.0);
-        FadeTransition ft = new FadeTransition(Duration.seconds(1.5), pulseCircle);
-        ft.setFromValue(1.0); ft.setToValue(0.0);
-        ParallelTransition pt = new ParallelTransition(st, ft);
-        pt.setCycleCount(Animation.INDEFINITE);
-        pt.play();
-
-        // Label for destination
-        Label destLabel = new Label("Tujuan");
-        destLabel.setStyle("-fx-text-fill: #FF4444; -fx-font-size: 8px; -fx-font-weight: bold; -fx-background-color: rgba(14, 15, 38, 0.7); -fx-padding: 1 4; -fx-background-radius: 4;");
-        destLabel.setLayoutX(180 - 12);
-        destLabel.setLayoutY(200 - 30);
-        mapPane.getChildren().add(destLabel);
-
-        // 10. Draw moving GPS locator (blue dot with soft glow)
-        techMarker = new StackPane();
-        techMarker.setPrefSize(30, 30);
-
-        Circle glowCircle = new Circle(15, 15, 10);
-        glowCircle.setFill(Color.web("rgba(124, 131, 255, 0.25)"));
-
-        Circle dotCircle = new Circle(15, 15, 6);
-        dotCircle.setFill(Color.web("#7C83FF"));
-
-        Circle innerDot = new Circle(15, 15, 2);
-        innerDot.setFill(Color.WHITE);
-
-        techMarker.getChildren().addAll(glowCircle, dotCircle, innerDot);
-        mapPane.getChildren().add(techMarker);
-
-        // 11. Path Transition for moving locator
-        trackPath = new Path();
-        trackPath.getElements().add(new MoveTo(80, 420));
-        trackPath.getElements().add(new LineTo(80, 300));
-        trackPath.getElements().add(new LineTo(250, 300));
-        trackPath.getElements().add(new LineTo(250, 200));
-        trackPath.getElements().add(new LineTo(180, 200));
-
-        pathTransition = new PathTransition();
-        pathTransition.setNode(techMarker);
-        pathTransition.setPath(trackPath);
-        pathTransition.setDuration(Duration.seconds(15));
-        pathTransition.setCycleCount(1);
-        pathTransition.play();
-
-        // 12. Update Timer Timeline
+        // 8. Update Timer Timeline
         updateTimeline = new Timeline(new KeyFrame(Duration.seconds(1), e -> {
             secondsElapsed++;
             
@@ -307,23 +228,77 @@ public class TrackingMapController implements Initializable {
         updateTimeline.play();
     }
 
-    private void drawRoad(double startX, double startY, double endX, double endY) {
-        // Draw the thick dark road surface
-        Line roadSurface = new Line(startX, startY, endX, endY);
-        roadSurface.setStroke(Color.web("#1E203C"));
-        roadSurface.setStrokeWidth(16.0);
-        
-        // Draw the thin dashed centerline
-        Line centerline = new Line(startX, startY, endX, endY);
-        centerline.setStroke(Color.web("#383B65"));
-        centerline.setStrokeWidth(1.0);
-        centerline.getStrokeDashArray().addAll(5.0, 5.0);
-
-        mapPane.getChildren().addAll(roadSurface, centerline);
+    private String getMapHtmlContent() {
+        return "<!DOCTYPE html>\n" +
+            "<html>\n" +
+            "<head>\n" +
+            "    <link rel=\"stylesheet\" href=\"https://unpkg.com/leaflet@1.9.4/dist/leaflet.css\" />\n" +
+            "    <script src=\"https://unpkg.com/leaflet@1.9.4/dist/leaflet.js\"></script>\n" +
+            "    <style>\n" +
+            "        html, body, #map { width: 100%; height: 100%; margin: 0; padding: 0; background: #0E0F26; }\n" +
+            "        .leaflet-container { background: #0E0F26; }\n" +
+            "        .leaflet-bar { border: none !important; }\n" +
+            "        .leaflet-control-zoom { margin: 10px !important; }\n" +
+            "        .leaflet-control-attribution { display: none !important; }\n" +
+            "    </style>\n" +
+            "</head>\n" +
+            "<body>\n" +
+            "    <div id=\"map\"></div>\n" +
+            "    <script>\n" +
+            "        var map = L.map('map', {zoomControl: true}).setView([" + destLat + ", " + destLon + "], 14);\n" +
+            "        L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {\n" +
+            "            maxZoom: 19\n" +
+            "        }).addTo(map);\n" +
+            "        \n" +
+            "        var customerIcon = L.icon({\n" +
+            "            iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-red.png',\n" +
+            "            shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',\n" +
+            "            iconSize: [25, 41], iconAnchor: [12, 41], popupAnchor: [1, -34], shadowSize: [41, 41]\n" +
+            "        });\n" +
+            "        var customerMarker = L.marker([" + destLat + ", " + destLon + "], {icon: customerIcon}).addTo(map)\n" +
+            "            .bindPopup('<b>Lokasi Anda</b>').openPopup();\n" +
+            "        \n" +
+            "        var techIcon = L.icon({\n" +
+            "            iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-blue.png',\n" +
+            "            shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',\n" +
+            "            iconSize: [25, 41], iconAnchor: [12, 41], shadowSize: [41, 41]\n" +
+            "        });\n" +
+            "        var techMarker = L.marker([" + startLat + ", " + startLon + "], {icon: techIcon}).addTo(map);\n" +
+            "        \n" +
+            "        var polyline = L.polyline([[" + startLat + ", " + startLon + "], [" + destLat + ", " + destLon + "]], {\n" +
+            "            color: '#7C83FF', weight: 4, dashArray: '10, 10'\n" +
+            "        }).addTo(map);\n" +
+            "        \n" +
+            "        var group = new L.featureGroup([customerMarker, techMarker]);\n" +
+            "        map.fitBounds(group.getBounds().pad(0.15));\n" +
+            "        \n" +
+            "        var duration = 15000;\n" +
+            "        var startTime = null;\n" +
+            "        function animate(timestamp) {\n" +
+            "            if (!startTime) startTime = timestamp;\n" +
+            "            var elapsed = timestamp - startTime;\n" +
+            "            var progress = Math.min(elapsed / duration, 1.0);\n" +
+            "            var curLat = " + startLat + " + progress * (" + destLat + " - " + startLat + ");\n" +
+            "            var curLon = " + startLon + " + progress * (" + destLon + " - " + startLon + ");\n" +
+            "            techMarker.setLatLng([curLat, curLon]);\n" +
+            "            polyline.setLatLngs([[curLat, curLon], [" + destLat + ", " + destLon + "]]);\n" +
+            "            if (progress < 1.0) {\n" +
+            "                requestAnimationFrame(animate);\n" +
+            "            } else {\n" +
+            "                techMarker.bindPopup('<b>Teknisi Telah Sampai</b>').openPopup();\n" +
+            "            }\n" +
+            "        }\n" +
+            "        requestAnimationFrame(animate);\n" +
+            "    </script>\n" +
+            "</body>\n" +
+            "</html>";
     }
 
     @FXML
     private void handleBack() {
+        if (updateTimeline != null) {
+            updateTimeline.stop();
+        }
         try {
             if ("TECHNICIAN".equals(trackerRole)) {
                 Main.setRoot("/com/teknisio/fxml/TechnicianRequestDetail.fxml");
@@ -357,8 +332,8 @@ public class TrackingMapController implements Initializable {
                 : (permissionGranted ? "Teknisi sedang menuju lokasi Anda..." : "Mode Simulasi (Izin Akses Lokasi Ditolak)"));
         }
 
-        pathTransition.stop();
-        pathTransition.playFromStart();
+        // Reload WebView to restart the animation
+        webView.getEngine().loadContent(getMapHtmlContent());
 
         updateTimeline.stop();
         updateTimeline.playFromStart();
