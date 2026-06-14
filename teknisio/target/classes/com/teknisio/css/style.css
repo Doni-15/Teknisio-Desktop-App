@@ -1078,10 +1078,10 @@
     -fx-border-width: 1px;
     -fx-border-radius: 12px;
     -fx-cursor: hand;
-    -fx-min-width: 76px;
-    -fx-min-height: 76px;
-    -fx-max-width: 76px;
-    -fx-max-height: 76px;
+    -fx-min-width: 80px;
+    -fx-min-height: 80px;
+    -fx-max-width: 80px;
+    -fx-max-height: 80px;
 }
 
 .floating-category-item:hover {
@@ -1104,6 +1104,10 @@
 
 .floating-category-item-selected SVGPath {
     -fx-fill: #ffffff;
+}
+
+.floating-category-item-selected .category-icon-container {
+    -fx-background-color: rgba(255, 255, 255, 0.2);
 }
 
 /* ==========================================

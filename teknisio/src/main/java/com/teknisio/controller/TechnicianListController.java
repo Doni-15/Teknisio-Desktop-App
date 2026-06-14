@@ -75,7 +75,7 @@ public class TechnicianListController implements Initializable {
     // -- Overlay & category selector --
     @FXML private VBox floatingOverlay;
     @FXML private Label sliderLabel;
-    @FXML private SVGPath sliderIcon;
+    @FXML private ImageView sliderIconView;
     @FXML private GridPane overlayCategoryGrid; // dynamic grid in FXML
 
     // Data
@@ -172,18 +172,24 @@ public class TechnicianListController implements Initializable {
     private VBox createOverlayCategoryItem(DeviceCategoryDto cat) {
         VBox item = new VBox();
         item.setAlignment(Pos.CENTER);
-        item.setSpacing(4);
+        item.setSpacing(6);
         item.setPrefWidth(72);
         item.getStyleClass().add("floating-category-item");
         item.setUserData(cat);
 
-        SVGPath icon = new SVGPath();
-        icon.setContent(HomeUserController.getCategoryIcon(cat.getName()));
-        icon.setScaleX(0.7);
-        icon.setScaleY(0.7);
-        icon.setFill(Color.web("#2D4B73"));
+        // Use PNG image like home_user screen
+        ImageView icon = new ImageView();
+        icon.setFitWidth(28);
+        icon.setFitHeight(28);
+        icon.setPreserveRatio(true);
+        icon.setPickOnBounds(true);
+        try {
+            String path = getCategoryIconPath(cat.getName());
+            icon.setImage(new Image(getClass().getResource(path).toExternalForm()));
+        } catch (Exception ignored) {}
+
         StackPane iconWrapper = new StackPane(icon);
-        iconWrapper.getStyleClass().add("category-icon-circle-wrapper");
+        iconWrapper.getStyleClass().add("category-icon-container");
         iconWrapper.setMinSize(44, 44);
         iconWrapper.setMaxSize(44, 44);
 
@@ -202,10 +208,47 @@ public class TechnicianListController implements Initializable {
         return item;
     }
 
+    private String getCategoryIconPath(String categoryName) {
+        if (categoryName == null) return "/com/teknisio/assets/devices/ac.png";
+        switch (categoryName.toLowerCase().trim()) {
+            case "ac":
+            case "air conditioner":
+                return "/com/teknisio/assets/devices/ac.png";
+            case "fan":
+            case "kipas":
+                return "/com/teknisio/assets/devices/fan.png";
+            case "mixer":
+                return "/com/teknisio/assets/devices/mixer.png";
+            case "oven":
+                return "/com/teknisio/assets/devices/oven.png";
+            case "fridge":
+            case "refrigerator":
+            case "kulkas":
+                return "/com/teknisio/assets/devices/refrigerator.png";
+            case "rice cooker":
+                return "/com/teknisio/assets/devices/rice_cooker.png";
+            case "tv":
+            case "television":
+            case "televisi":
+                return "/com/teknisio/assets/devices/television.png";
+            case "washing machine":
+            case "mesin cuci":
+                return "/com/teknisio/assets/devices/washing_machine.png";
+            default:
+                return "/com/teknisio/assets/devices/ac.png";
+        }
+    }
+
     private void applyCategory(DeviceCategoryDto cat) {
         selectedCategoryId = cat.getDeviceCategoryId();
         if (sliderLabel != null) sliderLabel.setText(cat.getName());
-        if (sliderIcon != null) sliderIcon.setContent(HomeUserController.getCategoryIcon(cat.getName()));
+        // Update slider icon image (PNG like home_user)
+        if (sliderIconView != null) {
+            try {
+                String path = getCategoryIconPath(cat.getName());
+                sliderIconView.setImage(new Image(getClass().getResource(path).toExternalForm()));
+            } catch (Exception ignored) {}
+        }
 
         // Highlight selected in overlay
         if (overlayCategoryGrid != null) {
