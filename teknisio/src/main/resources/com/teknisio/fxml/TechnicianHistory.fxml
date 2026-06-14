@@ -38,7 +38,7 @@
             <Label fx:id="txtTechnicianHistorySubtitle" style="-fx-text-fill: #6B7680; -fx-font-size: 13px;" text="Pantau semua request yang pernah masuk" wrapText="true" />
 
             <!-- Status Filter Chips (Horizontal Scroll) -->
-            <ScrollPane fitToHeight="true" fitToWidth="true" hbarPolicy="AS_NEEDED" style="-fx-background-color: transparent;" vbarPolicy="NEVER" prefViewportHeight="40.0">
+            <ScrollPane fitToHeight="true" fitToWidth="false" hbarPolicy="AS_NEEDED" style="-fx-background-color: transparent; -fx-background: transparent; -fx-border-color: transparent;" vbarPolicy="NEVER" prefViewportHeight="44.0" maxWidth="316.0">
                <content>
                   <HBox fx:id="layoutTechnicianHistoryFilters" alignment="CENTER_LEFT" spacing="8.0" style="-fx-background-color: transparent;" />
                </content>
