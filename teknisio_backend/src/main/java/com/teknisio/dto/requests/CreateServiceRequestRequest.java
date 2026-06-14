@@ -23,6 +23,9 @@ public record CreateServiceRequestRequest(
   String address,
 
   @Size(max = 500, message = "Address detail must be at most 500 characters")
-  String addressDetail
+  String addressDetail,
+
+  java.math.BigDecimal latitude,
+  java.math.BigDecimal longitude
 ) {
 }

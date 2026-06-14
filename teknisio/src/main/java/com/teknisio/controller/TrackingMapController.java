@@ -48,6 +48,7 @@ public class TrackingMapController implements Initializable {
     private static String trackerRole = "CUSTOMER"; // "CUSTOMER" or "TECHNICIAN"
     private static String targetName = "Doni (Teknisi)";
     private static String targetAddress = "Jl. Gatot Subroto No. 88, Medan";
+    private static String currentServiceRequestId = null;
 
     private WebView webView;
     private Timeline updateTimeline;
@@ -61,10 +62,11 @@ public class TrackingMapController implements Initializable {
     private double destLat;
     private double destLon;
 
-    public static void setTrackingContext(String role, String name, String address) {
+    public static void setTrackingContext(String role, String name, String address, String serviceRequestId) {
         trackerRole = role;
         targetName = name;
         targetAddress = address;
+        currentServiceRequestId = serviceRequestId;
     }
 
     @Override
@@ -97,134 +99,189 @@ public class TrackingMapController implements Initializable {
             permissionGranted = true;
         }
 
-        // 4. Configure coordinates and initial distance
-        if (permissionGranted) {
-            if ("TECHNICIAN".equals(trackerRole)) {
-                // The technician is running the app, so technician location is real-time IP Geolocation
-                Double techLat = com.teknisio.service.SessionManager.getLatitude();
-                Double techLon = com.teknisio.service.SessionManager.getLongitude();
-                if (techLat == null || techLon == null) {
-                    GeoLocationUtil.LocationResult loc = GeoLocationUtil.fetchLocation();
-                    techLat = loc.lat;
-                    techLon = loc.lon;
-                    com.teknisio.service.SessionManager.setCoordinates(loc.lat, loc.lon);
-                }
-                startLat = techLat;
-                startLon = techLon;
-                
-                // Destination is customer's request address text
-                GeoLocationUtil.LocationResult destLoc = GeoLocationUtil.geocodeAddress(targetAddress);
-                if (destLoc != null) {
-                    destLat = destLoc.lat;
-                    destLon = destLoc.lon;
-                } else {
-                    destLat = startLat + 0.015;
-                    destLon = startLon + 0.015;
-                }
-            } else {
-                // The customer is running the app, so customer location is real-time IP Geolocation
-                Double customerLat = com.teknisio.service.SessionManager.getLatitude();
-                Double customerLon = com.teknisio.service.SessionManager.getLongitude();
-                if (customerLat == null || customerLon == null) {
-                    GeoLocationUtil.LocationResult loc = GeoLocationUtil.fetchLocation();
-                    customerLat = loc.lat;
-                    customerLon = loc.lon;
-                    com.teknisio.service.SessionManager.setCoordinates(loc.lat, loc.lon);
-                }
-                destLat = customerLat;
-                destLon = customerLon;
-                
-                // Starting point is technician's profile address text
-                GeoLocationUtil.LocationResult startLoc = GeoLocationUtil.geocodeAddress(targetAddress);
-                if (startLoc != null) {
-                    startLat = startLoc.lat;
-                    startLon = startLoc.lon;
-                } else {
-                    startLat = destLat - 0.015;
-                    startLon = destLon - 0.015;
-                }
-            }
-            
-            simulatedDistance = GeoLocationUtil.calculateDistance(startLat, startLon, destLat, destLon);
-        } else {
-            // Fallback to default Medan coordinates
-            destLat = 3.5952;
-            destLon = 98.6722;
-            startLat = destLat - 0.015;
-            startLon = destLon - 0.015;
-            simulatedDistance = 2.5;
-        }
-
-        // 5. Configure text fields based on role
-        if ("TECHNICIAN".equals(trackerRole)) {
-            if (txtTrackingTitle != null) txtTrackingTitle.setText("Navigasi ke Pelanggan");
-            if (txtTechnicianName != null) txtTechnicianName.setText(targetName);
-            if (txtInfoHint != null) {
-                txtInfoHint.setText(permissionGranted ? "Silakan menuju ke lokasi pelanggan..." : "Mode Simulasi (Izin Akses Lokasi Ditolak)");
-            }
-            if (txtTrackingStatus != null) txtTrackingStatus.setText("Navigasi Dimulai...");
-        } else {
-            if (txtTrackingTitle != null) txtTrackingTitle.setText("Lacak Teknisi");
-            if (txtTechnicianName != null) txtTechnicianName.setText(targetName + " (Teknisi)");
-            if (txtInfoHint != null) {
-                txtInfoHint.setText(permissionGranted ? "Teknisi sedang menuju lokasi Anda..." : "Mode Simulasi (Izin Akses Lokasi Ditolak)");
-            }
-            if (txtTrackingStatus != null) txtTrackingStatus.setText("Menghubungkan...");
-        }
-        if (txtDistance != null) txtDistance.setText(String.format("%.1f km", simulatedDistance));
-        if (txtLastUpdate != null) txtLastUpdate.setText("Terakhir diupdate: Baru saja");
-
-        // 6. Create and add WebView to show the real interactive map
-        webView = new WebView();
-        webView.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
-        mapContainer.getChildren().add(0, webView); // Add at bottom of StackPane so overlays are on top
-
-        // 7. Load real Leaflet dark matter map content
-        webView.getEngine().loadContent(getMapHtmlContent());
-
-        // 8. Update Timer Timeline
-        updateTimeline = new Timeline(new KeyFrame(Duration.seconds(1), e -> {
-            secondsElapsed++;
-            
-            // Calculate current technician position based on timeline progress (0.0 to 1.0)
-            double progress = (double) secondsElapsed / 15.0;
-            if (progress > 1.0) progress = 1.0;
-            
-            double currentLat = startLat + progress * (destLat - startLat);
-            double currentLon = startLon + progress * (destLon - startLon);
-            
-            simulatedDistance = GeoLocationUtil.calculateDistance(currentLat, currentLon, destLat, destLon);
-            
-            if (txtDistance != null) {
-                txtDistance.setText(String.format("%.1f km", simulatedDistance));
-            }
-
-            // Update status text dynamically based on progress
-            if (txtTrackingStatus != null) {
-                if (simulatedDistance <= 0.05 || progress >= 1.0) {
-                    txtTrackingStatus.setText("Tiba di Lokasi");
-                    txtTrackingStatus.setStyle("-fx-font-size: 12px; -fx-text-fill: white; -fx-background-color: #27AE60; -fx-padding: 5 14; -fx-background-radius: 12;");
-                    
-                    if (txtInfoHint != null) {
-                        txtInfoHint.setText("TECHNICIAN".equals(trackerRole)
-                            ? "Anda telah sampai di lokasi pelanggan!"
-                            : "Teknisi telah sampai di lokasi Anda!");
+        // 4. Configure coordinates and initial distance in background
+        if (txtTrackingStatus != null) txtTrackingStatus.setText("Menghubungkan GPS...");
+        
+        Thread initThread = new Thread(() -> {
+            if (permissionGranted) {
+                if ("TECHNICIAN".equals(trackerRole)) {
+                    // Technician is running the app
+                    Double techLat = com.teknisio.service.SessionManager.getLatitude();
+                    Double techLon = com.teknisio.service.SessionManager.getLongitude();
+                    if (techLat == null || techLon == null) {
+                        GeoLocationUtil.LocationResult loc = GeoLocationUtil.fetchLocation();
+                        if (loc != null) {
+                            techLat = loc.lat;
+                            techLon = loc.lon;
+                            com.teknisio.service.SessionManager.setCoordinates(loc.lat, loc.lon);
+                        } else {
+                            techLat = 3.5952;
+                            techLon = 98.6722;
+                        }
                     }
-                } else if (simulatedDistance < 0.5) {
-                    txtTrackingStatus.setText("Hampir Sampai...");
-                } else if (simulatedDistance < 1.5) {
-                    txtTrackingStatus.setText("Dalam Perjalanan...");
+                    startLat = techLat;
+                    startLon = techLon;
+                    
+                    // Destination is customer's request coordinates or geocoded address
+                    com.teknisio.dto.ServiceRequestDto req = com.teknisio.service.TechnicianRequestService.getRequestDetail(currentServiceRequestId);
+                    if (req != null && req.getLatitude() != null && req.getLongitude() != null) {
+                        destLat = req.getLatitude();
+                        destLon = req.getLongitude();
+                    } else {
+                        GeoLocationUtil.LocationResult destLoc = GeoLocationUtil.geocodeAddress(targetAddress);
+                        if (destLoc != null) {
+                            destLat = destLoc.lat;
+                            destLon = destLoc.lon;
+                        } else {
+                            destLat = startLat + 0.015;
+                            destLon = startLon + 0.015;
+                        }
+                    }
                 } else {
-                    txtTrackingStatus.setText("Mencari Rute...");
+                    // Customer is running the app
+                    Double customerLat = com.teknisio.service.SessionManager.getLatitude();
+                    Double customerLon = com.teknisio.service.SessionManager.getLongitude();
+                    if (customerLat == null || customerLon == null) {
+                        GeoLocationUtil.LocationResult loc = GeoLocationUtil.fetchLocation();
+                        if (loc != null) {
+                            customerLat = loc.lat;
+                            customerLon = loc.lon;
+                            com.teknisio.service.SessionManager.setCoordinates(loc.lat, loc.lon);
+                        } else {
+                            customerLat = 3.5952;
+                            customerLon = 98.6722;
+                        }
+                    }
+                    destLat = customerLat;
+                    destLon = customerLon;
+                    
+                    // Start is technician's coordinates or geocoded address
+                    com.teknisio.dto.ServiceRequestDto req = com.teknisio.service.ServiceRequestService.getServiceRequestDetail(currentServiceRequestId);
+                    if (req != null && req.getLatitude() != null && req.getLongitude() != null) {
+                        startLat = req.getLatitude();
+                        startLon = req.getLongitude();
+                    } else {
+                        GeoLocationUtil.LocationResult startLoc = GeoLocationUtil.geocodeAddress(targetAddress);
+                        if (startLoc != null) {
+                            startLat = startLoc.lat;
+                            startLon = startLoc.lon;
+                        } else {
+                            startLat = destLat - 0.015;
+                            startLon = destLon - 0.015;
+                        }
+                    }
                 }
+                simulatedDistance = GeoLocationUtil.calculateDistance(startLat, startLon, destLat, destLon);
+            } else {
+                // Fallback to default Medan coordinates
+                destLat = 3.5952;
+                destLon = 98.6722;
+                startLat = destLat - 0.015;
+                startLon = destLon - 0.015;
+                simulatedDistance = 2.5;
             }
+            
+            javafx.application.Platform.runLater(() -> {
+                // Update text fields
+                if (txtDistance != null) txtDistance.setText(String.format("%.1f km", simulatedDistance));
+                if (txtLastUpdate != null) txtLastUpdate.setText("Terakhir diupdate: Baru saja");
+                
+                if (txtTrackingStatus != null) {
+                    txtTrackingStatus.setText("Terhubung");
+                    txtTrackingStatus.setStyle("-fx-font-size: 12px; -fx-text-fill: white; -fx-background-color: #2980B9; -fx-padding: 5 14; -fx-background-radius: 12;");
+                }
+                
+                // Load WebView
+                webView = new WebView();
+                webView.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+                mapContainer.getChildren().add(0, webView);
+                webView.getEngine().loadContent(getMapHtmlContent());
+                
+                // Start real-time update timeline
+                startRealTimeTimeline();
+            });
+        });
+        initThread.setDaemon(true);
+        initThread.start();
+    }
 
-            // Update last updated text
-            if (txtLastUpdate != null) {
-                txtLastUpdate.setText("Terakhir diupdate: Baru saja");
-            }
+    private void startRealTimeTimeline() {
+        updateTimeline = new Timeline(new KeyFrame(Duration.seconds(5), e -> {
+            Thread updateThread = new Thread(() -> {
+                if ("TECHNICIAN".equals(trackerRole)) {
+                    // Technician fetches their own current position
+                    GeoLocationUtil.LocationResult loc = GeoLocationUtil.fetchLocation();
+                    if (loc != null) {
+                        startLat = loc.lat;
+                        startLon = loc.lon;
+                        com.teknisio.service.SessionManager.setCoordinates(loc.lat, loc.lon);
+                        
+                        // Push coordinates to database
+                        com.teknisio.service.TechnicianRequestService.updateRequestLocation(currentServiceRequestId, startLat, startLon);
+                        
+                        javafx.application.Platform.runLater(() -> {
+                            try {
+                                webView.getEngine().executeScript("updateMarkers(" + startLat + ", " + startLon + ", " + destLat + ", " + destLon + ");");
+                            } catch (Exception ex) {
+                                System.err.println("Failed to update markers: " + ex.getMessage());
+                            }
+                        });
+                    }
+                } else {
+                    // Customer polls request details from database
+                    com.teknisio.dto.ServiceRequestDto req = com.teknisio.service.ServiceRequestService.getServiceRequestDetail(currentServiceRequestId);
+                    if (req != null && req.getLatitude() != null && req.getLongitude() != null) {
+                        startLat = req.getLatitude();
+                        startLon = req.getLongitude();
+                        
+                        javafx.application.Platform.runLater(() -> {
+                            try {
+                                webView.getEngine().executeScript("updateMarkers(" + startLat + ", " + startLon + ", " + destLat + ", " + destLon + ");");
+                            } catch (Exception ex) {
+                                System.err.println("Failed to update markers: " + ex.getMessage());
+                            }
+                        });
+                    }
+                }
+                
+                simulatedDistance = GeoLocationUtil.calculateDistance(startLat, startLon, destLat, destLon);
+                
+                javafx.application.Platform.runLater(() -> {
+                    if (txtDistance != null) {
+                        txtDistance.setText(String.format("%.1f km", simulatedDistance));
+                    }
+                    
+                    if (txtTrackingStatus != null) {
+                        if (simulatedDistance <= 0.05) {
+                            txtTrackingStatus.setText("Tiba di Lokasi");
+                            txtTrackingStatus.setStyle("-fx-font-size: 12px; -fx-text-fill: white; -fx-background-color: #27AE60; -fx-padding: 5 14; -fx-background-radius: 12;");
+                            if (txtInfoHint != null) {
+                                txtInfoHint.setText("TECHNICIAN".equals(trackerRole)
+                                    ? "Anda telah sampai di lokasi pelanggan!"
+                                    : "Teknisi telah sampai di lokasi Anda!");
+                            }
+                        } else if (simulatedDistance < 0.5) {
+                            txtTrackingStatus.setText("Hampir Sampai...");
+                            txtTrackingStatus.setStyle("-fx-font-size: 12px; -fx-text-fill: white; -fx-background-color: #E67E22; -fx-padding: 5 14; -fx-background-radius: 12;");
+                            if (txtInfoHint != null) {
+                                txtInfoHint.setText("TECHNICIAN".equals(trackerRole)
+                                    ? "Silakan menuju ke lokasi pelanggan..."
+                                    : "Teknisi sedang menuju lokasi Anda...");
+                            }
+                        } else {
+                            txtTrackingStatus.setText("Dalam Perjalanan");
+                            txtTrackingStatus.setStyle("-fx-font-size: 12px; -fx-text-fill: white; -fx-background-color: #2980B9; -fx-padding: 5 14; -fx-background-radius: 12;");
+                        }
+                    }
+                    if (txtLastUpdate != null) {
+                        txtLastUpdate.setText("Terakhir diupdate: Baru saja");
+                    }
+                });
+            });
+            updateThread.setDaemon(true);
+            updateThread.start();
         }));
-        updateTimeline.setCycleCount(15);
+        updateTimeline.setCycleCount(Timeline.INDEFINITE);
         updateTimeline.play();
     }
 
@@ -245,10 +302,25 @@ public class TrackingMapController implements Initializable {
             "<body>\n" +
             "    <div id=\"map\"></div>\n" +
             "    <script>\n" +
-            "        var map = L.map('map', {zoomControl: true}).setView([" + destLat + ", " + destLon + "], 14);\n" +
-            "        L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {\n" +
-            "            maxZoom: 19\n" +
-            "        }).addTo(map);\n" +
+            "        var roadmap = L.tileLayer('https://mt1.google.com/vt/lyrs=m&x={x}&y={y}&z={z}', {\n" +
+            "            maxZoom: 20,\n" +
+            "            attribution: '© Google'\n" +
+            "        });\n" +
+            "        var satellite = L.tileLayer('https://mt1.google.com/vt/lyrs=y&x={x}&y={y}&z={z}', {\n" +
+            "            maxZoom: 20,\n" +
+            "            attribution: '© Google'\n" +
+            "        });\n" +
+            "        \n" +
+            "        var map = L.map('map', {\n" +
+            "            zoomControl: true,\n" +
+            "            layers: [roadmap]\n" +
+            "        }).setView([" + destLat + ", " + destLon + "], 14);\n" +
+            "        \n" +
+            "        var baseMaps = {\n" +
+            "            \"Google Map\": roadmap,\n" +
+            "            \"Google Satellite\": satellite\n" +
+            "        };\n" +
+            "        L.control.layers(baseMaps).addTo(map);\n" +
             "        \n" +
             "        var customerIcon = L.icon({\n" +
             "            iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-red.png',\n" +
@@ -266,29 +338,20 @@ public class TrackingMapController implements Initializable {
             "        var techMarker = L.marker([" + startLat + ", " + startLon + "], {icon: techIcon}).addTo(map);\n" +
             "        \n" +
             "        var polyline = L.polyline([[" + startLat + ", " + startLon + "], [" + destLat + ", " + destLon + "]], {\n" +
-            "            color: '#7C83FF', weight: 4, dashArray: '10, 10'\n" +
+            "            color: '#1A73E8', weight: 4, dashArray: '8, 8'\n" +
             "        }).addTo(map);\n" +
             "        \n" +
-            "        var group = new L.featureGroup([customerMarker, techMarker]);\n" +
-            "        map.fitBounds(group.getBounds().pad(0.15));\n" +
-            "        \n" +
-            "        var duration = 15000;\n" +
-            "        var startTime = null;\n" +
-            "        function animate(timestamp) {\n" +
-            "            if (!startTime) startTime = timestamp;\n" +
-            "            var elapsed = timestamp - startTime;\n" +
-            "            var progress = Math.min(elapsed / duration, 1.0);\n" +
-            "            var curLat = " + startLat + " + progress * (" + destLat + " - " + startLat + ");\n" +
-            "            var curLon = " + startLon + " + progress * (" + destLon + " - " + startLon + ");\n" +
-            "            techMarker.setLatLng([curLat, curLon]);\n" +
-            "            polyline.setLatLngs([[curLat, curLon], [" + destLat + ", " + destLon + "]]);\n" +
-            "            if (progress < 1.0) {\n" +
-            "                requestAnimationFrame(animate);\n" +
-            "            } else {\n" +
-            "                techMarker.bindPopup('<b>Teknisi Telah Sampai</b>').openPopup();\n" +
-            "            }\n" +
+            "        function centerMap() {\n" +
+            "            var group = new L.featureGroup([customerMarker, techMarker]);\n" +
+            "            map.fitBounds(group.getBounds().pad(0.15));\n" +
             "        }\n" +
-            "        requestAnimationFrame(animate);\n" +
+            "        centerMap();\n" +
+            "        \n" +
+            "        function updateMarkers(techLat, techLon, custLat, custLon) {\n" +
+            "            techMarker.setLatLng([techLat, techLon]);\n" +
+            "            customerMarker.setLatLng([custLat, custLon]);\n" +
+            "            polyline.setLatLngs([[techLat, techLon], [custLat, custLon]]);\n" +
+            "        }\n" +
             "    </script>\n" +
             "</body>\n" +
             "</html>";
@@ -313,29 +376,10 @@ public class TrackingMapController implements Initializable {
 
     @FXML
     private void handleCenterMap() {
-        // Reset and restart the simulation so user can watch it again
-        if (permissionGranted) {
-            simulatedDistance = GeoLocationUtil.calculateDistance(startLat, startLon, destLat, destLon);
-        } else {
-            simulatedDistance = 2.5;
+        try {
+            webView.getEngine().executeScript("centerMap();");
+        } catch (Exception ex) {
+            System.err.println("Failed to center map: " + ex.getMessage());
         }
-        secondsElapsed = 0;
-        
-        if (txtTrackingStatus != null) {
-            txtTrackingStatus.setText("Menghubungkan...");
-            txtTrackingStatus.setStyle("-fx-font-size: 12px; -fx-text-fill: #AAAACC; -fx-background-color: #CC1A1A2E; -fx-padding: 5 14;");
-        }
-        if (txtDistance != null) txtDistance.setText(String.format("%.1f km", simulatedDistance));
-        if (txtInfoHint != null) {
-            txtInfoHint.setText("TECHNICIAN".equals(trackerRole)
-                ? (permissionGranted ? "Silakan menuju ke lokasi pelanggan..." : "Mode Simulasi (Izin Akses Lokasi Ditolak)")
-                : (permissionGranted ? "Teknisi sedang menuju lokasi Anda..." : "Mode Simulasi (Izin Akses Lokasi Ditolak)"));
-        }
-
-        // Reload WebView to restart the animation
-        webView.getEngine().loadContent(getMapHtmlContent());
-
-        updateTimeline.stop();
-        updateTimeline.playFromStart();
     }
 }

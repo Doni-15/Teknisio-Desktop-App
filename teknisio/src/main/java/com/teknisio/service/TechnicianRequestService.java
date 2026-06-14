@@ -102,4 +102,21 @@ public class TechnicianRequestService {
         if (response.isSuccess()) return response.getData();
         throw new IOException(response.getMessage());
     }
+
+    /**
+     * Update technician's current location for a service request.
+     */
+    public static boolean updateRequestLocation(String serviceRequestId, double latitude, double longitude) {
+        try {
+            String path = "/api/technicians/service-requests/" + serviceRequestId + "/location"
+                    + "?latitude=" + latitude + "&longitude=" + longitude;
+            ApiClient.ApiResponse<Void> response =
+                    ApiClient.patch(path, null, Void.class);
+            return response.isSuccess();
+        } catch (IOException | InterruptedException e) {
+            System.err.println("TechnicianRequestService.updateRequestLocation error: " + e.getMessage());
+            Thread.currentThread().interrupt();
+        }
+        return false;
+    }
 }
