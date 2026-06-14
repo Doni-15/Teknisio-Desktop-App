@@ -15,12 +15,12 @@
 
    <!-- Floating Top Bar Overlay -->
    <top>
-      <HBox alignment="CENTER_LEFT" minHeight="56.0" style="-fx-background-color: #CC0D0D1A; -fx-padding: 12 12 12 12;" BorderPane.alignment="CENTER">
+      <HBox alignment="CENTER_LEFT" minHeight="56.0" style="-fx-background-color: #0E0F26; -fx-padding: 12 12 12 12;" BorderPane.alignment="CENTER">
          <children>
             <!-- Back Button -->
             <Button mnemonicParsing="false" onAction="#handleBack" styleClass="back-btn">
                <graphic>
-                  <Label style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: white;" text="‹" />
+                  <SVGPath content="M15.41 16.59L10.83 12l4.58-4.59L14 6l-6 6 6 6 1.41-1.41z" fill="#2D4B73" />
                </graphic>
             </Button>
 

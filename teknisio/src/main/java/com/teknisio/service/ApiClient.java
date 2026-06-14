@@ -21,11 +21,23 @@ public class ApiClient {
     private static String BASE_URL = DEFAULT_BASE_URL;
 
     static {
-        // Auto-detect local backend for local development & testing
-        try (java.net.Socket socket = new java.net.Socket()) {
-            socket.connect(new java.net.InetSocketAddress("127.0.0.1", 8080), 200);
-            BASE_URL = "http://localhost:8080";
-            System.out.println("[ApiClient] Detected local backend. Routing to http://localhost:8080");
+        // Auto-detect local backend by pinging Spring Boot actuator health endpoint
+        try {
+            HttpClient tempClient = HttpClient.newBuilder()
+                    .connectTimeout(Duration.ofMillis(300))
+                    .build();
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(URI.create("http://localhost:8080/actuator/health"))
+                    .timeout(Duration.ofMillis(300))
+                    .GET()
+                    .build();
+            HttpResponse<String> response = tempClient.send(request, HttpResponse.BodyHandlers.ofString());
+            if (response.statusCode() == 200 && response.body().contains("UP")) {
+                BASE_URL = "http://localhost:8080";
+                System.out.println("[ApiClient] Detected local Teknisio backend. Routing to http://localhost:8080");
+            } else {
+                System.out.println("[ApiClient] Server on 8080 is not Teknisio. Defaulting to production: " + BASE_URL);
+            }
         } catch (Exception e) {
             System.out.println("[ApiClient] Local backend not detected. Defaulting to production: " + BASE_URL);
         }
