@@ -264,6 +264,9 @@ public class LocationController implements Initializable {
         // Update HomeUserController's location text via a static reference
         HomeUserController.setSelectedLocation(item.getShortAddress());
 
+        // Update local session immediately so that reloading FXML has the new address
+        com.teknisio.service.SessionManager.setAddress(item.getFullAddress());
+
         // Re-render to reflect selection
         renderSavedAddresses(savedAddresses);
 
@@ -312,11 +315,13 @@ public class LocationController implements Initializable {
     private void handleUseCurrentLocation(ActionEvent event) {
         // Simulate GPS fetch and update backend
         String gpsAddr = "Jl. Gatot Subroto No. 88, Medan, North Sumatra";
+        
+        // Update local session and home screen immediately to prevent race conditions
+        com.teknisio.service.SessionManager.setAddress(gpsAddr);
+        HomeUserController.setSelectedLocation("GPS — Medan");
+
         Thread t = new Thread(() -> {
             com.teknisio.service.UserService.updateProfile(java.util.Map.of("address", gpsAddr));
-            javafx.application.Platform.runLater(() -> {
-                HomeUserController.setSelectedLocation("GPS — Medan");
-            });
         });
         t.setDaemon(true);
         t.start();
