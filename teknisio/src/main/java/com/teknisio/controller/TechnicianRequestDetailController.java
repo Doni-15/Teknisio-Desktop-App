@@ -290,7 +290,7 @@ public class TechnicianRequestDetailController implements Initializable {
             String custName = currentRequest.getCustomerName() != null
                 ? currentRequest.getCustomerName() : "Pelanggan";
             String clientAddr = currentRequest.getAddress() != null ? currentRequest.getAddress() : "Alamat";
-            TrackingMapController.setTrackingContext("TECHNICIAN", custName, clientAddr);
+            TrackingMapController.setTrackingContext("TECHNICIAN", custName, clientAddr, currentRequest.getServiceRequestId());
         }
         try { Main.setRoot("/com/teknisio/fxml/TrackingMap.fxml"); }
         catch (IOException e) { e.printStackTrace(); }

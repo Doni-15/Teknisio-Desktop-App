@@ -112,4 +112,16 @@ public class TechnicianServiceRequestController {
       ApiResponse.success("Service request completed successfully", response)
     );
   }
+
+  @PatchMapping("/{serviceRequestId}/location")
+  public ResponseEntity<ApiResponse<Void>> updateServiceRequestLocation(
+    @PathVariable String serviceRequestId,
+    @RequestParam java.math.BigDecimal latitude,
+    @RequestParam java.math.BigDecimal longitude
+  ) {
+    technicianServiceRequestService.updateServiceRequestLocation(serviceRequestId, latitude, longitude);
+    return ResponseEntity.ok(
+      ApiResponse.success("Location updated successfully", null)
+    );
+  }
 }

@@ -22,6 +22,8 @@ public record TechnicianServiceRequestResponse(
   String issueDescription,
   String address,
   String addressDetail,
+  BigDecimal latitude,
+  BigDecimal longitude,
 
   BigDecimal estimatedCost,
   BigDecimal finalCost,

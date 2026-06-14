@@ -80,6 +80,8 @@ public class CustomerServiceRequestService {
       .alamat(TextUtil.trim(request.address()))
       .detailAlamat(TextUtil.trim(request.addressDetail()))
       .deskripsiMasalah(TextUtil.trim(request.issueDescription()))
+      .latitude(request.latitude())
+      .longitude(request.longitude())
       .status(RequestStatus.WAITING)
       .diubahOlehTerakhir(customer)
       .build();
@@ -464,6 +466,8 @@ public class CustomerServiceRequestService {
       serviceRequest.getDeskripsiMasalah(),
       serviceRequest.getAlamat(),
       serviceRequest.getDetailAlamat(),
+      serviceRequest.getLatitude(),
+      serviceRequest.getLongitude(),
       serviceRequest.getEstimasiBiaya(),
       serviceRequest.getBiayaAkhir(),
       serviceRequest.getCatatanTeknisi(),
