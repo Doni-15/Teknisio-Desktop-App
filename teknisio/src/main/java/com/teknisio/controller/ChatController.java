@@ -326,7 +326,8 @@ public class ChatController implements Initializable {
     private void handleBack(ActionEvent event) {
         try { Main.setRoot("/com/teknisio/fxml/home_user.fxml"); }
         catch (IOException e) { e.printStackTrace(); }
-    
+    }
+
     /**
      * Represents a chat contact (technician or active conversation).
      */
