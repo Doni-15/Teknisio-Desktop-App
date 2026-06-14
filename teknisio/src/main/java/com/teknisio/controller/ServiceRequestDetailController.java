@@ -247,7 +247,13 @@ public class ServiceRequestDetailController implements Initializable {
         btnCancelOrder.setVisible("PENDING".equals(status) || "ACCEPTED".equals(status));
         btnWriteReview.setVisible("COMPLETED".equals(status));
         btnTrackTechnician.setVisible("IN_PROGRESS".equals(status) || "ACCEPTED".equals(status));
-        btnOpenChat.setVisible(tech != null);
+
+        // Chat button: only visible when technician has accepted (ACCEPTED or IN_PROGRESS).
+        // If still PENDING/WAITING, the technician hasn't accepted yet so chat is not available.
+        boolean chatAllowed = tech != null
+                && ("ACCEPTED".equals(status) || "IN_PROGRESS".equals(status));
+        btnOpenChat.setVisible(chatAllowed);
+        btnOpenChat.setManaged(chatAllowed);
     }
 
     @FXML

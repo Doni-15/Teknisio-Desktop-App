@@ -1,7 +1,9 @@
 package com.teknisio.controller;
 
 import com.teknisio.Main;
+import com.teknisio.dto.ServiceRequestDto;
 import com.teknisio.dto.TechnicianDto;
+import com.teknisio.service.ServiceRequestService;
 import com.teknisio.service.TechnicianService;
 import com.teknisio.util.ImageUtil;
 import javafx.application.Platform;
@@ -12,6 +14,7 @@ import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
@@ -237,6 +240,58 @@ public class ChatController implements Initializable {
     }
 
     private void openChatDetail(ChatContact contact) {
+        // If this is already an active chat, navigate directly.
+        if (contact.isActiveChat()) {
+            navigateToChatDetail(contact);
+            return;
+        }
+
+        // Otherwise, validate that the technician has an ACCEPTED or IN_PROGRESS service request.
+        // Run the API call on a background thread to avoid blocking the UI.
+        Thread t = new Thread(() -> {
+            TechnicianDto techDto = contact.getTechnicianDto();
+            String technicianProfileId = techDto != null ? techDto.getTechnicianProfileId() : null;
+
+            boolean hasActiveRequest = false;
+            if (technicianProfileId != null) {
+                // Fetch customer's service requests that are in ACCEPTED status
+                List<ServiceRequestDto> acceptedRequests = ServiceRequestService.getMyServiceRequests("ACCEPTED");
+                List<ServiceRequestDto> inProgressRequests = ServiceRequestService.getMyServiceRequests("ON_PROGRESS");
+
+                hasActiveRequest = acceptedRequests.stream()
+                        .anyMatch(r -> technicianProfileId.equals(r.getTechnicianProfileId()));
+
+                if (!hasActiveRequest) {
+                    hasActiveRequest = inProgressRequests.stream()
+                            .anyMatch(r -> technicianProfileId.equals(r.getTechnicianProfileId()));
+                }
+            }
+
+            final boolean canChat = hasActiveRequest;
+            Platform.runLater(() -> {
+                if (canChat) {
+                    navigateToChatDetail(contact);
+                } else {
+                    Alert alert = new Alert(Alert.AlertType.WARNING);
+                    alert.setTitle("Chat Tidak Tersedia");
+                    alert.setHeaderText(null);
+                    alert.setContentText(
+                        "Fitur chat belum tersedia. Anda hanya dapat mengirim pesan " +
+                        "setelah teknisi menerima permintaan perbaikan Anda.");
+                    try {
+                        alert.getDialogPane().getStylesheets().add(
+                            getClass().getResource("/com/teknisio/css/style.css").toExternalForm());
+                        alert.getDialogPane().getStyleClass().add("alert-dialog");
+                    } catch (Exception ignored) {}
+                    alert.showAndWait();
+                }
+            });
+        });
+        t.setDaemon(true);
+        t.start();
+    }
+
+    private void navigateToChatDetail(ChatContact contact) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/teknisio/fxml/ChatDetail.fxml"));
             Parent root = loader.load();
@@ -244,15 +299,13 @@ public class ChatController implements Initializable {
             detailController.setContactData(contact.getName(), contact.getAvatarBase64(), contact.getStatus());
 
             // Add to active conversations if not already present
-            if (!contact.isActiveChat()) {
-                boolean exists = SESSION_ACTIVE_CONTACTS.stream()
-                    .anyMatch(c -> c.getName().equals(contact.getName()));
-                if (!exists) {
-                    ChatContact active = new ChatContact(
-                        contact.getName(), "", "", contact.getAvatarBase64(),
-                        contact.getStatus(), 0, true, contact.getTechnicianDto());
-                    SESSION_ACTIVE_CONTACTS.add(0, active);
-                }
+            boolean exists = SESSION_ACTIVE_CONTACTS.stream()
+                .anyMatch(c -> c.getName().equals(contact.getName()));
+            if (!exists) {
+                ChatContact active = new ChatContact(
+                    contact.getName(), "", "", contact.getAvatarBase64(),
+                    contact.getStatus(), 0, true, contact.getTechnicianDto());
+                SESSION_ACTIVE_CONTACTS.add(0, active);
             }
 
             javafx.scene.Scene scene = searchField != null ? searchField.getScene() : null;
