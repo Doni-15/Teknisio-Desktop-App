@@ -107,3 +107,6 @@ Aplikasi Klien Desktop dikembangkan dengan JavaFX dan berinteraksi langsung ke R
 Silakan saksikan penjelasan alur aplikasi, integrasi hardware GPS, dan demo fungsionalitas Teknisio melalui tautan YouTube berikut:
 
 [![Video Presentasi Teknisio](https://img.youtube.com/vi/-QjFn0lsS0U/0.jpg)](https://youtu.be/-QjFn0lsS0U?si=qLF7VqJFPzYBQMLa)
+
+
+https://youtu.be/-QjFn0lsS0U?si=qLF7VqJFPzYBQMLa
