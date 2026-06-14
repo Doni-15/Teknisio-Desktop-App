@@ -30,8 +30,15 @@ public class ServiceRequestDto {
     private String completedAt;
     private String cancelledAt;
     private String rejectedAt;
+    private Double latitude;
+    private Double longitude;
 
     public ServiceRequestDto() {}
+
+    public Double getLatitude() { return latitude; }
+    public Double getLongitude() { return longitude; }
+    public void setLatitude(Double latitude) { this.latitude = latitude; }
+    public void setLongitude(Double longitude) { this.longitude = longitude; }
 
     public String getServiceRequestId() { return serviceRequestId; }
     public String getServiceRequestCode() { return serviceRequestCode; }

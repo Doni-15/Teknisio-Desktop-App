@@ -379,6 +379,8 @@ public class TechnicianServiceRequestService {
       serviceRequest.getDeskripsiMasalah(),
       serviceRequest.getAlamat(),
       serviceRequest.getDetailAlamat(),
+      serviceRequest.getLatitude(),
+      serviceRequest.getLongitude(),
 
       serviceRequest.getEstimasiBiaya(),
       serviceRequest.getBiayaAkhir(),
@@ -396,6 +398,15 @@ public class TechnicianServiceRequestService {
       serviceRequest.getWaktuDibatalkan(),
       serviceRequest.getWaktuDitolak()
     );
+  }
+
+  @Transactional
+  public void updateServiceRequestLocation(String serviceRequestId, java.math.BigDecimal latitude, java.math.BigDecimal longitude) {
+    TeknisiProfile technicianProfile = getCurrentActiveTechnicianProfile();
+    PermintaanLayanan serviceRequest = getOwnedServiceRequest(technicianProfile, serviceRequestId);
+    serviceRequest.setLatitude(latitude);
+    serviceRequest.setLongitude(longitude);
+    permintaanLayananRepository.save(serviceRequest);
   }
 
   private DeviceCategoryResponse toDeviceCategoryResponse(KategoriLayanan category) {

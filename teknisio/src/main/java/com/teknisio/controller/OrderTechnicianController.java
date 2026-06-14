@@ -310,12 +310,28 @@ public class OrderTechnicianController implements Initializable {
 
         String addressDetail = "Jadwal: " + datePicker.getValue() + " " + timeNote;
 
+        Double latitude = SessionManager.getLatitude();
+        Double longitude = SessionManager.getLongitude();
+        if (latitude == null || longitude == null) {
+            try {
+                com.teknisio.util.GeoLocationUtil.LocationResult loc = com.teknisio.util.GeoLocationUtil.fetchLocation();
+                latitude = loc.lat;
+                longitude = loc.lon;
+                SessionManager.setCoordinates(latitude, longitude);
+            } catch (Exception e) {
+                latitude = 3.5952;
+                longitude = 98.6722;
+            }
+        }
+
         CreateServiceRequestDto request = new CreateServiceRequestDto(
             currentTechnician.getTechnicianProfileId(),
             selectedCatIds,
             description,
             address,
-            addressDetail
+            addressDetail,
+            latitude,
+            longitude
         );
 
         // Disable confirm button during submission
