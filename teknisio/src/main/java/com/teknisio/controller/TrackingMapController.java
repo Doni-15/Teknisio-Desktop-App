@@ -1,6 +1,7 @@
 package com.teknisio.controller;
 
 import com.teknisio.Main;
+import com.teknisio.util.GeoLocationUtil;
 import javafx.animation.Animation;
 import javafx.animation.FadeTransition;
 import javafx.animation.KeyFrame;
@@ -10,7 +11,9 @@ import javafx.animation.ScaleTransition;
 import javafx.animation.Timeline;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
@@ -26,6 +29,7 @@ import javafx.util.Duration;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 public class TrackingMapController implements Initializable {
@@ -64,8 +68,15 @@ public class TrackingMapController implements Initializable {
     private Polyline routeLine;
     private StackPane techMarker;
     private Path trackPath;
+    
     private double simulatedDistance = 2.5;
     private int secondsElapsed = 0;
+    
+    private boolean permissionGranted = false;
+    private double startLat;
+    private double startLon;
+    private double destLat;
+    private double destLon;
 
     public static void setTrackingContext(String role, String name, String address) {
         trackerRole = role;
@@ -85,28 +96,75 @@ public class TrackingMapController implements Initializable {
             txtLiveBadge.setVisible(true);
         }
 
-        // 3. Configure text fields based on role
+        // 3. Ask for Location Permission
+        Alert permissionAlert = new Alert(Alert.AlertType.CONFIRMATION);
+        permissionAlert.setTitle("Izin Akses Lokasi");
+        permissionAlert.setHeaderText("Izinkan Teknisio mengakses lokasi Anda saat ini?");
+        permissionAlert.setContentText("Kami membutuhkan izin lokasi untuk melakukan perhitungan rute GPS secara real-time.");
+        
+        ButtonType allowButton = new ButtonType("Izinkan");
+        ButtonType denyButton = new ButtonType("Tolak", javafx.scene.control.ButtonBar.ButtonData.CANCEL_CLOSE);
+        permissionAlert.getButtonTypes().setAll(allowButton, denyButton);
+        
+        permissionAlert.getDialogPane().getStylesheets().add(getClass().getResource("/com/teknisio/css/style.css").toExternalForm());
+        permissionAlert.getDialogPane().getStyleClass().add("alert-dialog");
+
+        Optional<ButtonType> permResult = permissionAlert.showAndWait();
+        if (permResult.isPresent() && permResult.get() == allowButton) {
+            permissionGranted = true;
+        }
+
+        // 4. Configure coordinates and initial distance
+        if (permissionGranted) {
+            Double customerLat = com.teknisio.service.SessionManager.getLatitude();
+            Double customerLon = com.teknisio.service.SessionManager.getLongitude();
+            if (customerLat == null || customerLon == null) {
+                GeoLocationUtil.LocationResult loc = GeoLocationUtil.fetchLocation();
+                customerLat = loc.lat;
+                customerLon = loc.lon;
+                com.teknisio.service.SessionManager.setCoordinates(loc.lat, loc.lon);
+            }
+            destLat = customerLat;
+            destLon = customerLon;
+            startLat = destLat - 0.015;
+            startLon = destLon - 0.015;
+            
+            simulatedDistance = GeoLocationUtil.calculateDistance(startLat, startLon, destLat, destLon);
+        } else {
+            // Fallback to default Medan coordinates
+            destLat = 3.5952;
+            destLon = 98.6722;
+            startLat = destLat - 0.015;
+            startLon = destLon - 0.015;
+            simulatedDistance = 2.5;
+        }
+
+        // 5. Configure text fields based on role
         if ("TECHNICIAN".equals(trackerRole)) {
             if (txtTrackingTitle != null) txtTrackingTitle.setText("Navigasi ke Pelanggan");
             if (txtTechnicianName != null) txtTechnicianName.setText(targetName);
-            if (txtInfoHint != null) txtInfoHint.setText("Silakan menuju ke lokasi pelanggan...");
+            if (txtInfoHint != null) {
+                txtInfoHint.setText(permissionGranted ? "Silakan menuju ke lokasi pelanggan..." : "Mode Simulasi (Izin Akses Lokasi Ditolak)");
+            }
             if (txtTrackingStatus != null) txtTrackingStatus.setText("Navigasi Dimulai...");
         } else {
             if (txtTrackingTitle != null) txtTrackingTitle.setText("Lacak Teknisi");
             if (txtTechnicianName != null) txtTechnicianName.setText(targetName + " (Teknisi)");
-            if (txtInfoHint != null) txtInfoHint.setText("Teknisi sedang menuju lokasi Anda...");
+            if (txtInfoHint != null) {
+                txtInfoHint.setText(permissionGranted ? "Teknisi sedang menuju lokasi Anda..." : "Mode Simulasi (Izin Akses Lokasi Ditolak)");
+            }
             if (txtTrackingStatus != null) txtTrackingStatus.setText("Menghubungkan...");
         }
-        if (txtDistance != null) txtDistance.setText("2.5 km");
+        if (txtDistance != null) txtDistance.setText(String.format("%.1f km", simulatedDistance));
         if (txtLastUpdate != null) txtLastUpdate.setText("Terakhir diupdate: Baru saja");
 
-        // 4. Create and add drawing pane
+        // 6. Create and add drawing pane
         mapPane = new Pane();
         mapPane.setPrefSize(360, 450);
         mapPane.setStyle("-fx-background-color: #0E0F26;");
         mapContainer.getChildren().add(0, mapPane); // Add at bottom of StackPane so status overlays are on top
 
-        // 5. Draw background streets (Road lines)
+        // 7. Draw background streets (Road lines)
         // Horizontal streets
         drawRoad(20, 200, 340, 200);
         drawRoad(20, 300, 340, 300);
@@ -115,7 +173,7 @@ public class TrackingMapController implements Initializable {
         drawRoad(250, 50, 250, 450);
         drawRoad(180, 50, 180, 200);
 
-        // 6. Draw route path
+        // 8. Draw route path
         routeLine = new Polyline();
         routeLine.getPoints().addAll(
             80.0, 420.0,
@@ -136,7 +194,7 @@ public class TrackingMapController implements Initializable {
         dashAnimation.setCycleCount(Timeline.INDEFINITE);
         dashAnimation.play();
 
-        // 7. Draw Destination Marker (Red pin with pulse ring)
+        // 9. Draw Destination Marker (Red pin with pulse ring)
         StackPane destMarker = new StackPane();
         destMarker.setLayoutX(180 - 15);
         destMarker.setLayoutY(200 - 15);
@@ -172,7 +230,7 @@ public class TrackingMapController implements Initializable {
         destLabel.setLayoutY(200 - 30);
         mapPane.getChildren().add(destLabel);
 
-        // 8. Draw moving GPS locator (blue dot with soft glow)
+        // 10. Draw moving GPS locator (blue dot with soft glow)
         techMarker = new StackPane();
         techMarker.setPrefSize(30, 30);
 
@@ -188,7 +246,7 @@ public class TrackingMapController implements Initializable {
         techMarker.getChildren().addAll(glowCircle, dotCircle, innerDot);
         mapPane.getChildren().add(techMarker);
 
-        // 9. Path Transition for moving locator
+        // 11. Path Transition for moving locator
         trackPath = new Path();
         trackPath.getElements().add(new MoveTo(80, 420));
         trackPath.getElements().add(new LineTo(80, 300));
@@ -203,15 +261,18 @@ public class TrackingMapController implements Initializable {
         pathTransition.setCycleCount(1);
         pathTransition.play();
 
-        // 10. Update Timer Timeline
+        // 12. Update Timer Timeline
         updateTimeline = new Timeline(new KeyFrame(Duration.seconds(1), e -> {
             secondsElapsed++;
             
-            // Simulating distance decrement from 2.5 km to 0.0 km
-            if (simulatedDistance > 0.0) {
-                simulatedDistance -= 0.166; // reaches 0 around 15 seconds
-                if (simulatedDistance < 0.0) simulatedDistance = 0.0;
-            }
+            // Calculate current technician position based on timeline progress (0.0 to 1.0)
+            double progress = (double) secondsElapsed / 15.0;
+            if (progress > 1.0) progress = 1.0;
+            
+            double currentLat = startLat + progress * (destLat - startLat);
+            double currentLon = startLon + progress * (destLon - startLon);
+            
+            simulatedDistance = GeoLocationUtil.calculateDistance(currentLat, currentLon, destLat, destLon);
             
             if (txtDistance != null) {
                 txtDistance.setText(String.format("%.1f km", simulatedDistance));
@@ -219,7 +280,7 @@ public class TrackingMapController implements Initializable {
 
             // Update status text dynamically based on progress
             if (txtTrackingStatus != null) {
-                if (simulatedDistance <= 0.0) {
+                if (simulatedDistance <= 0.05 || progress >= 1.0) {
                     txtTrackingStatus.setText("Tiba di Lokasi");
                     txtTrackingStatus.setStyle("-fx-font-size: 12px; -fx-text-fill: white; -fx-background-color: #27AE60; -fx-padding: 5 14; -fx-background-radius: 12;");
                     
@@ -230,7 +291,7 @@ public class TrackingMapController implements Initializable {
                     }
                 } else if (simulatedDistance < 0.5) {
                     txtTrackingStatus.setText("Hampir Sampai...");
-                } else if (simulatedDistance < 1.8) {
+                } else if (simulatedDistance < 1.5) {
                     txtTrackingStatus.setText("Dalam Perjalanan...");
                 } else {
                     txtTrackingStatus.setText("Mencari Rute...");
@@ -278,18 +339,22 @@ public class TrackingMapController implements Initializable {
     @FXML
     private void handleCenterMap() {
         // Reset and restart the simulation so user can watch it again
-        simulatedDistance = 2.5;
+        if (permissionGranted) {
+            simulatedDistance = GeoLocationUtil.calculateDistance(startLat, startLon, destLat, destLon);
+        } else {
+            simulatedDistance = 2.5;
+        }
         secondsElapsed = 0;
         
         if (txtTrackingStatus != null) {
             txtTrackingStatus.setText("Menghubungkan...");
             txtTrackingStatus.setStyle("-fx-font-size: 12px; -fx-text-fill: #AAAACC; -fx-background-color: #CC1A1A2E; -fx-padding: 5 14;");
         }
-        if (txtDistance != null) txtDistance.setText("2.5 km");
+        if (txtDistance != null) txtDistance.setText(String.format("%.1f km", simulatedDistance));
         if (txtInfoHint != null) {
             txtInfoHint.setText("TECHNICIAN".equals(trackerRole)
-                ? "Silakan menuju ke lokasi pelanggan..."
-                : "Teknisi sedang menuju lokasi Anda...");
+                ? (permissionGranted ? "Silakan menuju ke lokasi pelanggan..." : "Mode Simulasi (Izin Akses Lokasi Ditolak)")
+                : (permissionGranted ? "Teknisi sedang menuju lokasi Anda..." : "Mode Simulasi (Izin Akses Lokasi Ditolak)"));
         }
 
         pathTransition.stop();
