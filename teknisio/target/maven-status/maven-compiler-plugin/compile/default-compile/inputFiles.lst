@@ -23,12 +23,14 @@ D:\SEM 4\PBO\LAB\UAS\Teknisio-Desktop-App\teknisio\src\main\java\com\teknisio\co
 D:\SEM 4\PBO\LAB\UAS\Teknisio-Desktop-App\teknisio\src\main\java\com\teknisio\dto\TechnicianDto.java
 D:\SEM 4\PBO\LAB\UAS\Teknisio-Desktop-App\teknisio\src\main\java\com\teknisio\dto\AuthResponse.java
 D:\SEM 4\PBO\LAB\UAS\Teknisio-Desktop-App\teknisio\src\main\java\com\teknisio\service\ApiClient.java
+D:\SEM 4\PBO\LAB\UAS\Teknisio-Desktop-App\teknisio\src\main\java\com\teknisio\service\ChatService.java
 D:\SEM 4\PBO\LAB\UAS\Teknisio-Desktop-App\teknisio\src\main\java\com\teknisio\controller\LocationController.java
 D:\SEM 4\PBO\LAB\UAS\Teknisio-Desktop-App\teknisio\src\main\java\com\teknisio\dto\RegisterRequest.java
 D:\SEM 4\PBO\LAB\UAS\Teknisio-Desktop-App\teknisio\src\main\java\com\teknisio\controller\HistoryController.java
 D:\SEM 4\PBO\LAB\UAS\Teknisio-Desktop-App\teknisio\src\main\java\com\teknisio\service\TechnicianRequestService.java
 D:\SEM 4\PBO\LAB\UAS\Teknisio-Desktop-App\teknisio\src\main\java\com\teknisio\controller\NotificationController.java
 D:\SEM 4\PBO\LAB\UAS\Teknisio-Desktop-App\teknisio\src\main\java\com\teknisio\dto\DeviceCategoryDto.java
+D:\SEM 4\PBO\LAB\UAS\Teknisio-Desktop-App\teknisio\src\main\java\com\teknisio\dto\ChatMessageDto.java
 D:\SEM 4\PBO\LAB\UAS\Teknisio-Desktop-App\teknisio\src\main\java\com\teknisio\controller\TechnicianHomeController.java
 D:\SEM 4\PBO\LAB\UAS\Teknisio-Desktop-App\teknisio\src\main\java\com\teknisio\dto\LoginRequest.java
 D:\SEM 4\PBO\LAB\UAS\Teknisio-Desktop-App\teknisio\src\main\java\com\teknisio\dto\ServiceRequestDto.java
