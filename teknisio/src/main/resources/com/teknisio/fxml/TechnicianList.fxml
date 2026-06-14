@@ -375,8 +375,7 @@
                         <!-- Row 1: AC, Fridge, Washing Machine -->
                         <HBox alignment="CENTER" spacing="10.0">
                            <children>
-                              <!-- AC Item -->
-                              <VBox fx:id="overlayAC" alignment="CENTER" onMouseClicked="#handleSelectCategory" spacing="6.0" styleClass="floating-category-item floating-category-item-selected" userData="AC">
+                              <VBox fx:id="overlayAC" alignment="CENTER" onMouseClicked="#handleSelectCategory" spacing="6.0" styleClass="floating-category-item" userData="AC">
                                  <children>
                                     <StackPane styleClass="category-icon-container">
                                        <children>
