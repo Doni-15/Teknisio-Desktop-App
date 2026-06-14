@@ -66,17 +66,17 @@ public class ServiceRequestDetailController implements Initializable {
     }
 
     public static class StatusHistoryDto {
-        private String idRiwayat;
-        private String statusSebelum;
-        private String statusSesudah;
-        private String catatan;
-        private String changedById;
-        private String createdAt;
+        private String statusHistoryId;
+        private String previousStatus;
+        private String newStatus;
+        private String note;
+        private String changedByUserId;
+        private String changedAt;
 
-        public String getStatusSebelum() { return statusSebelum; }
-        public String getStatusSesudah() { return statusSesudah; }
-        public String getCatatan() { return catatan; }
-        public String getCreatedAt() { return createdAt; }
+        public String getStatusSebelum() { return previousStatus; }
+        public String getStatusSesudah() { return newStatus; }
+        public String getCatatan() { return note; }
+        public String getCreatedAt() { return changedAt; }
     }
 
     private static final Type HISTORY_LIST_TYPE = new TypeToken<List<StatusHistoryDto>>() {}.getType();

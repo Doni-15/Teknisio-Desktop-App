@@ -19,6 +19,15 @@ public class SessionManager {
     private static UserRole role;
     private static String profilePhoto; // base64 string from backend
     private static String technicianProfileId; // UUID string, only for TECHNICIAN role
+    private static Double latitude = null;
+    private static Double longitude = null;
+
+    public static void setCoordinates(Double lat, Double lon) {
+        latitude = lat;
+        longitude = lon;
+    }
+    public static Double getLatitude() { return latitude; }
+    public static Double getLongitude() { return longitude; }
 
     public static void login(Long userId, String email, String name, String phone, String address, String roleStr) {
         SessionManager.userId = userId;
