@@ -63,6 +63,7 @@ public class OrderHistoryController implements Initializable {
         for (String[] f : filters) {
             Button chip = new Button(f[1]);
             chip.setUserData(f[0]);
+            chip.setMinWidth(javafx.scene.layout.Region.USE_PREF_SIZE);
             updateChipStyle(chip, false);
 
             chip.setOnAction(e -> {

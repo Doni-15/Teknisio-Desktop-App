@@ -373,6 +373,12 @@ public class ServiceRequestDetailController implements Initializable {
 
     @FXML
     private void handleTrackTechnician() {
+        if (currentOrder != null) {
+            String techName = (currentTechnician != null && currentTechnician.getName() != null)
+                ? currentTechnician.getName() : "Teknisi";
+            String clientAddr = currentOrder.getAddress() != null ? currentOrder.getAddress() : "Alamat";
+            TrackingMapController.setTrackingContext("CUSTOMER", techName, clientAddr);
+        }
         try {
             Main.setRoot("/com/teknisio/fxml/TrackingMap.fxml");
         } catch (IOException e) {

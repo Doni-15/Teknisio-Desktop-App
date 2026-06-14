@@ -34,6 +34,7 @@ public class SessionManager {
     }
 
     public static void setProfilePhoto(String photo) { profilePhoto = photo; }
+    public static void setAddress(String address) { SessionManager.address = address; }
     public static void setTechnicianProfileId(String id) { technicianProfileId = id; }
     public static void setUserIdString(String id) { userIdString = id; }
     public static String getProfilePhoto() { return profilePhoto; }
