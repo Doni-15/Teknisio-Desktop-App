@@ -86,7 +86,7 @@
       <HBox alignment="CENTER" styleClass="bottom-nav-bar" BorderPane.alignment="CENTER">
          <children>
             <!-- Home -->
-            <HBox alignment="CENTER" spacing="6.0" styleClass="nav-item, nav-item-active" HBox.hgrow="ALWAYS">
+            <HBox alignment="CENTER" spacing="6.0" styleClass="nav-item nav-item-active" HBox.hgrow="ALWAYS">
                <children>
                   <SVGPath content="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z" styleClass="nav-icon" />
                   <Label styleClass="nav-label" text="Home" />

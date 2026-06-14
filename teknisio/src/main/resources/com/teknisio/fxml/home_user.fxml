@@ -83,8 +83,8 @@
                              <RowConstraints valignment="TOP" vgrow="SOMETIMES" />
                            </rowConstraints>
                            <children>
-                              <!-- AC -->
-                              <VBox onMouseClicked="#handleCategoryClick" styleClass="category-tile" GridPane.columnIndex="0" GridPane.rowIndex="0">
+                              <!-- AC (0,0) -->
+                              <VBox onMouseClicked="#handleCategoryClick" styleClass="category-tile" GridPane.columnIndex="0" GridPane.rowIndex="0" style="-fx-cursor: hand;">
                                  <children>
                                     <StackPane styleClass="category-icon-container">
                                        <children>
@@ -99,84 +99,8 @@
                                  </children>
                               </VBox>
                               
-                              <!-- Fridge (Refrigerator) -->
-                              <VBox onMouseClicked="#handleCategoryClick" styleClass="category-tile" GridPane.columnIndex="1" GridPane.rowIndex="0">
-                                 <children>
-                                    <StackPane styleClass="category-icon-container">
-                                       <children>
-                                          <ImageView fitHeight="36.0" fitWidth="36.0" pickOnBounds="true" preserveRatio="true">
-                                             <image>
-                                                <Image url="@../assets/devices/refrigerator.png" />
-                                             </image>
-                                          </ImageView>
-                                       </children>
-                                    </StackPane>
-                                    <Label alignment="CENTER" styleClass="category-name" text="Fridge" wrapText="true" />
-                                 </children>
-                              </VBox>
-                              
-                              <!-- Washing Machine -->
-                              <VBox onMouseClicked="#handleCategoryClick" styleClass="category-tile" GridPane.columnIndex="2" GridPane.rowIndex="0" style="-fx-cursor: hand;">
-                                 <children>
-                                    <StackPane styleClass="category-icon-container">
-                                       <children>
-                                          <ImageView fitHeight="36.0" fitWidth="36.0" pickOnBounds="true" preserveRatio="true">
-                                             <image>
-                                                <Image url="@../assets/devices/washing_machine.png" />
-                                             </image>
-                                          </ImageView>
-                                       </children>
-                                    </StackPane>
-                                    <Label alignment="CENTER" styleClass="category-name" text="Washing Machine" wrapText="true" />
-                                 </children>
-                              </VBox>
-                              
-                              <!-- Filter Camera (no PNG available, keep SVG) -->
-                              <VBox onMouseClicked="#handleCategoryClick" styleClass="category-tile" GridPane.columnIndex="3" GridPane.rowIndex="0" style="-fx-cursor: hand;">
-                                 <children>
-                                    <StackPane styleClass="category-icon-container">
-                                       <children>
-                                          <SVGPath content="M12 2L1 21h22L12 2zm0 4l7.5 13h-15L12 6zm-1 8h2v2h-2v-2zm0-4h2v2h-2v-2z" fill="#2D4B73" />
-                                       </children>
-                                    </StackPane>
-                                    <Label alignment="CENTER" styleClass="category-name" text="Filter Camera" wrapText="true" />
-                                 </children>
-                              </VBox>
-                              
-                              <!-- Oven -->
-                              <VBox onMouseClicked="#handleCategoryClick" styleClass="category-tile" GridPane.columnIndex="0" GridPane.rowIndex="1" style="-fx-cursor: hand;">
-                                 <children>
-                                    <StackPane styleClass="category-icon-container">
-                                       <children>
-                                          <ImageView fitHeight="36.0" fitWidth="36.0" pickOnBounds="true" preserveRatio="true">
-                                             <image>
-                                                <Image url="@../assets/devices/oven.png" />
-                                             </image>
-                                          </ImageView>
-                                       </children>
-                                    </StackPane>
-                                    <Label alignment="CENTER" styleClass="category-name" text="Oven" wrapText="true" />
-                                 </children>
-                              </VBox>
-                              
-                              <!-- Television -->
-                              <VBox onMouseClicked="#handleCategoryClick" styleClass="category-tile" GridPane.columnIndex="1" GridPane.rowIndex="1" style="-fx-cursor: hand;">
-                                 <children>
-                                    <StackPane styleClass="category-icon-container">
-                                       <children>
-                                          <ImageView fitHeight="36.0" fitWidth="36.0" pickOnBounds="true" preserveRatio="true">
-                                             <image>
-                                                <Image url="@../assets/devices/television.png" />
-                                             </image>
-                                          </ImageView>
-                                       </children>
-                                    </StackPane>
-                                    <Label alignment="CENTER" styleClass="category-name" text="Television" wrapText="true" />
-                                 </children>
-                              </VBox>
-                              
-                              <!-- Fan -->
-                              <VBox onMouseClicked="#handleCategoryClick" styleClass="category-tile" GridPane.columnIndex="2" GridPane.rowIndex="1" style="-fx-cursor: hand;">
+                              <!-- Fan (1,0) -->
+                              <VBox onMouseClicked="#handleCategoryClick" styleClass="category-tile" GridPane.columnIndex="1" GridPane.rowIndex="0" style="-fx-cursor: hand;">
                                  <children>
                                     <StackPane styleClass="category-icon-container">
                                        <children>
@@ -191,8 +115,8 @@
                                  </children>
                               </VBox>
                               
-                              <!-- Mixer -->
-                              <VBox onMouseClicked="#handleCategoryClick" styleClass="category-tile" GridPane.columnIndex="3" GridPane.rowIndex="1" style="-fx-cursor: hand;">
+                              <!-- Mixer (2,0) -->
+                              <VBox onMouseClicked="#handleCategoryClick" styleClass="category-tile" GridPane.columnIndex="2" GridPane.rowIndex="0" style="-fx-cursor: hand;">
                                  <children>
                                     <StackPane styleClass="category-icon-container">
                                        <children>
@@ -206,23 +130,90 @@
                                     <Label alignment="CENTER" styleClass="category-name" text="Mixer" wrapText="true" />
                                  </children>
                               </VBox>
+                              
+                              <!-- Oven (3,0) -->
+                              <VBox onMouseClicked="#handleCategoryClick" styleClass="category-tile" GridPane.columnIndex="3" GridPane.rowIndex="0" style="-fx-cursor: hand;">
+                                 <children>
+                                    <StackPane styleClass="category-icon-container">
+                                       <children>
+                                          <ImageView fitHeight="36.0" fitWidth="36.0" pickOnBounds="true" preserveRatio="true">
+                                             <image>
+                                                <Image url="@../assets/devices/oven.png" />
+                                             </image>
+                                          </ImageView>
+                                       </children>
+                                    </StackPane>
+                                    <Label alignment="CENTER" styleClass="category-name" text="Oven" wrapText="true" />
+                                 </children>
+                              </VBox>
+                              
+                              <!-- Fridge (0,1) -->
+                              <VBox onMouseClicked="#handleCategoryClick" styleClass="category-tile" GridPane.columnIndex="0" GridPane.rowIndex="1" style="-fx-cursor: hand;">
+                                 <children>
+                                    <StackPane styleClass="category-icon-container">
+                                       <children>
+                                          <ImageView fitHeight="36.0" fitWidth="36.0" pickOnBounds="true" preserveRatio="true">
+                                             <image>
+                                                <Image url="@../assets/devices/refrigerator.png" />
+                                             </image>
+                                          </ImageView>
+                                       </children>
+                                    </StackPane>
+                                    <Label alignment="CENTER" styleClass="category-name" text="Fridge" wrapText="true" />
+                                 </children>
+                              </VBox>
+
+                              <!-- Rice Cooker (1,1) -->
+                              <VBox onMouseClicked="#handleCategoryClick" styleClass="category-tile" GridPane.columnIndex="1" GridPane.rowIndex="1" style="-fx-cursor: hand;">
+                                 <children>
+                                    <StackPane styleClass="category-icon-container">
+                                       <children>
+                                          <ImageView fitHeight="36.0" fitWidth="36.0" pickOnBounds="true" preserveRatio="true">
+                                             <image>
+                                                <Image url="@../assets/devices/rice_cooker.png" />
+                                             </image>
+                                          </ImageView>
+                                       </children>
+                                    </StackPane>
+                                    <Label alignment="CENTER" styleClass="category-name" text="Rice Cooker" wrapText="true" />
+                                 </children>
+                              </VBox>
+
+                              <!-- TV (2,1) -->
+                              <VBox onMouseClicked="#handleCategoryClick" styleClass="category-tile" GridPane.columnIndex="2" GridPane.rowIndex="1" style="-fx-cursor: hand;">
+                                 <children>
+                                    <StackPane styleClass="category-icon-container">
+                                       <children>
+                                          <ImageView fitHeight="36.0" fitWidth="36.0" pickOnBounds="true" preserveRatio="true">
+                                             <image>
+                                                <Image url="@../assets/devices/television.png" />
+                                             </image>
+                                          </ImageView>
+                                       </children>
+                                    </StackPane>
+                                    <Label alignment="CENTER" styleClass="category-name" text="TV" wrapText="true" />
+                                 </children>
+                              </VBox>
+                              
+                              <!-- Washing Machine (3,1) -->
+                              <VBox onMouseClicked="#handleCategoryClick" styleClass="category-tile" GridPane.columnIndex="3" GridPane.rowIndex="1" style="-fx-cursor: hand;">
+                                 <children>
+                                    <StackPane styleClass="category-icon-container">
+                                       <children>
+                                          <ImageView fitHeight="36.0" fitWidth="36.0" pickOnBounds="true" preserveRatio="true">
+                                             <image>
+                                                <Image url="@../assets/devices/washing_machine.png" />
+                                             </image>
+                                          </ImageView>
+                                       </children>
+                                    </StackPane>
+                                    <Label alignment="CENTER" styleClass="category-name" text="Washing Machine" wrapText="true" />
+                                 </children>
+                              </VBox>
                            </children>
                         </GridPane>
-                        
-                        <!-- Slider Dots capsule for categories grid -->
-                        <HBox alignment="CENTER" spacing="6.0">
-                           <children>
-                              <StackPane styleClass="slider-dot, slider-dot-active" />
-                              <StackPane styleClass="slider-dot, slider-dot-inactive" />
-                              <StackPane styleClass="slider-dot, slider-dot-inactive" />
-                              <StackPane styleClass="slider-dot, slider-dot-inactive" />
-                           </children>
-                           <padding>
-                              <Insets top="4.0" />
-                           </padding>
-                        </HBox>
                      </children>
-                   </VBox>
+                  </VBox>
                    
                    <!-- Technician Nearby -->
                    <VBox spacing="10.0">
@@ -246,7 +237,7 @@
                            <children>
                               <Label styleClass="section-title" text="News" />
                               <Region HBox.hgrow="ALWAYS" />
-                              <Label styleClass="see-all-link" text="See all" />
+                              <Label onMouseClicked="#handleSeeAllNews" styleClass="see-all-link" text="See all" style="-fx-cursor: hand;" />
                            </children>
                         </HBox>
                         
@@ -264,13 +255,13 @@
       <HBox alignment="CENTER" styleClass="bottom-nav-bar" BorderPane.alignment="CENTER">
          <children>
             <!-- Home -->
-            <HBox alignment="CENTER" spacing="6.0" styleClass="nav-item, nav-item-active" HBox.hgrow="ALWAYS">
+            <HBox alignment="CENTER" spacing="6.0" styleClass="nav-item nav-item-active" HBox.hgrow="ALWAYS">
                <children>
                   <SVGPath content="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z" styleClass="nav-icon" />
                   <Label styleClass="nav-label" text="Home" />
                </children>
             </HBox>
-            
+
             <!-- Chat -->
             <HBox alignment="CENTER" onMouseClicked="#handleChatTab" spacing="6.0" styleClass="nav-item" HBox.hgrow="ALWAYS" style="-fx-cursor: hand;">
                <children>

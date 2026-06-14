@@ -73,6 +73,7 @@ public class SecurityConfig {
         .requestMatchers("/api/customers/**").hasRole("CUSTOMER")
         .requestMatchers("/api/technicians/**").hasRole("TECHNICIAN")
         .requestMatchers("/api/admin/**").hasRole("ADMIN")
+        .requestMatchers("/api/chat/**").authenticated()
 
         .anyRequest().authenticated()
       )

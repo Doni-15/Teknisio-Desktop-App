@@ -17,7 +17,7 @@ import java.time.Duration;
  */
 public class ApiClient {
 
-    private static final String DEFAULT_BASE_URL = "http://localhost:8080";
+    private static final String DEFAULT_BASE_URL = "https://teknisio-desktop-app-production.up.railway.app";
     private static String BASE_URL = DEFAULT_BASE_URL;
     private static final HttpClient httpClient = HttpClient.newBuilder()
             .connectTimeout(Duration.ofSeconds(10))
@@ -111,6 +111,50 @@ public class ApiClient {
 
         return parseResponse(response, responseType);
     }
+
+    /**
+     * Send PATCH request.
+     */
+    public static <T> ApiResponse<T> patch(String path, Object body, Type responseType) throws IOException, InterruptedException {
+        String jsonBody = body != null ? gson.toJson(body) : "{}";
+
+        HttpRequest.Builder builder = HttpRequest.newBuilder()
+                .uri(URI.create(BASE_URL + path))
+                .header("Content-Type", "application/json")
+                .header("Accept", "application/json")
+                .timeout(Duration.ofSeconds(15))
+                .method("PATCH", HttpRequest.BodyPublishers.ofString(jsonBody));
+
+        if (jwtToken != null && !jwtToken.isEmpty()) {
+            builder.header("Authorization", "Bearer " + jwtToken);
+        }
+
+        HttpRequest request = builder.build();
+        HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+
+        return parseResponse(response, responseType);
+    }
+
+    /**
+     * Send DELETE request.
+     */
+    public static <T> ApiResponse<T> delete(String path, Type responseType) throws IOException, InterruptedException {
+        HttpRequest.Builder builder = HttpRequest.newBuilder()
+                .uri(URI.create(BASE_URL + path))
+                .header("Accept", "application/json")
+                .timeout(Duration.ofSeconds(15))
+                .DELETE();
+
+        if (jwtToken != null && !jwtToken.isEmpty()) {
+            builder.header("Authorization", "Bearer " + jwtToken);
+        }
+
+        HttpRequest request = builder.build();
+        HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+
+        return parseResponse(response, responseType);
+    }
+
 
     private static <T> ApiResponse<T> parseResponse(HttpResponse<String> response, Type responseType) {
         int statusCode = response.statusCode();
