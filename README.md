@@ -2,9 +2,13 @@
 Kelompok: 4 Sehat 5 Sempurna
 Anggota:
 Rifki Al Sauqy (241401007)
+
 Doni Rivaldo Simamora (241401037)
+
 Rionaldo Benedictus Purba (241401064)
+
 Yehezkiel Gustav Setiawan Sitanggang (241401070)
+
 M.Farhan Prasetyo (241401094)
 
 **Teknisio** adalah aplikasi berbasis Java (JavaFX untuk klien Desktop dan Spring Boot untuk Backend) yang menghubungkan pelanggan dengan teknisi perbaikan alat elektronik rumah tangga terdekat. Aplikasi ini dikembangkan untuk meningkatkan **produktivitas dan efisiensi waktu** melalui otomatisasi koordinasi alur kerja servis, pelacakan perjalanan teknisi secara instan, serta integrasi komunikasi langsung di dalam satu sistem terpadu.
