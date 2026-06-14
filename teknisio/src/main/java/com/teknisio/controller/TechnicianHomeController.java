@@ -252,7 +252,7 @@ public class TechnicianHomeController implements Initializable {
 
     // -- Navigation ---
     @FXML private void handleHistoryTab(MouseEvent event) {
-        try { Main.setRoot("/com/teknisio/fxml/History.fxml"); }
+        try { Main.setRoot("/com/teknisio/fxml/TechnicianHistory.fxml"); }
         catch (IOException e) { e.printStackTrace(); }
     }
 

@@ -252,24 +252,31 @@ public class ChatController implements Initializable {
             TechnicianDto techDto = contact.getTechnicianDto();
             String technicianProfileId = techDto != null ? techDto.getTechnicianProfileId() : null;
 
-            boolean hasActiveRequest = false;
+            ServiceRequestDto matchedRequest = null;
             if (technicianProfileId != null) {
                 // Fetch customer's service requests that are in ACCEPTED status
                 List<ServiceRequestDto> acceptedRequests = ServiceRequestService.getMyServiceRequests("ACCEPTED");
                 List<ServiceRequestDto> inProgressRequests = ServiceRequestService.getMyServiceRequests("ON_PROGRESS");
 
-                hasActiveRequest = acceptedRequests.stream()
-                        .anyMatch(r -> technicianProfileId.equals(r.getTechnicianProfileId()));
+                // Find the matching service request
+                matchedRequest = acceptedRequests.stream()
+                        .filter(r -> technicianProfileId.equals(r.getTechnicianProfileId()))
+                        .findFirst()
+                        .orElse(null);
 
-                if (!hasActiveRequest) {
-                    hasActiveRequest = inProgressRequests.stream()
-                            .anyMatch(r -> technicianProfileId.equals(r.getTechnicianProfileId()));
+                if (matchedRequest == null) {
+                    matchedRequest = inProgressRequests.stream()
+                            .filter(r -> technicianProfileId.equals(r.getTechnicianProfileId()))
+                            .findFirst()
+                            .orElse(null);
                 }
             }
 
-            final boolean canChat = hasActiveRequest;
+            final ServiceRequestDto finalRequest = matchedRequest;
             Platform.runLater(() -> {
-                if (canChat) {
+                if (finalRequest != null) {
+                    // Store the serviceRequestId on the contact so ChatDetail can use it
+                    contact.setServiceRequestId(finalRequest.getServiceRequestId());
                     navigateToChatDetail(contact);
                 } else {
                     Alert alert = new Alert(Alert.AlertType.WARNING);
@@ -324,8 +331,13 @@ public class ChatController implements Initializable {
 
     @FXML
     private void handleBack(ActionEvent event) {
-        try { Main.setRoot("/com/teknisio/fxml/home_user.fxml"); }
-        catch (IOException e) { e.printStackTrace(); }
+        try {
+            if (com.teknisio.service.SessionManager.isTechnician()) {
+                Main.setRoot("/com/teknisio/fxml/TechnicianHome.fxml");
+            } else {
+                Main.setRoot("/com/teknisio/fxml/home_user.fxml");
+            }
+        } catch (IOException e) { e.printStackTrace(); }
     }
 
     /**
