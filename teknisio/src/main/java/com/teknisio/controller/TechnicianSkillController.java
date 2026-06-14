@@ -113,12 +113,15 @@ public class TechnicianSkillController implements Initializable {
         row.setOnMouseExited(e -> row.setStyle("-fx-background-color: #F8FAFC; -fx-background-radius: 10px; -fx-border-color: #E2E8F0; -fx-border-radius: 10px; -fx-border-width: 1px;"));
 
         // Category Icon
-        javafx.scene.shape.SVGPath icon = new javafx.scene.shape.SVGPath();
-        String svgPath = HomeUserController.getCategoryIcon(cat.getName());
-        icon.setContent(svgPath);
-        icon.setFill(javafx.scene.paint.Color.web("#2D4B73"));
-        icon.setScaleX(0.55);
-        icon.setScaleY(0.55);
+        javafx.scene.image.ImageView icon = new javafx.scene.image.ImageView();
+        icon.setFitWidth(20);
+        icon.setFitHeight(20);
+        icon.setPreserveRatio(true);
+        icon.setPickOnBounds(true);
+        try {
+            String path = getCategoryIconPath(cat.getName());
+            icon.setImage(new javafx.scene.image.Image(getClass().getResource(path).toExternalForm()));
+        } catch (Exception ignored) {}
 
         javafx.scene.layout.StackPane iconWrapper = new javafx.scene.layout.StackPane(icon);
         iconWrapper.setMinSize(36, 36);
@@ -174,6 +177,36 @@ public class TechnicianSkillController implements Initializable {
         });
         t.setDaemon(true);
         t.start();
+    }
+    private String getCategoryIconPath(String categoryName) {
+        if (categoryName == null) return "/com/teknisio/assets/devices/ac.png";
+        switch (categoryName.toLowerCase().trim()) {
+            case "ac":
+            case "air conditioner":
+                return "/com/teknisio/assets/devices/ac.png";
+            case "fan":
+            case "kipas":
+                return "/com/teknisio/assets/devices/fan.png";
+            case "mixer":
+                return "/com/teknisio/assets/devices/mixer.png";
+            case "oven":
+                return "/com/teknisio/assets/devices/oven.png";
+            case "fridge":
+            case "refrigerator":
+            case "kulkas":
+                return "/com/teknisio/assets/devices/refrigerator.png";
+            case "rice cooker":
+                return "/com/teknisio/assets/devices/rice_cooker.png";
+            case "tv":
+            case "television":
+            case "televisi":
+                return "/com/teknisio/assets/devices/television.png";
+            case "washing machine":
+            case "mesin cuci":
+                return "/com/teknisio/assets/devices/washing_machine.png";
+            default:
+                return "/com/teknisio/assets/devices/ac.png";
+        }
     }
 
     @FXML
