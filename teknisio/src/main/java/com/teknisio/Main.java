@@ -14,31 +14,50 @@ import java.io.IOException;
  */
 public class Main extends Application {
 
+    private static Main instance;
     private static Scene scene;
+
+    public Main() {
+        instance = this;
+    }
+
+    public static Main getInstance() {
+        return instance;
+    }
 
     @Override
     public void start(Stage stage) throws IOException {
         // Load the initial Walkthrough/Splash screen
         Parent root = loadFXML("/com/teknisio/fxml/walkthrough.fxml");
         scene = new Scene(root, 360, 740);
-        
+
         stage.setScene(scene);
         stage.setTitle("Teknisio Mobile");
         stage.setResizable(false);
-        
+
         // Add application icon if logo exists
         try {
-Image icon = new Image(getClass().getResource("/com/teknisio/assets/logo/logo.png").toExternalForm());
+            Image icon = new Image(getClass().getResource("/com/teknisio/assets/logo/logo.png").toExternalForm());
             stage.getIcons().add(icon);
         } catch (Exception e) {
             System.err.println("Could not load application icon: " + e.getMessage());
         }
-        
+
+        // Start background GPS tracker manager
+        com.teknisio.service.GpsTrackerManager.getInstance().start();
+
         stage.show();
+    }
+
+    @Override
+    public void stop() throws Exception {
+        com.teknisio.service.GpsTrackerManager.getInstance().stop();
+        super.stop();
     }
 
     /**
      * Set a new FXML root for the current scene, simulating a screen transition.
+     * 
      * @param fxml Path to the FXML file
      * @throws IOException if FXML cannot be loaded
      */

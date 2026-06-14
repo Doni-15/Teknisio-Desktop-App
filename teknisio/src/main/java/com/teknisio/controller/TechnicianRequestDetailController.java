@@ -49,6 +49,21 @@ public class TechnicianRequestDetailController implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         if (currentRequest != null) {
             populateDetail(currentRequest);
+            
+            // Fetch fresh request detail from server to ensure no cached/outdated address is used
+            Thread t = new Thread(() -> {
+                try {
+                    ServiceRequestDto fresh = TechnicianRequestService.getRequestDetail(currentRequest.getServiceRequestId());
+                    if (fresh != null) {
+                        currentRequest = fresh;
+                        Platform.runLater(() -> populateDetail(fresh));
+                    }
+                } catch (Exception e) {
+                    System.err.println("Failed to fetch fresh request details: " + e.getMessage());
+                }
+            });
+            t.setDaemon(true);
+            t.start();
         } else {
             if (txtTechOrderCode != null) txtTechOrderCode.setText("REQ-???");
         }
@@ -286,14 +301,21 @@ public class TechnicianRequestDetailController implements Initializable {
 
     @FXML
     private void handleNavigateToCustomer() {
-        if (currentRequest != null) {
-            String custName = currentRequest.getCustomerName() != null
-                ? currentRequest.getCustomerName() : "Pelanggan";
-            String clientAddr = currentRequest.getAddress() != null ? currentRequest.getAddress() : "Alamat";
-            TrackingMapController.setTrackingContext("TECHNICIAN", custName, clientAddr, currentRequest.getServiceRequestId());
+        if (currentRequest == null) return;
+        try {
+            String url;
+            com.teknisio.util.GeoLocationUtil.LocationResult loc = com.teknisio.util.GeoLocationUtil.geocodeAddress(currentRequest.getAddress());
+            if (loc != null) {
+                url = "https://www.google.com/maps/dir/?api=1&destination=" + loc.lat + "," + loc.lon;
+            } else {
+                url = "https://www.google.com/maps/dir/?api=1&destination=" + java.net.URLEncoder.encode(
+                    currentRequest.getAddress() != null ? currentRequest.getAddress() : "", "UTF-8");
+            }
+            Main.getInstance().getHostServices().showDocument(url);
+        } catch (Exception e) {
+            System.err.println("Failed to open Google Maps: " + e.getMessage());
+            e.printStackTrace();
         }
-        try { Main.setRoot("/com/teknisio/fxml/TrackingMap.fxml"); }
-        catch (IOException e) { e.printStackTrace(); }
     }
 
     @FXML

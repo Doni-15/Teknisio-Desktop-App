@@ -27,6 +27,7 @@ com\teknisio\service\ChatService.class
 com\teknisio\service\ApiClient$ApiResponse.class
 com\teknisio\controller\TechnicianHomeController.class
 com\teknisio\dto\RegisterRequest$CustomerPayload.class
+com\teknisio\service\GpsTrackerManager.class
 com\teknisio\model\Technician.class
 com\teknisio\controller\ServiceRequestDetailController.class
 com\teknisio\controller\LoginController.class
@@ -40,6 +41,7 @@ com\teknisio\dto\ChatMessageDto.class
 com\teknisio\dto\AuthResponse$AuthUserResponse.class
 com\teknisio\controller\TechnicianSkillController.class
 com\teknisio\service\ServiceRequestService.class
+com\teknisio\util\NmeaParser.class
 com\teknisio\controller\OrderHistoryController.class
 com\teknisio\controller\ChatController$ChatContact.class
 com\teknisio\controller\LocationController$LocationItem.class
@@ -54,6 +56,8 @@ com\teknisio\dto\DeviceCategoryDto.class
 com\teknisio\model\News.class
 com\teknisio\controller\RegisterController.class
 com\teknisio\dto\RegisterRequest.class
+com\teknisio\util\NmeaParser$GpsPosition.class
 com\teknisio\controller\ChatDetailController.class
 com\teknisio\util\GeoLocationUtil$LocationResult.class
 com\teknisio\dto\ServiceRequestDto.class
+com\teknisio\service\GpsHardwareService.class

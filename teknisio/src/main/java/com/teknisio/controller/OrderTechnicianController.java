@@ -313,14 +313,23 @@ public class OrderTechnicianController implements Initializable {
         Double latitude = SessionManager.getLatitude();
         Double longitude = SessionManager.getLongitude();
         if (latitude == null || longitude == null) {
-            try {
-                com.teknisio.util.GeoLocationUtil.LocationResult loc = com.teknisio.util.GeoLocationUtil.fetchLocation();
+            // Try geocoding the customer's text address first
+            com.teknisio.util.GeoLocationUtil.LocationResult loc = com.teknisio.util.GeoLocationUtil.geocodeAddress(address);
+            if (loc != null) {
                 latitude = loc.lat;
                 longitude = loc.lon;
                 SessionManager.setCoordinates(latitude, longitude);
-            } catch (Exception e) {
-                latitude = 3.5952;
-                longitude = 98.6722;
+            } else {
+                // Fallback to IP geolocation if geocoding fails
+                try {
+                    com.teknisio.util.GeoLocationUtil.LocationResult ipLoc = com.teknisio.util.GeoLocationUtil.fetchLocation();
+                    latitude = ipLoc.lat;
+                    longitude = ipLoc.lon;
+                    SessionManager.setCoordinates(latitude, longitude);
+                } catch (Exception e) {
+                    latitude = 3.5952;
+                    longitude = 98.6722;
+                }
             }
         }
 

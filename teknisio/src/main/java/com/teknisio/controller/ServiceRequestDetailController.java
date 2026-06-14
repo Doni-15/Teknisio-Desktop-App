@@ -373,18 +373,53 @@ public class ServiceRequestDetailController implements Initializable {
 
     @FXML
     private void handleTrackTechnician() {
-        if (currentOrder != null) {
-            String techName = (currentTechnician != null && currentTechnician.getName() != null)
-                ? currentTechnician.getName() : "Teknisi";
-            String clientAddr = currentOrder.getAddress() != null ? currentOrder.getAddress() : "Alamat";
-            TrackingMapController.setTrackingContext("CUSTOMER", techName, clientAddr, currentOrder.getServiceRequestId());
-        }
+        if (currentOrder == null) return;
         try {
-            Main.setRoot("/com/teknisio/fxml/TrackingMap.fxml");
-        } catch (IOException e) {
-            System.err.println("Failed to navigate to TrackingMap: " + e.getMessage());
+            // Check if technician's real-time coordinates are set
+            if (currentOrder.getLatitude() == null || currentOrder.getLongitude() == null ||
+                (Math.abs(currentOrder.getLatitude()) < 0.0001 && Math.abs(currentOrder.getLongitude()) < 0.0001)) {
+                
+                showNoLocationAlert();
+                return;
+            }
+
+            // Try to check if coordinates are still just the customer's coordinates (not updated yet)
+            Double custLat = com.teknisio.service.SessionManager.getLatitude();
+            Double custLon = com.teknisio.service.SessionManager.getLongitude();
+            if (custLat == null || custLon == null) {
+                com.teknisio.util.GeoLocationUtil.LocationResult loc = com.teknisio.util.GeoLocationUtil.geocodeAddress(currentOrder.getAddress());
+                if (loc != null) {
+                    custLat = loc.lat;
+                    custLon = loc.lon;
+                }
+            }
+
+            if (custLat != null && custLon != null) {
+                if (Math.abs(currentOrder.getLatitude() - custLat) < 0.001 && Math.abs(currentOrder.getLongitude() - custLon) < 0.001) {
+                    showNoLocationAlert();
+                    return;
+                }
+            }
+            
+            String url = "https://www.google.com/maps/dir/?api=1&destination=" + currentOrder.getLatitude() + "," + currentOrder.getLongitude();
+            Main.getInstance().getHostServices().showDocument(url);
+        } catch (Exception e) {
+            System.err.println("Failed to open Google Maps: " + e.getMessage());
             e.printStackTrace();
         }
+    }
+
+    private void showNoLocationAlert() {
+        Alert alert = new Alert(Alert.AlertType.WARNING);
+        alert.setTitle("Lokasi Tidak Tersedia");
+        alert.setHeaderText(null);
+        alert.setContentText("Lokasi aktif teknisi belum tersedia saat ini. Mohon tunggu hingga teknisi memulai perjalanan.");
+        try {
+            alert.getDialogPane().getStylesheets().add(
+                getClass().getResource("/com/teknisio/css/style.css").toExternalForm());
+            alert.getDialogPane().getStyleClass().add("alert-dialog");
+        } catch (Exception ignored) {}
+        alert.showAndWait();
     }
 
     @FXML

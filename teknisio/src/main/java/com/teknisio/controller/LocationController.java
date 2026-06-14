@@ -133,7 +133,19 @@ public class LocationController implements Initializable {
         }
 
         renderSavedAddresses(filteredSaved);
-        renderRecentLocations(filteredRecent);
+        if (!lowerQuery.isEmpty()) {
+            List<LocationItem> displayRecent = new java.util.ArrayList<>();
+            displayRecent.add(new LocationItem(
+                "Gunakan Alamat Kustom",
+                query.trim(),
+                query.trim(),
+                false
+            ));
+            displayRecent.addAll(filteredRecent);
+            renderRecentLocations(displayRecent);
+        } else {
+            renderRecentLocations(filteredRecent);
+        }
     }
 
     private void renderSavedAddresses(List<LocationItem> items) {
@@ -267,28 +279,64 @@ public class LocationController implements Initializable {
         // Update HomeUserController's location text via a static reference
         HomeUserController.setSelectedLocation(item.getShortAddress());
 
-        // Update local session immediately so that reloading FXML has the new address
-        com.teknisio.service.SessionManager.setAddress(item.getFullAddress());
-
         // Re-render to reflect selection
         renderSavedAddresses(savedAddresses);
 
-        // Save selected address to backend database asynchronously
+        // Save selected address and coordinates to backend database asynchronously
         Thread t = new Thread(() -> {
-            com.teknisio.service.UserService.updateProfile(java.util.Map.of("address", item.getFullAddress()));
+            // Geocode coordinates for the address
+            Double lat = null;
+            Double lon = null;
+            boolean geocoded = false;
+            
+            try {
+                com.teknisio.util.GeoLocationUtil.LocationResult loc = com.teknisio.util.GeoLocationUtil.geocodeAddress(item.getFullAddress());
+                if (loc != null) {
+                    lat = loc.lat;
+                    lon = loc.lon;
+                    geocoded = true;
+                    com.teknisio.service.SessionManager.setCoordinates(lat, lon);
+                }
+            } catch (Exception e) {
+                System.err.println("Geocoding failed during address selection: " + e.getMessage());
+            }
+
+            // Update local session
+            com.teknisio.service.SessionManager.setAddress(item.getFullAddress());
+
+            java.util.Map<String, String> fields = new java.util.HashMap<>();
+            fields.put("address", item.getFullAddress());
+            if (lat != null && lon != null) {
+                fields.put("latitude", String.valueOf(lat));
+                fields.put("longitude", String.valueOf(lon));
+            }
+            com.teknisio.service.UserService.updateProfile(fields);
+
+            final boolean finalGeocoded = geocoded;
+            final Double finalLat = lat;
+            final Double finalLon = lon;
+            
+            javafx.application.Platform.runLater(() -> {
+                showLocationSelectedAlert(item, finalGeocoded, finalLat, finalLon);
+            });
         });
         t.setDaemon(true);
         t.start();
-
-        // Show confirmation and navigate back
-        showLocationSelectedAlert(item);
     }
 
-    private void showLocationSelectedAlert(LocationItem item) {
+    private void showLocationSelectedAlert(LocationItem item, boolean geocoded, Double lat, Double lon) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Location Updated");
+        alert.setTitle("Lokasi Diperbarui");
         alert.setHeaderText(null);
-        alert.setContentText("Location set to:\n" + item.getLabel() + " — " + item.getFullAddress());
+        
+        String msg = "Lokasi berhasil diatur ke:\n" + item.getFullAddress();
+        if (geocoded && lat != null && lon != null) {
+            msg += String.format("\n\nKoordinat terdeteksi:\nLat: %.4f, Lon: %.4f", lat, lon);
+        } else {
+            msg += "\n\n(Catatan: Alamat tidak terdaftar di peta. Koordinat peta diset ke default)";
+        }
+        
+        alert.setContentText(msg);
         alert.getDialogPane().getStylesheets().add(getClass().getResource("/com/teknisio/css/style.css").toExternalForm());
         alert.getDialogPane().getStyleClass().add("alert-dialog");
 
